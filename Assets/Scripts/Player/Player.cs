@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Player
 {
-    public class Player : MonoBehaviour, IPositionMutator, IRotationProvider, IVelocityProvider
+    public class Player : MonoBehaviour, IPositionMutator, IRotationProvider
     {
         [SerializeField] private Rigidbody2D rb;
         [SerializeField] private float _friction;

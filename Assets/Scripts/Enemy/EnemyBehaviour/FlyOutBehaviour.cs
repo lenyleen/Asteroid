@@ -1,17 +1,28 @@
-﻿using UnityEngine;
+﻿using DataObjects;
+using Interfaces;
+using UnityEngine;
 
 namespace Enemy.EnemyBehaviour
 {
-    public class FlyOutBehaviour : IEnemyBehaviour
+    public class FlyOutBehaviour : EnemyBehaviourBase
     {
-        private Vector3 _direction;
-        public Vector3 Execute(Vector3 playerPosition)
+        public FlyOutBehaviour(EnemyBehaviourData data, IPositionProvider positionProvider) 
+            : base(data, positionProvider)
+        {
+        }
+
+        public override Vector3 CalculateVelocity(Vector3 playerPosition)
         {
             if(_direction != Vector3.zero)
                 return Vector3.zero;
 
             _direction = playerPosition.normalized;
             return _direction;
+        }
+
+        public override float CalculateTorque(Vector3 curPosition, float currentRotation)
+        {
+            return 0;
         }
     }
 }
