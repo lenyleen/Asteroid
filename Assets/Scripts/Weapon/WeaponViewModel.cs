@@ -11,6 +11,7 @@ namespace Weapon
         public WeaponType WeaponType => _model.Type;
         
         public ReactiveCommand<IProjectile> OnProjectileCreated { get; } = new();
+        public string Name { get; }
         public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
         public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 

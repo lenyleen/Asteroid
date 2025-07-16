@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac83d303257145a0b68df3bd600b614b, type: 3}
   m_Name: LilAsteroiBehaviour
   m_EditorClassIdentifier: 
-  <acceleration>k__BackingField: 10
+  <acceleration>k__BackingField: 0.5
   <angularAcceleration>k__BackingField: 0

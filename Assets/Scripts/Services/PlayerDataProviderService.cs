@@ -6,16 +6,16 @@ namespace Services
 {
     public class PlayerDataProviderService : IPlayerPositionProvider
     {
-        public IPositionProvider PositionProvider { get; private set; }
+        public ReactiveProperty<IPositionProvider> PositionProvider { get; private set; } =  new ();
         
         public void ApplyPlayer(IPositionProvider player)
         {
-            PositionProvider = player;
+            PositionProvider.Value = player;
         }
 
         public void RemovePlayer(IPositionProvider player)
         {
-            PositionProvider = null;
+            PositionProvider.Value = null;
         }
     }
 }

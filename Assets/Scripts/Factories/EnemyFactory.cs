@@ -24,17 +24,15 @@ namespace Factories
         }
         public EnemyViewModel Create(Vector3 position, EnemyData  data)
         {
-            if (_dataProvider.PositionProvider == null)
+            if (_dataProvider.PositionProvider.Value == null)
                 return null;
             
             var behaviour = CreateBehaviour(data);
-            var model = new EnemyModel(data.Health,data, position);
+            var model = new EnemyModel(data.Health,data,behaviour, position);
             var viewModel = new EnemyViewModel(model, _signalBus);
             viewModel.Initialize();
             
             var enemy = _enemyPool.Spawn(position,data.Sprite, viewModel,view => _enemyPool.Despawn(view));
-            
-            viewModel.SetBehaviour(behaviour);
             
             return viewModel;
         }
@@ -44,11 +42,11 @@ namespace Factories
             switch (data.Type)
             {
                 case EnemyType.UFO:
-                    return new ChasingBehaviour(data.BehaviourData, _dataProvider.PositionProvider);
+                    return new ChasingBehaviour(data.BehaviourData, _dataProvider.PositionProvider.Value);
                 case EnemyType.Asteroid:
-                    return new FlyOutBehaviour(data.BehaviourData, _dataProvider.PositionProvider);
+                    return new FlyOutBehaviour(data.BehaviourData, _dataProvider.PositionProvider.Value);
                 case EnemyType.LilAsteroid:
-                    return new FlyOutBehaviour(data.BehaviourData, _dataProvider.PositionProvider);
+                    return new FlyOutBehaviour(data.BehaviourData, _dataProvider.PositionProvider.Value);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

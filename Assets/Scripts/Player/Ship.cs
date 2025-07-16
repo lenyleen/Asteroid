@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Player
 {
-    public class Player : MonoBehaviour
+    public class Ship : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D rb;
         [field: SerializeField] public PlayerWeapons PlayerWeapons { get; private set; }
@@ -18,15 +18,15 @@ namespace Player
         
         private readonly CompositeDisposable _disposables = new();
         
-        public void Construct(PlayerViewModel playerViewModel)
+        public void Construct(ShipViewModel shipViewModel)
         {
-            playerViewModel.Position.Subscribe(pos => rb.position = pos)
+            shipViewModel.Position.Subscribe(pos => rb.position = pos)
                 .AddTo(_disposables);
                 
-            playerViewModel.Rotation.Subscribe(rot => rb.rotation = rot)
+            shipViewModel.Rotation.Subscribe(rot => rb.rotation = rot)
                 .AddTo(_disposables);
                 
-            playerViewModel.Velocity.Subscribe(vel => rb.linearVelocity = vel)
+            shipViewModel.Velocity.Subscribe(vel => rb.linearVelocity = vel)
                 .AddTo(_disposables);
         }
         

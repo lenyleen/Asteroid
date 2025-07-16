@@ -1,8 +1,10 @@
-﻿namespace Interfaces
+﻿using UniRx;
+
+namespace Interfaces
 {
     public interface IPlayerPositionProvider 
     {
-        public IPositionProvider PositionProvider { get; }
+        public ReactiveProperty<IPositionProvider> PositionProvider { get; }
         public void ApplyPlayer(IPositionProvider player);
         public void RemovePlayer(IPositionProvider player);
     }

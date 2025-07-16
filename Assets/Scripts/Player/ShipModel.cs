@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Player
 {
-    public class PlayerModel
+    public class ShipModel
     {
         public  PlayerPreferences Preferences => _playerPreferences;
         private readonly PlayerPreferences _playerPreferences;
@@ -19,7 +19,7 @@ namespace Player
         public event Action<Vector2> OnVelocityChanged;
         public event Action<float> OnRotationChanged;
 
-        public PlayerModel(PlayerPreferences playerPreferences)
+        public ShipModel(PlayerPreferences playerPreferences)
         {
             _playerPreferences = playerPreferences;
         }

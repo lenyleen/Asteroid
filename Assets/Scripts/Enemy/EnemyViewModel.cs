@@ -9,18 +9,22 @@ using Zenject;
 
 namespace Enemy
 {
-    public class EnemyViewModel : IEnemyContext, IInitializable
+    public class EnemyViewModel :IInitializable, IDieble
     {
         private readonly EnemyModel _model;
         private readonly CompositeDisposable _disposables = new ();
         private readonly SignalBus _signalBus;
-        public ReactiveProperty<IEnemyBehaviour> Behaviour { get; }
+        public ReadOnlyReactiveProperty<float> Rotation { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public ReactiveCommand OnDead => _model.OnDeath;
         
         public EnemyViewModel(EnemyModel model, SignalBus signalBus)
         {
             _model = model;
-            Behaviour = new ReactiveProperty<IEnemyBehaviour>();
+            Rotation = new ReadOnlyReactiveProperty<float>(_model.Rotation);
+            Position = new ReadOnlyReactiveProperty<Vector3>(_model.Position);
+            Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
             _signalBus = signalBus;
         }
 
@@ -29,12 +33,6 @@ namespace Enemy
             _model.OnDeath.Subscribe(_ => OnDeath())
                 .AddTo(_disposables);
         }
-        
-        public void SetBehaviour(IEnemyBehaviour behaviour)
-        {
-            Behaviour.Value = behaviour;
-        }
-
         public void TakeCollision(ICollisionReceiver collisionReceiver)
         {
             if(collisionReceiver.ColliderType == ColliderType.Enemy)
@@ -43,9 +41,9 @@ namespace Enemy
             _model.TakeHit(1);
         }
         
-        public void UpdatePosition(Vector3 newPosition)
+        public void UpdatePosition()
         {
-            _model.UpdatePosition(newPosition);
+            _model.UpdateMovement();
         }
 
         private void OnDeath()
