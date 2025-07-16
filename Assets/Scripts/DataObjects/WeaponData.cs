@@ -10,6 +10,7 @@ namespace DataObjects
         [field:SerializeField] public Sprite Sprite { get; private set; }
         [field:SerializeField] public int Damage { get; private set; }
         [field:SerializeField] public float ReloadTimeInSeconds { get; private set; }
+        [field: SerializeField] public int AmmoCount { get; private set; }
     }
 
     public enum WeaponType

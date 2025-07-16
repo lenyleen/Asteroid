@@ -13,7 +13,7 @@ namespace Enemy.EnemyBehaviour
 
         public override Vector3 CalculateVelocity(Vector3 currentPosition)
         {
-            _direction = (_positionProvider.Position - currentPosition).normalized;
+            _direction = (_positionProvider.Position.Value - currentPosition).normalized;
             _direction *= _data.acceleration;
             return _direction;
         }

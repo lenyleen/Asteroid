@@ -9,11 +9,13 @@ using Zenject;
 
 namespace Enemy
 {
-    [RequireComponent(typeof(Rigidbody2D))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public class Enemy : MonoBehaviour, ICollisionReceiver
     {
         [SerializeField] private Rigidbody2D _rb;
+        [SerializeField] private SpriteRenderer _renderer; 
         [SerializeField] private float _maxSpeed;
+        [SerializeField] private BoxCollider2D _collider;
         [field: SerializeField] public ColliderType ColliderType { get; private set; }
 
         private IEnemyContext _context;
@@ -22,11 +24,14 @@ namespace Enemy
         private IEnemyBehaviour  _behaviour;
         private Vector2 _direction;
 
-        private void Initialize(Vector3 position,IEnemyContext context, Action<Enemy> onDeath)
+        private void Initialize(Vector3 position,Sprite sprite,IEnemyContext context, Action<Enemy> onDeath)
         {
             _context = context;
             transform.position = position;
             _onDeath = onDeath;
+            _renderer.sprite = sprite;
+            
+            _collider.size = sprite.bounds.size;
             
             _behaviour = context.Behaviour.Value;
             context.Behaviour.Subscribe(behaviour => _behaviour = behaviour)
@@ -44,6 +49,8 @@ namespace Enemy
             Vector2 forward = transform.right;
             if (_rb.linearVelocity.magnitude < _maxSpeed)
                 _rb.AddRelativeForce(velocity);
+            
+            _context.UpdatePosition(transform.position);
         }
 
         public void Collide(ICollisionReceiver collisionReceiver)
@@ -51,10 +58,15 @@ namespace Enemy
             _context.TakeCollision(collisionReceiver);
         }
 
-        public void OnCollisionEnter2D(Collision2D collision)
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            if(collision.gameObject.TryGetComponent(out ICollisionReceiver receiver))
-                receiver.Collide(this);
+            if(!other.gameObject.TryGetComponent(out ICollisionReceiver receiver))
+                return;
+            
+            if(receiver.ColliderType != ColliderType.Player) return;
+                
+            receiver.Collide(this);
+            Debug.Log("Collided");
         }
 
         private void Despawn()
@@ -67,11 +79,11 @@ namespace Enemy
             _behaviour = null;
         }
 
-        public class Pool : MonoMemoryPool<Vector3,IEnemyContext, Action<Enemy>,Enemy>
+        public class Pool : MonoMemoryPool<Vector3,Sprite,IEnemyContext, Action<Enemy>,Enemy>
         {
-            protected override void Reinitialize(Vector3 postion,IEnemyContext context,Action<Enemy> onDestroy,Enemy item)
+            protected override void Reinitialize(Vector3 postion,Sprite sprite,IEnemyContext context,Action<Enemy> onDestroy,Enemy item)
             {
-                item.Initialize(postion, context,onDestroy);
+                item.Initialize(postion,sprite, context,onDestroy);
             }
 
             protected override void OnDespawned(Enemy item)

@@ -4,31 +4,27 @@ using Zenject;
 
 namespace Services
 {
-    public class ScreenWrapService : IFixedTickable
+    public class ScreenWrapService
     {
-        private readonly IPositionMutator  _positionMutator;
         private readonly Camera _camera;
         private readonly Vector2 _screenMin;
         private readonly Vector2 _screenMax;
 
-        public ScreenWrapService(IPositionMutator positionMutator, Camera camera)
+        public ScreenWrapService(Camera camera)
         {
-            _positionMutator = positionMutator;
             _camera = camera;
             
             _screenMin = _camera.ViewportToWorldPoint(Vector3.zero);
             _screenMax = _camera.ViewportToWorldPoint(Vector3.one);
         }
         
-        public void FixedTick()
+        public Vector3 GetInScreenPosition(Vector3 position)
         {
-            var newPosition = _positionMutator.Position;
+            var newPosition = Vector3.zero;
+            newPosition.x = WrapCoordinate(position.x, _screenMin.x, _screenMax.x);
+            newPosition.y = WrapCoordinate(position.y, _screenMin.y, _screenMax.y);
             
-            newPosition.x = WrapCoordinate(newPosition.x, _screenMin.x, _screenMax.x);
-            newPosition.y = WrapCoordinate(newPosition.y, _screenMin.y, _screenMax.y);
-            
-            if(_positionMutator.Position != newPosition)
-                _positionMutator.SetPosition(newPosition);
+            return position != newPosition ? newPosition : position;
         }
 
         private float WrapCoordinate(float value, float min, float max)

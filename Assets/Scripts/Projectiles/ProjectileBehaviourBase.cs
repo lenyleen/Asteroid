@@ -19,7 +19,7 @@ namespace Projectiles
         }
         
         public abstract Vector2 CalculateVelocity(Vector3 position);
-        
+        public abstract void Collided();
 
         public void Update(float deltaTime)
         {

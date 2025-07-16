@@ -9,10 +9,5 @@ namespace Interfaces
         public int MainSlotsCapacity { get; }
         
         public void ApplyWeapons(WeaponType weaponType, IWeapon weapon);
-
-        public void FireAll();
-
-        public void FireMain();
-        public void FireHeavy();
     }
 }

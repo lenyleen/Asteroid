@@ -16,7 +16,7 @@ namespace Enemy.EnemyBehaviour
             if(_direction != Vector3.zero)
                 return Vector3.zero;
 
-            _direction = playerPosition.normalized;
+            _direction = -playerPosition.normalized  * _data.acceleration;
             return _direction;
         }
 

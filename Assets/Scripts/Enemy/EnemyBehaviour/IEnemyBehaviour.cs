@@ -6,5 +6,6 @@ namespace Enemy.EnemyBehaviour
     {
         public Vector3 CalculateVelocity(Vector3 currentPosition);
         public float CalculateTorque(Vector3 currentPosition, float currentRotation);
+        
     }
 }

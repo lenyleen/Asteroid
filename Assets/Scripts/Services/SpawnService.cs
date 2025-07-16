@@ -53,7 +53,10 @@ namespace Services
             
             var position = RandomPositionGenerator.GetRandomPositionOutsideCamera(_camera);
             var enemy = _enemyFactory.Create(position, enemyData);
-
+            
+            if(enemy == null)
+                return;
+            
             enemy.OnDead.Take(1)
                 .Subscribe(_ => OnEnemyDied(enemy));
         }

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f57c31bd3de141f99142cae2c7d894e3, type: 3}
+  m_Name: LaserProjectile
+  m_EditorClassIdentifier: 
+  <Type>k__BackingField: 0
+  <Sprite>k__BackingField: {fileID: 3368173300653684224, guid: 045750ad91f262a46a680c82da6599d9, type: 3}
+  <Speed>k__BackingField: 0
+  <LifetimeInSeconds>k__BackingField: 2

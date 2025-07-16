@@ -3,50 +3,31 @@ using DG.Tweening;
 using Interfaces;
 using UniRx;
 using UnityEngine;
+using Weapon;
 using Zenject;
 
 namespace Player
 {
-    public class Player : MonoBehaviour, IPositionMutator, IRotationProvider
+    public class Player : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D rb;
-        [SerializeField] private float _friction;
-
+        [field: SerializeField] public PlayerWeapons PlayerWeapons { get; private set; }
+        
         public Vector3 Position => transform.position;
-
         public float Rotation => transform.rotation.eulerAngles.z;
-        public Vector2 Velocity => rb.linearVelocity;
-
+        
         private readonly CompositeDisposable _disposables = new();
         
-        private float _speed;
-        private float _torque;
-
-        [Inject]
-        private void Constuct(PlayerViewModel playerViewModel)
+        public void Construct(PlayerViewModel playerViewModel)
         {
-            playerViewModel._speed.Subscribe(speed => _speed = speed)
+            playerViewModel.Position.Subscribe(pos => rb.position = pos)
                 .AddTo(_disposables);
-            playerViewModel._torque.Subscribe(torque => _torque = torque)
+                
+            playerViewModel.Rotation.Subscribe(rot => rb.rotation = rot)
                 .AddTo(_disposables);
-        }
-
-        private void FixedUpdate()
-        {
-            Move(_speed);
-            Rotate(_torque);
-        }
-        private void Move(float speed)
-        {
-            rb.AddRelativeForceY(speed);
-
-            rb.linearVelocity *= _friction;
-        }
-
-        private void Rotate(float direction)
-        {
-            Debug.Log(direction);
-            rb.MoveRotation(rb.rotation + direction);
+                
+            playerViewModel.Velocity.Subscribe(vel => rb.linearVelocity = vel)
+                .AddTo(_disposables);
         }
         
         public void SetPosition(Vector3 position)

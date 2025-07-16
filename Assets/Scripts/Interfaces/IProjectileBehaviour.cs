@@ -9,5 +9,7 @@ namespace Interfaces
         public ReactiveCommand OnDeath { get; }
         public Vector2 CalculateVelocity(Vector3 position);
         public void Update(float deltaTime);
+
+        public void Collided();
     }
 }

@@ -178,7 +178,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""id"": ""9346b2d1-e0d0-4d9f-9257-854c8d70239d"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 },
                 {
@@ -187,7 +187,7 @@ public partial class @GameInput: IInputActionCollection2, IDisposable
                     ""id"": ""60d5cc4a-cc19-4d2f-ad62-4c39dc8632db"",
                     ""expectedControlType"": """",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Press"",
                     ""initialStateCheck"": false
                 }
             ],

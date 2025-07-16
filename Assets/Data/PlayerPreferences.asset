@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08e38bee195d4dcd9aab9d5c62b0a2d5, type: 3}
   m_Name: PlayerPreferences
   m_EditorClassIdentifier: 
-  <Acceleration>k__BackingField: 10
+  <Acceleration>k__BackingField: 25
   <MaxSpeed>k__BackingField: 246.1
-  <RotationSpeed>k__BackingField: 571.6
-  <MaxRotationSpeed>k__BackingField: 360
-  <RotationFriction>k__BackingField: 0.95
-  <Friction>k__BackingField: 0.99
+  <RotationSpeed>k__BackingField: 250
+  <MaxRotationSpeed>k__BackingField: 20
+  <RotationFriction>k__BackingField: -1.87
+  <Friction>k__BackingField: 0.95

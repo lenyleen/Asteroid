@@ -1,4 +1,5 @@
 ﻿using System;
+using DataObjects;
 using Interfaces;
 using UniRx;
 using UnityEngine;
@@ -6,26 +7,31 @@ using Zenject;
 
 namespace Projectiles
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
-    public class Projectile : MonoBehaviour,IProjectile
+    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
+    public class Projectile : MonoBehaviour,IProjectile, ICollisionReceiver
     {
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _renderer;
+        [SerializeField] private BoxCollider2D _collider;
+        public ColliderType ColliderType { get; }
         
+
         private IProjectileBehaviour _projectileBehaviour;
         private Action<Projectile> _onDestroy;
 
-        public void Initialize(Sprite sprite, Action<Projectile> onDestroy)
+        public void Initialize(Sprite sprite,float rotation, Action<Projectile> onDestroy)
         {
             _renderer.sprite = sprite;
+            _collider.size = sprite.bounds.size;
             _onDestroy = onDestroy;
+            transform.rotation = Quaternion.Euler(0, 0, rotation);
             gameObject.SetActive(true);
         }
         
         public void ApplyParent(Transform transform)
         {
             transform.SetParent(transform);
-            transform.position = Vector3.zero;
+            transform.localPosition = Vector3.zero;
         }
 
         public void ApplyBehaviour(IProjectileBehaviour  projectileBehaviour)
@@ -41,6 +47,10 @@ namespace Projectiles
                 return;
             
             _projectileBehaviour.Update(Time.fixedDeltaTime);
+            
+            if(!gameObject.activeInHierarchy)
+                return;
+            
             var velocity = _projectileBehaviour.CalculateVelocity(transform.position);
             _rb.AddRelativeForce(velocity);
         }
@@ -52,12 +62,28 @@ namespace Projectiles
             gameObject.SetActive(false);
             _renderer.sprite = null;
         }
-
-        public class Pool : MonoMemoryPool<Sprite,Action<Projectile>,Projectile>
+        
+        private void OnTriggerEnter2D(Collider2D other)
         {
-            protected override void Reinitialize(Sprite sprite,Action<Projectile> onDestroy,Projectile item)
+            if(!other.gameObject.TryGetComponent<ICollisionReceiver>(out var receiver))
+                return;
+             
+            if(receiver.ColliderType != ColliderType.Enemy)
+                return;
+
+            receiver.Collide(this);
+            Debug.Log("colleded");
+        }
+        public void Collide(ICollisionReceiver collisionReceiver)
+        {
+            _projectileBehaviour.Collided();
+        }
+
+        public class Pool : MonoMemoryPool<Sprite,float,Action<Projectile>,Projectile>
+        {
+            protected override void Reinitialize(Sprite sprite, float rotation,Action<Projectile> onDestroy,Projectile item)
             {
-                item.Initialize(sprite,onDestroy);
+                item.Initialize(sprite,rotation,onDestroy);
             }
 
             protected override void OnDespawned(Projectile item)

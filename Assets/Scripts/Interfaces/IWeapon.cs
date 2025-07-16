@@ -1,7 +1,6 @@
 ﻿namespace Weapon
 {
-    public class IWeapon
+    public interface IWeapon
     {
-        
     }
 }

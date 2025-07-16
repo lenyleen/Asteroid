@@ -6,8 +6,6 @@ namespace Projectiles
 {
     public class BulletBehaviour : ProjectileBehaviourBase
     {
-        public ReactiveCommand OnDeath { get; }
-        
         private Vector2 _currentDirection;
         private readonly float _speed;
         
@@ -22,8 +20,13 @@ namespace Projectiles
             if(_currentDirection != Vector2.zero)
                 return Vector2.zero;
             
-            _currentDirection = _moveDirection * _speed;
+            _currentDirection = Vector2.up * _speed;
             return _currentDirection;
+        }
+
+        public override void Collided()
+        {
+            OnDeath?.Execute();
         }
     }
 }

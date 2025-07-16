@@ -14,5 +14,8 @@ namespace Projectiles
         {
             return Vector2.zero;
         }
+        public override void Collided()
+        {
+        }
     }
 }

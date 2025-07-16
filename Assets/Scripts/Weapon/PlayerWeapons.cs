@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using DataObjects;
 using Interfaces;
 using UnityEngine;
@@ -10,31 +12,41 @@ namespace Weapon
         public int HeavySlotsCapacity => _heavySlots.Capacity;
         public int MainSlotsCapacity => _mainSlots.Capacity;
         
+        private HashSet<Transform> _occupiedSlots = new ();
+        
         [SerializeField] private List<Transform> _heavySlots;
         [SerializeField] private List<Transform> _mainSlots;
         
-        private List<IWeapon> _mainWeapons;
-        private List<IWeapon> _heavyWeapons;
-
         public void ApplyWeapons(WeaponType weaponType, IWeapon weapon)
         {
+            if(weapon is not WeaponView weaponView)
+                throw new ArgumentException("Weapon must be of type WeaponView", nameof(weapon));
             
+            switch (weaponType)
+            {
+                case WeaponType.Main:
+                    ApplyWeaponInSlot(_mainSlots,weaponView);
+                    break;
+                case WeaponType.Secondary :
+                    ApplyWeaponInSlot(_heavySlots,weaponView);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null);
+            }
         }
 
-        public void FireAll()
-        {
-            FireMain();
-            FireHeavy();
-        }
 
-        public void FireMain()
+        private void ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
         {
-            _mainWeapons.ForEach(slot => slot.Fire());
-        }
+            var emptySlot = slots.FirstOrDefault(sl => !_occupiedSlots.Contains(sl));
+            
+            if (emptySlot == null)
+                throw new Exception("No empty slot available for weapon application.");
 
-        public void FireHeavy()
-        {
-            _heavyWeapons.ForEach(slot => slot.Fire());
+            _occupiedSlots.Add(emptySlot);
+            
+            weaponView.transform.SetParent(emptySlot);
+            weaponView.transform.localPosition = Vector3.zero;
         }
     }
 }

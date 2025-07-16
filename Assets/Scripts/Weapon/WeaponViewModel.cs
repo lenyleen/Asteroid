@@ -6,17 +6,51 @@ using Zenject;
 
 namespace Weapon
 {
-    public class WeaponViewModel
+    public class WeaponViewModel : IFixedTickable, IWeaponInfoProvider
     {
-        public ReactiveProperty<IProjectile> Projectile { get; } = new ReactiveProperty<IProjectile>();
+        public WeaponType WeaponType => _model.Type;
         
-        private readonly IFactory<ProjectileType,Vector2,IProjectileTarget,IProjectile>  _projectileFactory;
+        public ReactiveCommand<IProjectile> OnProjectileCreated { get; } = new();
+        public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
+        public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 
-        public void Fire(Vector2 direction)
+        private readonly WeaponModel _model;
+       
+        private readonly IWeaponProjectileCreator _projectileCreator;
+        
+        public void Initialize()
+        {
+            ReloadTime = new ReadOnlyReactiveProperty<float>(_model.ReloadTime);
+            AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
+        }
+        
+        public WeaponViewModel(IWeaponProjectileCreator projectileCreator, WeaponModel weaponModel)
+        {
+            _projectileCreator = projectileCreator;
+            _model = weaponModel;
+        }
+        public void TryFiree(Vector3 position, float rotation)
+        {
+            if(!_model.TryFire())
+                return;
+            
+            var projectile = _projectileCreator.CreateProjectile(position,rotation);
+            OnProjectileCreated.Execute(projectile);
+        }
+        
+        public void FixedTick()
+        {
+            _model.UpdateReloadTime(Time.fixedDeltaTime);
+        }
+
+       
+
+        /*public void Fire(Vector2 direction)
         {
             //if(_model.Cooldown)
             //return
             Projectile.Value = _projectileFactory.Create(//model.ProjectileType, direction,null)
-        }
+        }*/
+        
     }
 }
