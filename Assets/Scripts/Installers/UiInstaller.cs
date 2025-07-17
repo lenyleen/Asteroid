@@ -22,7 +22,9 @@ namespace Installers
                 .AsSingle()
                 .WithArguments(_dataDisplayerPrefab);
 
-            Container.BindInterfacesAndSelfTo<InGameUiViewModel>().AsSingle();
+            Container.BindInterfacesAndSelfTo<InGameUiViewModel>()
+                .AsSingle();
+            
             Container.BindInterfacesAndSelfTo<InGameUi>()
                 .FromInstance(_inGameUi)
                 .AsSingle();

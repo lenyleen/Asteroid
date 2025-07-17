@@ -32,5 +32,17 @@ namespace Static
                 _ => Vector3.zero
             };
         }
+
+        public static Vector3 GenerateRandomPositionNearPosition(Vector3 centerPosition, float radius = 1f)
+        {
+            float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+            
+            float randomDistance = Random.Range(0f, radius);
+            
+            float offsetX = Mathf.Cos(randomAngle) * randomDistance;
+            float offsetY = Mathf.Sin(randomAngle) * randomDistance;
+            
+            return new Vector3(centerPosition.x + offsetX, centerPosition.y + offsetY, centerPosition.z);
+        }
     }
 }

@@ -17,3 +17,4 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: 7113076273944033046, guid: 4a23bf3fa72a50741b008afa9669968f, type: 3}
   <Damage>k__BackingField: 1
   <ReloadTimeInSeconds>k__BackingField: 5
+  <AmmoCount>k__BackingField: 50

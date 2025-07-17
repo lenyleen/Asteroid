@@ -7,17 +7,17 @@ using Zenject;
 
 namespace Installers
 {
-    public class EnemyInstaller : Installer<Enemy.Enemy,int,List<EnemyData>,EnemyInstaller>
+    public class EnemyInstaller : Installer<Enemy.Enemy,SpawnData,List<EnemyData>,EnemyInstaller>
     {
         private Enemy.Enemy _enemyPrefab;
         private List<EnemyData> _enemyDatas;
-        private int _maxEnemies;
+        private SpawnData _spawnData;
 
-        public EnemyInstaller(Enemy.Enemy enemyPrefab,int maxEnemies, List<EnemyData> enemyDatas)
+        public EnemyInstaller(Enemy.Enemy enemyPrefab,SpawnData spawnData, List<EnemyData> enemyDatas)
         {
             _enemyPrefab = enemyPrefab;
             _enemyDatas = enemyDatas;
-            _maxEnemies = maxEnemies;
+            _spawnData = spawnData;
         }
         public override void InstallBindings()
         {
@@ -26,7 +26,7 @@ namespace Installers
 
             Container.BindInterfacesAndSelfTo<EnemyFactory>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle().WithArguments(Camera.main, _enemyDatas, _maxEnemies);
+            Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle().WithArguments(_enemyDatas, _spawnData);
         }
     }
 }

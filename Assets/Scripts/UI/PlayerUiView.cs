@@ -25,9 +25,8 @@ namespace UI
             
             _playerViewModel.Score.Subscribe(score => _scoreText.text = score.ToString())
                 .AddTo(_disposable);
-            _playerViewModel.OnScoreEnable.Subscribe(enable => _scoreText.enabled = enable)
-                .AddTo(_disposable);
-            _playerViewModel.OnEndScreenEnable.Subscribe(enable => _nameEnterBox.enabled = enable)
+            
+            _playerViewModel.OnEndScreenEnable.Subscribe(enable => _nameEnterBox.Display(enable))
                 .AddTo(_disposable);
         }
     }

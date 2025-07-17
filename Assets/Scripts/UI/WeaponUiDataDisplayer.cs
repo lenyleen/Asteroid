@@ -8,7 +8,7 @@ namespace UI
 {
     public class WeaponUiDataDisplayer : MonoBehaviour,IWeaponUiDataDisplayer
     {
-        public string Name { get; }
+        public string Name => _name.text;
         
         private readonly CompositeDisposable _disposables = new ();
 

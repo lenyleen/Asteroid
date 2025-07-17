@@ -15,6 +15,7 @@ MonoBehaviour:
   <Sprite>k__BackingField: {fileID: -7989768276783323436, guid: d7818bef7aedd5c43b60905cdacc2a46, type: 3}
   <Health>k__BackingField: 1
   <Type>k__BackingField: 1
+  <Score>k__BackingField: 100
   <BehaviourData>k__BackingField: {fileID: 11400000, guid: 60c60b7da5c92ca4fb116928260d0fd6, type: 2}
   <SpawnTimeInSeconds>k__BackingField: 5
   <MaxCount>k__BackingField: 0

@@ -9,7 +9,7 @@ namespace Installers
         {
             Container.Bind<GameInput>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerInputController>().AsSingle();
-            /*Container.BindInterfacesAndSelfTo<ScreenWrapService>().AsSingle();*/
+            Container.BindInterfacesAndSelfTo<ScreenWrapService>().AsSingle();
         }
     }
 }

@@ -6,6 +6,6 @@ namespace Interfaces
     {
         public ReactiveProperty<IPositionProvider> PositionProvider { get; }
         public void ApplyPlayer(IPositionProvider player);
-        public void RemovePlayer(IPositionProvider player);
+        public void RemovePlayer();
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Signals
 {
-    public class GameEnded
+    public class LoseSignal
     {
         
     }

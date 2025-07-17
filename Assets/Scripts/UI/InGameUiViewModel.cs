@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Interfaces;
+using Signals;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -25,7 +26,7 @@ namespace UI
             IPlayerPositionProvider playerPositionProviderService)
         {
             Position = new ReactiveProperty<Vector3>(Vector3.zero);
-            Rotation = new ReactiveProperty<float>(0f);
+            Rotation = new ReactiveProperty<float>(0);
             Velocity = new ReactiveProperty<Vector2>(Vector2.zero);
             
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
@@ -70,19 +71,23 @@ namespace UI
             displayer.Hide();
             _displayers.Remove(displayer);
         }
-
+        
         private void OnPositionProviderChanged(IPositionProvider positionProvider)
         {
             if (positionProvider == null)
-            {
-                Position = new ReactiveProperty<Vector3>(Vector3.zero);
-                Rotation = new ReactiveProperty<float>(0f);
-                Velocity = new ReactiveProperty<Vector2>(Vector2.zero);
                 return;
-            }
-            Position = positionProvider.Position;
-            Velocity = positionProvider.Velocity;
-            Rotation = positionProvider.Rotation;
+            
+            positionProvider.Position.Subscribe(pos 
+                => Position.Value = pos)
+                .AddTo(_disposables);
+            
+            positionProvider.Velocity.Subscribe(vel 
+                => Velocity.Value = vel)
+                .AddTo(_disposables);
+            
+            positionProvider.Rotation
+                .Subscribe(rot => Rotation.Value = rot)
+                .AddTo(_disposables);
         }
         public void Dispose()
         {

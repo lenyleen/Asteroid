@@ -1,7 +1,8 @@
 ﻿using System;
+using Signals;
 using UniRx;
 using Zenject;
-using IInitializable = Unity.VisualScripting.IInitializable;
+
 
 namespace UI
 {
@@ -11,7 +12,6 @@ namespace UI
         private readonly PlayerModel _playerModel;
         
         public ReactiveCommand<bool> OnEndScreenEnable { get; } = new ();
-        public ReactiveCommand<bool> OnScoreEnable { get; } = new ();
         public ReadOnlyReactiveProperty<int> Score { get; }
 
         public PlayerViewModel(PlayerModel model, SignalBus signalBus)
@@ -23,17 +23,30 @@ namespace UI
 
         public void Initialize()
         {
-            
+            _signalBus.Subscribe<LoseSignal>(OnLose);
+            _signalBus.Subscribe<EnemyDestroyedSignal>(OnEnemyDestroyed);
         }
 
         public void OnRestartClick(string playerName)
         {
             _playerModel.SavePlayerDataToScore(playerName);
+            OnEndScreenEnable.Execute(false);
+            _signalBus.Fire<GameStarted>();
+        }
+
+        private void OnLose(LoseSignal loseSignal)
+        {
+            OnEndScreenEnable.Execute(true);
+        }
+        
+        private void OnEnemyDestroyed(EnemyDestroyedSignal signal)
+        {
+            _playerModel.UpdateScore(signal.Score);
         }
         
         public void Dispose()
         {
-            
+            _signalBus.TryUnsubscribe<EnemyDestroyedSignal>(OnEnemyDestroyed);
         }
     }
 }

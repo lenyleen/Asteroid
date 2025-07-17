@@ -16,7 +16,7 @@ namespace Installers
         [SerializeField] private List<ProjectileData> _projectileDatas;
         [SerializeField] private Projectile _projectilePrefab;
         [SerializeField] private Enemy.Enemy _enemyPrefab;
-        [SerializeField] private int _maxEnemies;
+        [SerializeField] private SpawnData _spawnData;
         [SerializeField] private List<EnemyData> _enemyDatas;
         [SerializeField] private Camera _camera;
         [SerializeField]private InGameUi _inGameUi;
@@ -29,7 +29,7 @@ namespace Installers
             Container.Bind<Camera>().FromInstance(_camera).AsSingle();
             GameInstaller.Install(Container);
             ShipInstaller.Install(Container,  _playerInstallData,_projectilePrefab, _projectileDatas, _weaponViewPrefab);
-            EnemyInstaller.Install(Container, _enemyPrefab, _maxEnemies, _enemyDatas);
+            EnemyInstaller.Install(Container, _enemyPrefab, _spawnData, _enemyDatas);
             UiInstaller.Install(Container, _inGameUi,_dataDisplayerPrefab, _playerUi);
         }
 
@@ -37,8 +37,8 @@ namespace Installers
         private void InstallSignals()
         {
             Container.DeclareSignal<EnemyDestroyedSignal>();
+            Container.DeclareSignal<LoseSignal>();
             Container.DeclareSignal<GameStarted>();
-            Container.DeclareSignal<GameEnded>();
         }
     }
 }

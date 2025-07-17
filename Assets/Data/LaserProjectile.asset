@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: LaserProjectile
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
-  <Sprite>k__BackingField: {fileID: 3368173300653684224, guid: 045750ad91f262a46a680c82da6599d9, type: 3}
+  <Sprite>k__BackingField: {fileID: -4721095330656935829, guid: bd780d5682f2ff2419e2cc6ea20223a5, type: 3}
   <Speed>k__BackingField: 0
-  <LifetimeInSeconds>k__BackingField: 2
+  <LifetimeInSeconds>k__BackingField: 0.5

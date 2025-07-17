@@ -6,14 +6,14 @@ namespace Enemy.EnemyBehaviour
 {
     public class ChasingBehaviour : EnemyBehaviourBase
     {
-        public ChasingBehaviour(EnemyBehaviourData data, IPositionProvider positionProvider) 
-            : base(data, positionProvider)
+        public ChasingBehaviour(EnemyBehaviourData data) 
+            : base(data)
         {
         }
 
-        public override Vector3 CalculateVelocity(Vector3 currentPosition)
+        public override Vector3 CalculateVelocity(Vector3 currentPosition, Vector3 followingPosition)
         {
-            _direction = (_positionProvider.Position.Value - currentPosition).normalized;
+            _direction = (followingPosition - currentPosition).normalized;
             _direction *= _data.acceleration;
             return _direction;
         }

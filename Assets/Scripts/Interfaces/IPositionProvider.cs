@@ -6,9 +6,8 @@ namespace Interfaces
 {
     public interface IPositionProvider
     {
-        public ReactiveProperty<Vector3> Position { get; }
-        public ReactiveProperty<float> Rotation { get; }
-        
-        public ReactiveProperty<Vector2> Velocity { get; }
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public ReadOnlyReactiveProperty<float> Rotation { get; } 
     }
 }

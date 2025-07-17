@@ -6,12 +6,12 @@ namespace Enemy.EnemyBehaviour
 {
     public class FlyOutBehaviour : EnemyBehaviourBase
     {
-        public FlyOutBehaviour(EnemyBehaviourData data, IPositionProvider positionProvider) 
-            : base(data, positionProvider)
+        public FlyOutBehaviour(EnemyBehaviourData data) 
+            : base(data)
         {
         }
 
-        public override Vector3 CalculateVelocity(Vector3 currentPosition)
+        public override Vector3 CalculateVelocity(Vector3 currentPosition, Vector3 followingPosition)
         {
             if (_direction != Vector3.zero)
                 return _direction;

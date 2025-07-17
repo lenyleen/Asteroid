@@ -1,4 +1,5 @@
 ﻿using System;
+using DataObjects;
 using DG.Tweening;
 using Interfaces;
 using UniRx;
@@ -8,36 +9,47 @@ using Zenject;
 
 namespace Player
 {
-    public class Ship : MonoBehaviour
+    public class Ship : MonoBehaviour, ICollisionReceiver
     {
         [SerializeField] private Rigidbody2D rb;
         [field: SerializeField] public PlayerWeapons PlayerWeapons { get; private set; }
+        [field:SerializeField]public ColliderType ColliderType { get; private set; }
         
-        public Vector3 Position => transform.position;
-        public float Rotation => transform.rotation.eulerAngles.z;
+        private ShipViewModel _shipViewModel; 
         
         private readonly CompositeDisposable _disposables = new();
         
         public void Construct(ShipViewModel shipViewModel)
         {
-            shipViewModel.Position.Subscribe(pos => rb.position = pos)
+            _shipViewModel = shipViewModel;
+            
+            _shipViewModel.Position.Subscribe(pos => rb.position = pos)
                 .AddTo(_disposables);
                 
-            shipViewModel.Rotation.Subscribe(rot => rb.rotation = rot)
+            _shipViewModel.Rotation.Subscribe(rot => rb.rotation = rot)
                 .AddTo(_disposables);
                 
-            shipViewModel.Velocity.Subscribe(vel => rb.linearVelocity = vel)
+            _shipViewModel.Velocity.Subscribe(vel => rb.linearVelocity = vel)
+                .AddTo(_disposables);
+            
+            _shipViewModel.OnDeath.Subscribe(_ => Destroy(this.gameObject))
                 .AddTo(_disposables);
         }
-        
-        public void SetPosition(Vector3 position)
+
+        private void FixedUpdate()
         {
-            transform.position = position;
+            _shipViewModel.Update();
         }
 
         public void OnDestroy()
         {
             _disposables.Dispose();
+        }
+
+        
+        public void Collide(ICollisionReceiver collisionReceiver)
+        {
+            _shipViewModel.TakeDamage();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataObjects;
 using Interfaces;
+using UniRx;
 using UnityEngine;
 
 namespace Weapon
@@ -12,10 +13,22 @@ namespace Weapon
         public int HeavySlotsCapacity => _heavySlots.Capacity;
         public int MainSlotsCapacity => _mainSlots.Capacity;
         
+        private PlayerWeaponsViewModel _viewModel;
         private HashSet<Transform> _occupiedSlots = new ();
+        
+        private readonly CompositeDisposable _disposables = new ();
         
         [SerializeField] private List<Transform> _heavySlots;
         [SerializeField] private List<Transform> _mainSlots;
+
+        public void Initialize(PlayerWeaponsViewModel viewModel)
+        {
+            _viewModel = viewModel;
+
+            _viewModel.OnDeath
+                .Subscribe(_ => Die())
+                .AddTo(_disposables);
+        }
         
         public void ApplyWeapons(WeaponType weaponType, IWeapon weapon)
         {
@@ -35,6 +48,21 @@ namespace Weapon
             }
         }
 
+        private void Die()
+        {
+            foreach (var slot in _occupiedSlots)
+            {
+                Destroy(slot.gameObject);
+            }
+            Destroy(this.gameObject);
+        }
+
+
+        private void FixedUpdate()
+        {
+            _viewModel.Update();
+        }
+
 
         private void ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
         {
@@ -47,6 +75,11 @@ namespace Weapon
             
             weaponView.transform.SetParent(emptySlot);
             weaponView.transform.localPosition = Vector3.zero;
+        }
+
+        private void OnDestroy()
+        {
+            _disposables.Dispose();
         }
     }
 }

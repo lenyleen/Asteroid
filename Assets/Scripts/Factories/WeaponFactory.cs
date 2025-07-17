@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Factories
 {
-    public class WeaponFactory : IFactory<ProjectileType, WeaponData, IWeaponsHolder, WeaponViewModel>
+    public class WeaponFactory : IFactory<ProjectileType, WeaponData,string, IWeaponsHolder, WeaponViewModel>
     {
         private readonly DiContainer _diContainer;
         private readonly IFactory<ProjectileType, Vector2, IProjectileTarget, IProjectileBehaviour>
@@ -26,9 +26,9 @@ namespace Factories
             _weaponViewPrefab = weaponViewPrefab;
         }
 
-        public WeaponViewModel Create(ProjectileType type, WeaponData data, IWeaponsHolder weaponsHolder)
+        public WeaponViewModel Create(ProjectileType type,WeaponData data,string name, IWeaponsHolder weaponsHolder)
         {
-            var model = new WeaponModel(data);
+            var model = new WeaponModel(data, name);
             var viewModel = new WeaponViewModel(CreateProjectileCreator(type),model);
             viewModel.Initialize();
             _diContainer.Resolve<TickableManager>().AddFixed(viewModel);

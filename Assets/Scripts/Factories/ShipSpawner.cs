@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DataObjects;
 using Installers;
 using Interfaces;
 using Player;
+using Services;
 using UnityEngine;
 using Weapon;
 using Zenject;
@@ -14,13 +16,13 @@ namespace Factories
         private readonly DiContainer _container;
         
         private readonly ShipInstaller.PlayerInstallData _playerInstallData;
-        private readonly IFactory<ProjectileType, WeaponData, IWeaponsHolder, WeaponViewModel>  _weaponFactory;
+        private readonly IFactory<ProjectileType, WeaponData, string,IWeaponsHolder, WeaponViewModel>  _weaponFactory;
         private readonly PlayerInputController _playerInputController;
         private readonly IPlayerPositionProvider _playerDataProvider;
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
 
         public ShipSpawner(ShipInstaller.PlayerInstallData playerInstallData,
-            IFactory<ProjectileType, WeaponData, IWeaponsHolder, WeaponViewModel> weaponFactory,
+            IFactory<ProjectileType, WeaponData,string, IWeaponsHolder, WeaponViewModel> weaponFactory,
             PlayerInputController playerInputController, DiContainer container, IPlayerPositionProvider playerDataProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
         {
@@ -34,14 +36,10 @@ namespace Factories
         
         public void SpawnPlayer()
         {
-            var playerModel = new ShipModel(_playerInstallData.PlayerPreferences);
-            _container.BindInterfacesAndSelfTo<ShipModel>()
-                .FromInstance(playerModel)
-                .AsSingle();
-
-            var playerViewModel = _container.Instantiate<ShipViewModel>();
-            _container.Bind<IFixedTickable>().To<ShipViewModel>().FromInstance(playerViewModel);
-            _container.Resolve<TickableManager>().AddFixed(playerViewModel);
+            var playerModel = _container.Instantiate<ShipModel>(new object[]{_playerInstallData.PlayerPreferences});
+            
+            var playerViewModel = _container.Instantiate<ShipViewModel>(new object[]{playerModel});
+            playerViewModel.Initiialize();
             
             _playerDataProvider.ApplyPlayer(playerViewModel);
             
@@ -62,29 +60,31 @@ namespace Factories
         {
             var heavyWeapons = new List<WeaponViewModel>();
             var mainWeapons = new List<WeaponViewModel>();
+
+            var heavyWeaponIndex = 1; 
             
             foreach (var weaponData in _playerInstallData.PlayerHeavyWeaponsData)
             {
-                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData, playerWeapons);
+                var name = $"{weaponData.Type} {heavyWeaponIndex}";
+                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData,name, playerWeapons);
                 heavyWeapons.Add(newWeapon);
                 _playerWeaponInfoProviderService.ApplyWeaponInfoProvider(newWeapon);
+
+                heavyWeaponIndex++;
             }
 
             foreach (var weaponData in _playerInstallData.PlayerMainWeaponsData)  
             {
-                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData, playerWeapons);
+                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData, weaponData.Type.ToString(), playerWeapons);
                 mainWeapons.Add(newWeapon);
             }
             
-            var weaponsViewModel = new PlayerWeaponsViewModel(mainWeapons,heavyWeapons, _playerInputController
-                , _playerDataProvider.PositionProvider.Value);
+            var weaponsViewModel = _container.Instantiate<PlayerWeaponsViewModel>(new object[] { mainWeapons,heavyWeapons, _playerInputController,
+                _playerDataProvider.PositionProvider.Value});
             
-            _container.BindInterfacesAndSelfTo<PlayerWeaponsViewModel>()
-                .FromInstance(weaponsViewModel)
-                .AsSingle();
-            _container.Resolve<TickableManager>().AddFixed(weaponsViewModel);
+            
+            weaponsViewModel.Initialize();
+            playerWeapons.Initialize(weaponsViewModel);
         }
-        
-        
     }
 }

@@ -23,6 +23,7 @@ namespace Projectiles
         {
             _renderer.sprite = sprite;
             _collider.size = sprite.bounds.size;
+            _collider.offset = sprite.bounds.center;
             _onDestroy = onDestroy;
             transform.rotation = Quaternion.Euler(0, 0, rotation);
             gameObject.SetActive(true);

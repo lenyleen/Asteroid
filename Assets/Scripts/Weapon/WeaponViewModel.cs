@@ -11,7 +11,7 @@ namespace Weapon
         public WeaponType WeaponType => _model.Type;
         
         public ReactiveCommand<IProjectile> OnProjectileCreated { get; } = new();
-        public string Name { get; }
+        public string Name => _model.Name;
         public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
         public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 
@@ -44,14 +44,10 @@ namespace Weapon
             _model.UpdateReloadTime(Time.fixedDeltaTime);
         }
 
-       
-
-        /*public void Fire(Vector2 direction)
+        public void Dispose()
         {
-            //if(_model.Cooldown)
-            //return
-            Projectile.Value = _projectileFactory.Create(//model.ProjectileType, direction,null)
-        }*/
-        
+            ReloadTime.Dispose();
+            AmmoCount.Dispose();
+        }
     }
 }

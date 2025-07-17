@@ -17,7 +17,11 @@ namespace UI
         {
             _restartButton.onClick.AddListener(RestartButtonOnClick);
         }
-        
+
+        public void Display(bool enable)
+        {
+            gameObject.SetActive(enable);
+        }
         public void RestartButtonOnClick()
         {
             _restartCommand.Execute(_enteredText.text);

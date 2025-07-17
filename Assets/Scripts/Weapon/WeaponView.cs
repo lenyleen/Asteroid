@@ -31,5 +31,10 @@ namespace Weapon
             projectileTransform.SetParent(this.transform);
             projectileTransform.localPosition = Vector3.zero;
         }
+
+        public void OnDestroy()
+        {
+            _disposables.Dispose();
+        }
     }
 }

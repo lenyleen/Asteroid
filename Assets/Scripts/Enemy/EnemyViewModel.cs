@@ -9,11 +9,12 @@ using Zenject;
 
 namespace Enemy
 {
-    public class EnemyViewModel :IInitializable, IDieble
+    public class EnemyViewModel :IInitializable, ISpawnableEnemy
     {
         private readonly EnemyModel _model;
         private readonly CompositeDisposable _disposables = new ();
         private readonly SignalBus _signalBus;
+        public EnemyType  Type => _model.Type;
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
@@ -32,6 +33,8 @@ namespace Enemy
         {
             _model.OnDeath.Subscribe(_ => OnDeath())
                 .AddTo(_disposables);
+
+            _signalBus.Subscribe<LoseSignal>(OnLose);
         }
         public void TakeCollision(ICollisionReceiver collisionReceiver)
         {
@@ -40,6 +43,8 @@ namespace Enemy
             
             _model.TakeHit(1);
         }
+
+        private void OnLose(LoseSignal signal) => _model.OnNothingToAttack(); 
         
         public void UpdatePosition()
         {
@@ -48,7 +53,8 @@ namespace Enemy
 
         private void OnDeath()
         {
-            _signalBus.Fire(new EnemyDestroyedSignal(_model.Type, _model.Position.Value));
+            _signalBus.Unsubscribe<LoseSignal>(OnLose);
+            _signalBus.Fire(new EnemyDestroyedSignal(_model.Type, _model.Score, _model.Position.Value));
             _disposables.Dispose();
         }
     }

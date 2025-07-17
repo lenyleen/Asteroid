@@ -12,41 +12,46 @@ namespace Weapon
         public ProjectileType ProjectileType => _weaponData.ProjectileType;
         public Sprite Sprite => _weaponData.Sprite;
         public int Damage => _weaponData.Damage;
+        public string Name => _name;
         public ReactiveProperty<float> ReloadTime { get; private set; }
         public ReactiveProperty<int> AmmoCount { get; private set; }
-
-        private float _reloadTime;
-        private float _ammoCount;
-        public bool CanFire { get; private set; }
         
-        private float _lastFireTime = -999f;
+        private bool _canFire = true;
+        
+        private readonly string _name;
+        
 
-        public WeaponModel(WeaponData weaponData)
+        public WeaponModel(WeaponData weaponData, string name)
         {
             _weaponData = weaponData;
-            ReloadTime = new ReactiveProperty<float>(0);
+            _name = name;
+            ReloadTime = new ReactiveProperty<float>(weaponData.ReloadTimeInSeconds);
             AmmoCount = new ReactiveProperty<int>(_weaponData.AmmoCount);
         }
         
         public bool TryFire()
         {
-            if (!CanFire || AmmoCount.Value <= 0) return false;
+            if (!_canFire || AmmoCount.Value <= 0) return false;
             
-            _lastFireTime = Time.time;
-            CanFire = false;
-            AmmoCount.Value -= 1;
+            _canFire = false;
+            
+            if(_weaponData.Type != WeaponType.Main)
+                AmmoCount.Value -= 1;
+
+            ReloadTime.Value = 0;
+            
             return true;
         }
         
         public void UpdateReloadTime(float deltaTime)
         {
-            ReloadTime.Value += deltaTime;
-            
-            if(ReloadTime.Value < _weaponData.ReloadTimeInSeconds)
+            if (ReloadTime.Value < _weaponData.ReloadTimeInSeconds)
+            {
+                ReloadTime.Value += deltaTime;
                 return;
-            
-            CanFire = true;
-            ReloadTime.Value = 0f;
+            }
+
+            _canFire = true;
         }
     }
 }

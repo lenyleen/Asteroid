@@ -5,13 +5,15 @@ namespace Signals
 {
     public class EnemyDestroyedSignal
     {
-        public EnemyType Type;
-        public Vector3 Position;
+        public EnemyType Type { get; private set; }
+        public Vector3 Position{get; private set;}
+        public int Score{get; private set;}
 
-        public EnemyDestroyedSignal(EnemyType type, Vector3 position)
+        public EnemyDestroyedSignal(EnemyType type,int score, Vector3 position)
         {
             Type = type;
             Position = position;
+            Score = score;
         }
     }
 }
