@@ -9,6 +9,6 @@ namespace Interfaces
     {
         public EnemyType Type { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
-        public ReactiveCommand OnDead { get; }
+        public IObservable<Unit> OnDead { get; }
     }
 }

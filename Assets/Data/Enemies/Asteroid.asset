@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517477925b8042c39fb9d0d347a9616e, type: 3}
   m_Name: Asteroid
   m_EditorClassIdentifier: 
+  <ColliderType>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: -4308095718904324256, guid: 7e4bd15416aba2e468f934da30d5931f, type: 3}
   <Health>k__BackingField: 1
   <Type>k__BackingField: 0
@@ -19,3 +20,4 @@ MonoBehaviour:
   <BehaviourData>k__BackingField: {fileID: 11400000, guid: bab32cdcedb9e754c938abd15626fd4a, type: 2}
   <SpawnTimeInSeconds>k__BackingField: 5
   <MaxCount>k__BackingField: 0
+  <CollisionData>k__BackingField: {fileID: 11400000, guid: c6c7239ca5370214ba4647655f91dcab, type: 2}

@@ -14,22 +14,22 @@ namespace Factories
     {
         private readonly Enemy.Enemy.Pool _enemyPool;
         private readonly IPlayerPositionProvider _dataProvider;
-        private readonly SignalBus _signalBus;
+        private readonly IInstantiator _instantiator;
 
-        public EnemyFactory(Enemy.Enemy.Pool enemyPool,SignalBus signalBus, IPlayerPositionProvider dataProvider)
+        public EnemyFactory(Enemy.Enemy.Pool enemyPool, IPlayerPositionProvider dataProvider,
+            IInstantiator instantiator)
         {
             _enemyPool = enemyPool;
             _dataProvider = dataProvider;
-            _signalBus = signalBus;
+            _instantiator = instantiator;
         }
         public EnemyViewModel Create(Vector3 position, EnemyData  data)
         {
-            if (_dataProvider.PositionProvider.Value == null)
-                return null;
-            
             var behaviour = CreateBehaviour(data);
-            var model = new EnemyModel(data.Health,data,behaviour, position, _dataProvider.PositionProvider.Value);
-            var viewModel = new EnemyViewModel(model, _signalBus);
+            var model = _instantiator.Instantiate<EnemyModel>(new object[]{data, behaviour, position,
+                _dataProvider.PositionProvider.Value});
+            var viewModel = _instantiator.Instantiate<EnemyViewModel>(new object[]{model});
+            
             viewModel.Initialize();
             
             var enemy = _enemyPool.Spawn(position,data.Sprite, viewModel,view => _enemyPool.Despawn(view));

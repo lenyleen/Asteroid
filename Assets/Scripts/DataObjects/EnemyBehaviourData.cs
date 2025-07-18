@@ -7,5 +7,6 @@ namespace DataObjects
     {
         [field: SerializeField] public float acceleration { get; private set; }
         [field: SerializeField] public float angularAcceleration { get; private set; }
+        [field: SerializeField] public float _maxSpeed { get; private set; }
     }
 }

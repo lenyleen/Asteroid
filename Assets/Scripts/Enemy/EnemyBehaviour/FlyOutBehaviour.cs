@@ -11,18 +11,17 @@ namespace Enemy.EnemyBehaviour
         {
         }
 
-        public override Vector3 CalculateVelocity(Vector3 currentPosition, Vector3 followingPosition)
+        public override void Update(ref Vector3 currentPosition,  Vector3 followingPosition, 
+                ref Vector2 currentVelocity, ref float currentRotation)
         {
-            if (_direction != Vector3.zero)
-                return _direction;
-            
-            _direction = -currentPosition.normalized  * _data.acceleration;
-            return _direction;
-        }
+            if (_direction == Vector3.zero)
+                _direction = -currentPosition.normalized  * _data.acceleration;
 
-        public override float CalculateTorque(Vector3 curPosition, float currentRotation)
-        {
-            return 0;
+            currentVelocity = _direction;
+            if(currentVelocity.magnitude > _data._maxSpeed)
+                currentVelocity *= _data._maxSpeed;
+            
+            currentPosition += (Vector3)currentVelocity * Time.deltaTime;
         }
     }
 }

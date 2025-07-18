@@ -14,15 +14,17 @@ namespace Enemy
         private readonly EnemyModel _model;
         private readonly CompositeDisposable _disposables = new ();
         private readonly SignalBus _signalBus;
+        private readonly IPositionProvider _positionProvider;
         public EnemyType  Type => _model.Type;
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
-        public ReactiveCommand OnDead => _model.OnDeath;
+        public IObservable<Unit> OnDead => _model.OnDeath;
         
-        public EnemyViewModel(EnemyModel model, SignalBus signalBus)
+        public EnemyViewModel(EnemyModel model, SignalBus signalBus, IPositionProvider positionProvider)
         {
             _model = model;
+            _positionProvider = positionProvider;
             Rotation = new ReadOnlyReactiveProperty<float>(_model.Rotation);
             Position = new ReadOnlyReactiveProperty<Vector3>(_model.Position);
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
@@ -34,14 +36,18 @@ namespace Enemy
             _model.OnDeath.Subscribe(_ => OnDeath())
                 .AddTo(_disposables);
 
-            _signalBus.Subscribe<LoseSignal>(OnLose);
+            _positionProvider.OnDeath.Take(1).Subscribe(_ 
+                    => _model.OnNothingToAttack())
+                .AddTo(_disposables);
         }
-        public void TakeCollision(ICollisionReceiver collisionReceiver)
+        public void MakeCollision(ICollisionReceiver collisionReceiver)
         {
-            if(collisionReceiver.ColliderType == ColliderType.Enemy)
-                return;
-            
-            _model.TakeHit(1);
+            collisionReceiver.Collide(_model.ColliderType,_model.Damage);
+        }
+
+        public void TakeCollision(ColliderType colliderType, int damage)
+        {
+            _model.TakeHit(colliderType, damage);
         }
 
         private void OnLose(LoseSignal signal) => _model.OnNothingToAttack(); 
@@ -53,9 +59,13 @@ namespace Enemy
 
         private void OnDeath()
         {
-            _signalBus.Unsubscribe<LoseSignal>(OnLose);
             _signalBus.Fire(new EnemyDestroyedSignal(_model.Type, _model.Score, _model.Position.Value));
             _disposables.Dispose();
+        }
+
+        ~EnemyViewModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

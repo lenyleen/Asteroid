@@ -11,14 +11,22 @@ namespace Enemy.EnemyBehaviour
         {
         }
 
-        public override Vector3 CalculateVelocity(Vector3 currentPosition, Vector3 followingPosition)
+        public override void Update(ref Vector3 currentPosition,  Vector3 followingPosition, 
+            ref Vector2 currentVelocity, ref float currentRotation)
         {
             _direction = (followingPosition - currentPosition).normalized;
             _direction *= _data.acceleration;
-            return _direction;
+            currentRotation = CalculateRotation(currentRotation);
+
+            currentVelocity = _direction * Time.deltaTime;
+           
+            if(currentVelocity.magnitude > _data._maxSpeed)
+               currentVelocity *= _data._maxSpeed;
+           
+            currentPosition += (Vector3)currentVelocity;
         }
 
-        public override float CalculateTorque(Vector3 currentPosition, float currentRotation)
+        private float CalculateRotation(float currentRotation)
         {
             float angle = Mathf.Atan2(_direction.y, _direction.x) * Mathf.Rad2Deg;
             float angleDiff = Mathf.DeltaAngle(currentRotation, angle);

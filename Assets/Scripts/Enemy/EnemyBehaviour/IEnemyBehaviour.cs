@@ -1,11 +1,12 @@
-﻿using UnityEngine;
+﻿using Interfaces;
+using UnityEngine;
 
 namespace Enemy.EnemyBehaviour
 {
-    public interface IEnemyBehaviour
+    public interface IEnemyBehaviour : IMovementBehaviour
     {
-        public Vector3 CalculateVelocity(Vector3 currentPosition,  Vector3 followingPosition);
-        public float CalculateTorque(Vector3 currentPosition, float currentRotation);
-        
+        public void Update(ref Vector3 currentPosition, Vector3 followingPosition,
+            ref Vector2 currentVelocity, ref float currentRotation);
+
     }
 }

@@ -19,11 +19,10 @@ namespace Services
         private readonly IFactory<Vector3, EnemyData, EnemyViewModel> _enemyFactory;
         private readonly Dictionary<EnemyType,EnemyData> _enemiesData;
         private readonly CompositeDisposable _disposable = new ();
-        private HashSet<ISpawnableEnemy> _spawnedEnemies;
+        private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private readonly SpawnData _spawnData;
-        
-        
-        private bool _canSpawn = true;
+
+        private bool _canSpawn;
 
         public SpawnService(Camera camera, IFactory<Vector3, EnemyData, EnemyViewModel> enemyFactory, 
             List<EnemyData> enemiesData, SpawnData spawnData)
@@ -44,6 +43,8 @@ namespace Services
                     .AddTo(_disposable);
             }
         }
+        
+        public void EnableSpawn(bool enable) => _canSpawn = enable; //TODO
         
         private void SpawnEnemy(EnemyData enemyData, Vector3 position = default)
         {
@@ -77,13 +78,13 @@ namespace Services
             if(enemy.Type != EnemyType.Asteroid)
                 return;
 
-            if(!_enemiesData.ContainsKey(EnemyType.LilAsteroid))
+            if(!_enemiesData.TryGetValue(EnemyType.LilAsteroid, out var data))
                 return;
             
             for (int i = 0; i < _spawnData.SpawnLilAsteroidCount; i++)
             {
                 var postion = RandomPositionGenerator.GenerateRandomPositionNearPosition(enemy.Position.Value);
-                SpawnEnemy(_enemiesData[EnemyType.LilAsteroid], postion);
+                SpawnEnemy(data, postion);
             }
         }
 

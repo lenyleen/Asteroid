@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using DataObjects;
 using Interfaces;
 using JetBrains.Annotations;
@@ -10,7 +11,6 @@ namespace Player
 {
     public class ShipModel
     {
-        public  PlayerPreferences Preferences => _playerPreferences;
         public ReactiveProperty<Vector3> Position { get; } = new (Vector2.zero);
         public ReactiveProperty<float> Rotation { get; } = new(0);
         public ReactiveProperty<Vector2> Velocity { get; } = new (Vector2.zero);
@@ -18,6 +18,8 @@ namespace Player
         
         private readonly PlayerPreferences _playerPreferences;
         private readonly ScreenWrapService _screenWrapService;
+        private readonly ColliderData  _colliderData;
+        private readonly HashSet<ColliderType> _acceptableColliderTypes;
         
         private int _health;
 
@@ -26,12 +28,18 @@ namespace Player
             _playerPreferences = playerPreferences;
             _health = playerPreferences.Health;
             _screenWrapService = screenWrapService;
+            _colliderData = playerPreferences.ColliderData;
+            _acceptableColliderTypes = new HashSet<ColliderType>(_colliderData.AcceptableColliderTypes);
         }
 
-        public void TakeDamage()
+        public void TakeDamage(ColliderType colliderType, int damage)
         {
-            Velocity.Value = Vector2.zero;
-            OnDeath.Execute();
+            if(!_acceptableColliderTypes.Contains(colliderType))
+                return;
+
+            _health -= damage;
+            if(_health <= 0)
+                OnDeath.Execute();
         }
         
         public void UpdateMovement(Vector2 input, float deltaTime)
@@ -70,6 +78,11 @@ namespace Player
                 Rotation.Value %=  360f;
                 if (Rotation.Value < 0) Rotation.Value += 360f;
             }
+        }
+
+        ~ShipModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

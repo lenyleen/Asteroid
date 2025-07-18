@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
   <Sprite>k__BackingField: {fileID: 9022410353708369243, guid: 22b61a2f41130894ab36ab60bce12dc1, type: 3}
+  <ColliderData>k__BackingField: {fileID: 11400000, guid: dec1b64621762744088cbe0853dab4af, type: 2}
   <Speed>k__BackingField: 1000
   <LifetimeInSeconds>k__BackingField: 2

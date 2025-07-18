@@ -13,7 +13,7 @@ namespace Factories
 {
     public class ShipSpawner
     {
-        private readonly DiContainer _container;
+        private readonly IInstantiator _instantiator;
         
         private readonly ShipInstaller.PlayerInstallData _playerInstallData;
         private readonly IFactory<ProjectileType, WeaponData, string,IWeaponsHolder, WeaponViewModel>  _weaponFactory;
@@ -23,7 +23,7 @@ namespace Factories
 
         public ShipSpawner(ShipInstaller.PlayerInstallData playerInstallData,
             IFactory<ProjectileType, WeaponData,string, IWeaponsHolder, WeaponViewModel> weaponFactory,
-            PlayerInputController playerInputController, DiContainer container, IPlayerPositionProvider playerDataProvider,
+            PlayerInputController playerInputController, DiContainer instantiator, IPlayerPositionProvider playerDataProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
         {
             _playerInstallData = playerInstallData;
@@ -31,19 +31,19 @@ namespace Factories
             _playerInputController = playerInputController;
             _playerDataProvider = playerDataProvider;
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
-            _container = container;
+            _instantiator = instantiator;
         }
         
         public void SpawnPlayer()
         {
-            var playerModel = _container.Instantiate<ShipModel>(new object[]{_playerInstallData.PlayerPreferences});
+            var playerModel = _instantiator.Instantiate<ShipModel>(new object[]{_playerInstallData.PlayerPreferences});
             
-            var playerViewModel = _container.Instantiate<ShipViewModel>(new object[]{playerModel});
+            var playerViewModel = _instantiator.Instantiate<ShipViewModel>(new object[]{playerModel});
             playerViewModel.Initiialize();
             
             _playerDataProvider.ApplyPlayer(playerViewModel);
             
-            var player = _container.InstantiatePrefabForComponent<Player.Ship>(
+            var player = _instantiator.InstantiatePrefabForComponent<Player.Ship>(
                 _playerInstallData.ShipPrefab,
                 _playerInstallData.PlayerSpawnPosition.position, 
                 Quaternion.identity, 
@@ -79,7 +79,7 @@ namespace Factories
                 mainWeapons.Add(newWeapon);
             }
             
-            var weaponsViewModel = _container.Instantiate<PlayerWeaponsViewModel>(new object[] { mainWeapons,heavyWeapons, _playerInputController,
+            var weaponsViewModel = _instantiator.Instantiate<PlayerWeaponsViewModel>(new object[] { mainWeapons,heavyWeapons, _playerInputController,
                 _playerDataProvider.PositionProvider.Value});
             
             

@@ -53,5 +53,10 @@ namespace Weapon
 
             _canFire = true;
         }
+
+        ~WeaponModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace Installers
         [SerializeField]private InGameUi _inGameUi;
         [SerializeField]private WeaponUiDataDisplayer  _dataDisplayerPrefab;
         [SerializeField]private PlayerUiView _playerUi;
+        
         public override void InstallBindings()
         {
             SignalBusInstaller.Install(Container);

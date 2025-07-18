@@ -1,4 +1,5 @@
-﻿using Interfaces;
+﻿using System;
+using Interfaces;
 using Projectiles;
 using UniRx;
 using UnityEngine;
@@ -15,21 +16,12 @@ namespace Weapon
         public void Initialize(WeaponViewModel viewModel, Sprite sprite)
         {
             _viewModel = viewModel;
-            
-            _viewModel.OnProjectileCreated.Subscribe(ApllyProjectile).AddTo(_disposables);
-            
             _spriteRenderer.sprite = sprite;
         }
-        
-        private void ApllyProjectile(IProjectile projectile)
-        {
-            if(projectile is not Projectile projectileInGame)
-                return;
 
-            var projectileTransform = projectileInGame.transform;
-            
-            projectileTransform.SetParent(this.transform);
-            projectileTransform.localPosition = Vector3.zero;
+        private void Update()
+        {
+            _viewModel.Update();
         }
 
         public void OnDestroy()

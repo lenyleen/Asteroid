@@ -1,23 +1,22 @@
 ﻿using DataObjects;
 using Interfaces;
+using Projectiles;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
 namespace Weapon
 {
-    public class WeaponViewModel : IFixedTickable, IWeaponInfoProvider
+    public class WeaponViewModel : IWeaponInfoProvider
     {
         public WeaponType WeaponType => _model.Type;
-        
-        public ReactiveCommand<IProjectile> OnProjectileCreated { get; } = new();
         public string Name => _model.Name;
         public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
         public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 
         private readonly WeaponModel _model;
-       
-        private readonly IWeaponProjectileCreator _projectileCreator;
+
+        private IFactory<ProjectileType, IPositionProvider, ProjectileViewModel> _projectileFactory;
         
         public void Initialize()
         {
@@ -25,21 +24,20 @@ namespace Weapon
             AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
         }
         
-        public WeaponViewModel(IWeaponProjectileCreator projectileCreator, WeaponModel weaponModel)
+        public WeaponViewModel( IFactory<ProjectileType,IPositionProvider,ProjectileViewModel> projectileFactory, WeaponModel weaponModel)
         {
-            _projectileCreator = projectileCreator;
+            _projectileFactory = projectileFactory;
             _model = weaponModel;
         }
-        public void TryFiree(Vector3 position, float rotation)
+        public void TryFiree(IPositionProvider positionProvider)
         {
             if(!_model.TryFire())
                 return;
             
-            var projectile = _projectileCreator.CreateProjectile(position,rotation);
-            OnProjectileCreated.Execute(projectile);
+            _projectileFactory.Create(_model.ProjectileType,positionProvider); 
         }
         
-        public void FixedTick()
+        public void Update()
         {
             _model.UpdateReloadTime(Time.fixedDeltaTime);
         }
@@ -48,6 +46,10 @@ namespace Weapon
         {
             ReloadTime.Dispose();
             AmmoCount.Dispose();
+        }
+        ~WeaponViewModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

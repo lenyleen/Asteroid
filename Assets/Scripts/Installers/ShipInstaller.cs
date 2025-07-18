@@ -32,7 +32,6 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<PlayerWeaponsInfoProviderService>().AsSingle();
             Container.BindMemoryPool<Projectile, Projectile.Pool>().WithInitialSize(20).FromComponentInNewPrefab(_projectilePrefab).UnderTransformGroup("Projectiles");
             Container.BindInterfacesAndSelfTo<ProjectileFactory>().AsSingle().WithArguments(_projectileDatas);
-            Container.BindInterfacesAndSelfTo<ProjectileBehaviourFactory>().AsSingle().WithArguments(_projectileDatas);
             Container.BindInterfacesAndSelfTo<WeaponFactory>().AsSingle().WithArguments(_weaponViewPrefab);
 
             Container.BindInterfacesAndSelfTo<ShipSpawner>().AsSingle().WithArguments(_playerInstallData);

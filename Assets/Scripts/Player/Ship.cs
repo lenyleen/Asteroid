@@ -36,7 +36,7 @@ namespace Player
                 .AddTo(_disposables);
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             _shipViewModel.Update();
         }
@@ -47,9 +47,9 @@ namespace Player
         }
 
         
-        public void Collide(ICollisionReceiver collisionReceiver)
+        public void Collide(ColliderType colliderType, int damage)
         {
-            _shipViewModel.TakeDamage();
+            _shipViewModel.TakeDamage(colliderType, damage);
         }
     }
 }

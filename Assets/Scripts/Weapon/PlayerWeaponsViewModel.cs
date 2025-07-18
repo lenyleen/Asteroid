@@ -70,7 +70,7 @@ namespace Weapon
                 return;
 
             weapons.ForEach(weapon =>
-                weapon.TryFiree(_positionProvider.Position.Value, _positionProvider.Rotation.Value));
+                weapon.TryFiree(_positionProvider));
         }
 
     }

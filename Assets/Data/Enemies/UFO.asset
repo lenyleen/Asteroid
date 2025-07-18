@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517477925b8042c39fb9d0d347a9616e, type: 3}
   m_Name: UFO
   m_EditorClassIdentifier: 
+  <ColliderType>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: 6999996049573445800, guid: e16a7b8e0d10bef498af3cca5733347f, type: 3}
   <Health>k__BackingField: 1
   <Type>k__BackingField: 2
@@ -19,3 +20,4 @@ MonoBehaviour:
   <BehaviourData>k__BackingField: {fileID: 11400000, guid: 3ff497c55e093e44281334004d15821d, type: 2}
   <SpawnTimeInSeconds>k__BackingField: 10
   <MaxCount>k__BackingField: 0
+  <CollisionData>k__BackingField: {fileID: 11400000, guid: c6c7239ca5370214ba4647655f91dcab, type: 2}

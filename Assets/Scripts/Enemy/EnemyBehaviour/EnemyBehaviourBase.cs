@@ -13,8 +13,8 @@ namespace Enemy.EnemyBehaviour
         {
             _data = data;
         }
-        
-        public abstract Vector3 CalculateVelocity(Vector3 curPosition, Vector3 followingPosition);
-        public abstract float CalculateTorque(Vector3 curPosition, float currentRotation);
+
+        public abstract void Update(ref Vector3 currentPosition, Vector3 followingPosition,
+            ref Vector2 currentVelocity, ref float currentRotation);
     }
 }

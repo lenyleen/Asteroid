@@ -12,5 +12,6 @@ namespace DataObjects
         [field: SerializeField] public float MaxRotationSpeed { get; private set; } = 360f;
         [field: SerializeField] public float RotationFriction { get; private set; } = 0.95f;
         [field: SerializeField] public float Friction { get; private set; } = 0.5f;
+        [field: SerializeField] public ColliderData ColliderData { get; private set; }
     }
 }

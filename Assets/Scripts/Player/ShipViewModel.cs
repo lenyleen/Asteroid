@@ -1,4 +1,6 @@
-﻿using Interfaces;
+﻿using System;
+using DataObjects;
+using Interfaces;
 using Signals;
 using UniRx;
 using UnityEngine;
@@ -12,11 +14,11 @@ namespace Player
         private readonly PlayerInputController _inputController;
         private readonly SignalBus _signalBus;
         private readonly CompositeDisposable _disposables =  new ();
-        
+
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public ReadOnlyReactiveProperty<float> Rotation { get; } 
-        public ReactiveCommand OnDeath => _shipModel.OnDeath;
+        public IObservable<Unit> OnDeath => _shipModel.OnDeath;
         
         public ShipViewModel(ShipModel shipModel, PlayerInputController playerInputController, SignalBus signalBus)
         {
@@ -40,10 +42,12 @@ namespace Player
             _shipModel.UpdateRotation(-direction.x, Time.fixedDeltaTime);
         }
 
-        public void TakeDamage()
+        public void TakeDamage(ColliderType colliderType, int damage)
         {
-            _shipModel.TakeDamage();
+            _shipModel.TakeDamage(colliderType, damage);
         }
+        
+        
 
         public void Dispose()
         {
@@ -56,6 +60,11 @@ namespace Player
         public void Update()
         {
             Move(_inputController.GetInputValues());
+        }
+
+        ~ShipViewModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

@@ -7,6 +7,6 @@ namespace Interfaces
     {
         public ColliderType ColliderType { get; }
         
-        public void Collide(ICollisionReceiver collisionReceiver);
+        public void Collide(ColliderType colliderType, int damage);
     }
 }

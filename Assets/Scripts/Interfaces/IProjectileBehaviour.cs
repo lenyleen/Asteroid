@@ -1,15 +1,15 @@
-﻿using Projectiles;
+﻿using System;
+using Projectiles;
 using UniRx;
 using UnityEngine;
 
 namespace Interfaces
 {
-    public interface IProjectileBehaviour
+    public interface IProjectileBehaviour : IDisposable
     {
-        public ReactiveCommand OnDeath { get; }
-        public Vector2 CalculateVelocity(Vector3 position);
-        public void Update(float deltaTime);
-
-        public void Collided();
+        void Initialize(Vector3 spawnPosition, float shooterRotation);
+        void Update(ref Vector3 position, ref float rotation, ref Vector2 velocity);
+        
+        public bool CheckDeathAfterCollision();
     }
 }

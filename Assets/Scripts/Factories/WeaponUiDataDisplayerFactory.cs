@@ -7,16 +7,16 @@ namespace Factories
     public class WeaponUiDataDisplayerFactory : IFactory<IWeaponInfoProvider,IWeaponUiDataDisplayer>
     {
         private readonly WeaponUiDataDisplayer _prefab;
-        private readonly DiContainer _container;
+        private readonly IInstantiator _instantialor;
 
-        public WeaponUiDataDisplayerFactory(WeaponUiDataDisplayer prefab, DiContainer container)
+        public WeaponUiDataDisplayerFactory(WeaponUiDataDisplayer prefab, DiContainer instantialor)
         {
             _prefab = prefab;
-            _container = container;
+            _instantialor = instantialor;
         }
         public IWeaponUiDataDisplayer Create(IWeaponInfoProvider provider)
         {
-            var displayer = _container.InstantiatePrefabForComponent<IWeaponUiDataDisplayer>(_prefab);
+            var displayer = _instantialor.InstantiatePrefabForComponent<IWeaponUiDataDisplayer>(_prefab);
             displayer.Initialize(provider);
             return displayer;
         }
