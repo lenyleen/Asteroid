@@ -28,7 +28,7 @@ namespace Factories
             var behaviour = CreateBehaviour(data);
             var model = _instantiator.Instantiate<EnemyModel>(new object[]{data, behaviour, position,
                 _dataProvider.PositionProvider.Value});
-            var viewModel = _instantiator.Instantiate<EnemyViewModel>(new object[]{model});
+            var viewModel = _instantiator.Instantiate<EnemyViewModel>(new object[]{model, _dataProvider.PositionProvider.Value});
             
             viewModel.Initialize();
             

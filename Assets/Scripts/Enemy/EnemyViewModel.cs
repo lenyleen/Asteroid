@@ -13,22 +13,21 @@ namespace Enemy
     {
         private readonly EnemyModel _model;
         private readonly CompositeDisposable _disposables = new ();
-        private readonly SignalBus _signalBus;
         private readonly IPositionProvider _positionProvider;
         public EnemyType  Type => _model.Type;
+        public int Score => _model.Score;
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public IObservable<Unit> OnDead => _model.OnDeath;
         
-        public EnemyViewModel(EnemyModel model, SignalBus signalBus, IPositionProvider positionProvider)
+        public EnemyViewModel(EnemyModel model, IPositionProvider positionProvider)
         {
             _model = model;
             _positionProvider = positionProvider;
             Rotation = new ReadOnlyReactiveProperty<float>(_model.Rotation);
             Position = new ReadOnlyReactiveProperty<Vector3>(_model.Position);
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
-            _signalBus = signalBus;
         }
 
         public void Initialize()
@@ -37,7 +36,7 @@ namespace Enemy
                 .AddTo(_disposables);
 
             _positionProvider.OnDeath.Take(1).Subscribe(_ 
-                    => _model.OnNothingToAttack())
+                    => _model.Dispose())
                 .AddTo(_disposables);
         }
         public void MakeCollision(ICollisionReceiver collisionReceiver)
@@ -49,17 +48,19 @@ namespace Enemy
         {
             _model.TakeHit(colliderType, damage);
         }
-
-        private void OnLose(LoseSignal signal) => _model.OnNothingToAttack(); 
         
         public void UpdatePosition()
         {
             _model.UpdateMovement();
         }
-
+        
+        public void Despawn()
+        {
+            _model.Dispose();
+        }
+        
         private void OnDeath()
         {
-            _signalBus.Fire(new EnemyDestroyedSignal(_model.Type, _model.Score, _model.Position.Value));
             _disposables.Dispose();
         }
 

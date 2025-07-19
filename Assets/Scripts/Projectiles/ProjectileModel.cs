@@ -12,7 +12,7 @@ namespace Projectiles
         public ReactiveProperty<float> Rotation;
         public ReactiveProperty<Vector2> Velocity;
         public ReactiveCommand OnDeath = new();
-        public ColliderType ColliderType => _colliderData.colliderType;
+        public ColliderType ColliderType => _colliderData.ColliderType;
         public int Damage => _colliderData.Damage;
         
         private float _lifetime;
@@ -31,6 +31,7 @@ namespace Projectiles
             _data =  data;
             _colliderData = data.ColliderData;
             _behaviour = behaviour;
+            _lifetime = data.LifetimeInSeconds;
             
             _behaviour.Initialize(position, rotation);
         }
@@ -52,15 +53,20 @@ namespace Projectiles
 
         public void TakeHit()
         {
-            
+            if (_behaviour.CheckDeathAfterCollision())
+                OnDeath.Execute();
         }
 
-        public void UpdateLifetime(float deltaTime)
+        public void UpdateLifetime(float deltaTime = 0)
         {
-            _lifetime -=  deltaTime;
+            _lifetime -=  Time.deltaTime;
 
             if (_lifetime < 0)
                 OnDeath.Execute();
+        }
+        ~ProjectileModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

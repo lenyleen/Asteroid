@@ -30,7 +30,7 @@ namespace Weapon
                 .AddTo(_disposables);
         }
         
-        public void ApplyWeapons(WeaponType weaponType, IWeapon weapon)
+        public Vector3 ApplyWeapon(WeaponType weaponType, IWeapon weapon)
         {
             if(weapon is not WeaponView weaponView)
                 throw new ArgumentException("Weapon must be of type WeaponView", nameof(weapon));
@@ -38,10 +38,10 @@ namespace Weapon
             switch (weaponType)
             {
                 case WeaponType.Main:
-                    ApplyWeaponInSlot(_mainSlots,weaponView);
+                    return ApplyWeaponInSlot(_mainSlots,weaponView);
                     break;
                 case WeaponType.Secondary :
-                    ApplyWeaponInSlot(_heavySlots,weaponView);
+                    return ApplyWeaponInSlot(_heavySlots,weaponView);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null);
@@ -64,7 +64,7 @@ namespace Weapon
         }
 
 
-        private void ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
+        private Vector3 ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
         {
             var emptySlot = slots.FirstOrDefault(sl => !_occupiedSlots.Contains(sl));
             
@@ -75,6 +75,7 @@ namespace Weapon
             
             weaponView.transform.SetParent(emptySlot);
             weaponView.transform.localPosition = Vector3.zero;
+            return emptySlot.transform.localPosition;
         }
 
         private void OnDestroy()

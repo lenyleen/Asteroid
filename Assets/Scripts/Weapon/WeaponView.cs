@@ -19,7 +19,7 @@ namespace Weapon
             _spriteRenderer.sprite = sprite;
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             _viewModel.Update();
         }

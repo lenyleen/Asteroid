@@ -23,10 +23,9 @@ namespace Projectiles
         
         public void Initialize(Vector3 spawnPosition, float shooterRotation)
         {
-            var offset = spawnPosition - _currentShooterPosition;
+            var worldOffset = spawnPosition - _currentShooterPosition;
+            _offsetFromShooter = Quaternion.Euler(0, 0, -shooterRotation) * worldOffset;
             
-            _offsetFromShooter = Quaternion.Euler(0, 0, - shooterRotation) * offset;;
-
             _shoterPositionProviderProvider.Position.Subscribe(pos =>
                     _currentShooterPosition = pos)
                 .AddTo(_disposable);

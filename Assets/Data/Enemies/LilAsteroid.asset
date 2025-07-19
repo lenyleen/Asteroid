@@ -12,12 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 517477925b8042c39fb9d0d347a9616e, type: 3}
   m_Name: LilAsteroid
   m_EditorClassIdentifier: 
-  <ColliderType>k__BackingField: 0
   <Sprite>k__BackingField: {fileID: -7989768276783323436, guid: d7818bef7aedd5c43b60905cdacc2a46, type: 3}
   <Health>k__BackingField: 1
   <Type>k__BackingField: 1
   <Score>k__BackingField: 100
   <BehaviourData>k__BackingField: {fileID: 11400000, guid: 60c60b7da5c92ca4fb116928260d0fd6, type: 2}
   <SpawnTimeInSeconds>k__BackingField: 5
-  <MaxCount>k__BackingField: 0
-  <CollisionData>k__BackingField: {fileID: 11400000, guid: c6c7239ca5370214ba4647655f91dcab, type: 2}
+  <ImmortalityAfterSpawnInSecond>k__BackingField: 0
+  <CollisionData>k__BackingField: {fileID: 11400000, guid: 73bbb29729438c14599d00fcd416944b, type: 2}

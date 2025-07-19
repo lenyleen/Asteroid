@@ -16,7 +16,7 @@ namespace Weapon
 
         private readonly WeaponModel _model;
 
-        private IFactory<ProjectileType, IPositionProvider, ProjectileViewModel> _projectileFactory;
+        private IFactory<ProjectileType,Vector3,IPositionProvider,ProjectileViewModel> _projectileFactory;
         
         public void Initialize()
         {
@@ -24,7 +24,8 @@ namespace Weapon
             AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
         }
         
-        public WeaponViewModel( IFactory<ProjectileType,IPositionProvider,ProjectileViewModel> projectileFactory, WeaponModel weaponModel)
+        public WeaponViewModel(IFactory<ProjectileType,Vector3,IPositionProvider,ProjectileViewModel> projectileFactory,
+            WeaponModel weaponModel)
         {
             _projectileFactory = projectileFactory;
             _model = weaponModel;
@@ -33,8 +34,12 @@ namespace Weapon
         {
             if(!_model.TryFire())
                 return;
+
+            var playerRotation = positionProvider.Rotation.Value;
+            var rotatedOffset = Quaternion.Euler(0, 0, playerRotation) * _model.OffsetFromHolder;
+            var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
             
-            _projectileFactory.Create(_model.ProjectileType,positionProvider); 
+            _projectileFactory.Create(_model.ProjectileType,projectileSpawnPos,positionProvider); 
         }
         
         public void Update()

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <acceleration>k__BackingField: 1
   <angularAcceleration>k__BackingField: 0
+  <_maxSpeed>k__BackingField: 2

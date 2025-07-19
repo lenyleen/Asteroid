@@ -1,4 +1,5 @@
 ﻿using System;
+using Interfaces;
 using Signals;
 using UniRx;
 using Zenject;
@@ -8,45 +9,41 @@ namespace UI
 {
     public class PlayerViewModel : IInitializable, IDisposable
     {
-        private readonly SignalBus _signalBus;
         private readonly PlayerModel _playerModel;
+        private readonly IGameEvents _gameEvents;
+        private readonly CompositeDisposable _disposable = new ();
         
         public ReactiveCommand<bool> OnEndScreenEnable { get; } = new ();
         public ReadOnlyReactiveProperty<int> Score { get; }
 
-        public PlayerViewModel(PlayerModel model, SignalBus signalBus)
+        public PlayerViewModel(PlayerModel model, IGameEvents gameEvents)
         {
-            _signalBus = signalBus;
+           
             _playerModel = model;
             Score = new ReadOnlyReactiveProperty<int>(_playerModel.Score);
+            _gameEvents = gameEvents;
         }
 
         public void Initialize()
         {
-            _signalBus.Subscribe<LoseSignal>(OnLose);
-            _signalBus.Subscribe<EnemyDestroyedSignal>(OnEnemyDestroyed);
+            _gameEvents.OnGameEnded.Subscribe(_ => OnEndScreenEnable.Execute(true))
+                .AddTo(_disposable);
+
+            _gameEvents.OnScoreReceived.Subscribe(score =>
+                    _playerModel.UpdateScore(score))
+                .AddTo(_disposable);
         }
 
         public void OnRestartClick(string playerName)
         {
             _playerModel.SavePlayerDataToScore(playerName);
             OnEndScreenEnable.Execute(false);
-            _signalBus.Fire<GameStarted>();
-        }
-
-        private void OnLose(LoseSignal loseSignal)
-        {
-            OnEndScreenEnable.Execute(true);
-        }
-        
-        private void OnEnemyDestroyed(EnemyDestroyedSignal signal)
-        {
-            _playerModel.UpdateScore(signal.Score);
+            _gameEvents.RequestGameStart();
         }
         
         public void Dispose()
         {
-            _signalBus.TryUnsubscribe<EnemyDestroyedSignal>(OnEnemyDestroyed);
+            _disposable.Dispose();
         }
     }
 }

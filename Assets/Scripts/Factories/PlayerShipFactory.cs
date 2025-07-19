@@ -11,7 +11,7 @@ using Zenject;
 
 namespace Factories
 {
-    public class ShipSpawner
+    public class PlayerShipFactory
     {
         private readonly IInstantiator _instantiator;
         
@@ -21,7 +21,7 @@ namespace Factories
         private readonly IPlayerPositionProvider _playerDataProvider;
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
 
-        public ShipSpawner(ShipInstaller.PlayerInstallData playerInstallData,
+        public PlayerShipFactory(ShipInstaller.PlayerInstallData playerInstallData,
             IFactory<ProjectileType, WeaponData,string, IWeaponsHolder, WeaponViewModel> weaponFactory,
             PlayerInputController playerInputController, DiContainer instantiator, IPlayerPositionProvider playerDataProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
@@ -34,25 +34,27 @@ namespace Factories
             _instantiator = instantiator;
         }
         
-        public void SpawnPlayer()
+        public ShipViewModel SpawnShip()
         {
-            var playerModel = _instantiator.Instantiate<ShipModel>(new object[]{_playerInstallData.PlayerPreferences});
+            var shipModel = _instantiator.Instantiate<ShipModel>(new object[]{_playerInstallData.ShipPreferences});
             
-            var playerViewModel = _instantiator.Instantiate<ShipViewModel>(new object[]{playerModel});
-            playerViewModel.Initiialize();
+            var shipViewModel = _instantiator.Instantiate<ShipViewModel>(new object[]{shipModel});
+            shipViewModel.Initiialize();
             
-            _playerDataProvider.ApplyPlayer(playerViewModel);
+            _playerDataProvider.ApplyPlayer(shipViewModel);
             
-            var player = _instantiator.InstantiatePrefabForComponent<Player.Ship>(
+            var shipView = _instantiator.InstantiatePrefabForComponent<Player.Ship>(
                 _playerInstallData.ShipPrefab,
                 _playerInstallData.PlayerSpawnPosition.position, 
                 Quaternion.identity, 
                 null
             );
             
-            SpawnPlayerWeapons(player.PlayerWeapons);
+            SpawnPlayerWeapons(shipView.PlayerWeapons);
             
-            player.Construct(playerViewModel);
+            shipView.Construct(shipViewModel);
+            
+            return shipViewModel;
         }
 
 

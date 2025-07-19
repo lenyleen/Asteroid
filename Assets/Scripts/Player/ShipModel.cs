@@ -16,19 +16,19 @@ namespace Player
         public ReactiveProperty<Vector2> Velocity { get; } = new (Vector2.zero);
         public ReactiveCommand OnDeath { get; } = new ();
         
-        private readonly PlayerPreferences _playerPreferences;
+        private readonly ShipPreferences _shipPreferences;
         private readonly ScreenWrapService _screenWrapService;
         private readonly ColliderData  _colliderData;
         private readonly HashSet<ColliderType> _acceptableColliderTypes;
         
         private int _health;
 
-        public ShipModel(PlayerPreferences playerPreferences, ScreenWrapService screenWrapService)
+        public ShipModel(ShipPreferences shipPreferences, ScreenWrapService screenWrapService)
         {
-            _playerPreferences = playerPreferences;
-            _health = playerPreferences.Health;
+            _shipPreferences = shipPreferences;
+            _health = shipPreferences.Health;
             _screenWrapService = screenWrapService;
-            _colliderData = playerPreferences.ColliderData;
+            _colliderData = shipPreferences.ColliderData;
             _acceptableColliderTypes = new HashSet<ColliderType>(_colliderData.AcceptableColliderTypes);
         }
 
@@ -42,37 +42,37 @@ namespace Player
                 OnDeath.Execute();
         }
         
-        public void UpdateMovement(Vector2 input, float deltaTime)
+        public void UpdateMovement(Vector2 input)
         {
             Vector2 acceleration = Vector2.zero;
             if (input.y > 0)
             {
                 float angle = -Rotation.Value * Mathf.Deg2Rad;
                 acceleration = new Vector2(
-                    Mathf.Sin(angle) * _playerPreferences.Acceleration,
-                    Mathf.Cos(angle) * _playerPreferences.Acceleration
+                    Mathf.Sin(angle) * _shipPreferences.Acceleration,
+                    Mathf.Cos(angle) * _shipPreferences.Acceleration
                 );
             }
             
-            Velocity.Value += acceleration * deltaTime;
+            Velocity.Value += acceleration * Time.deltaTime;
             
             
-            if (Velocity.Value.magnitude > _playerPreferences.MaxSpeed)
-                Velocity.Value = Velocity.Value.normalized * _playerPreferences.MaxSpeed;
+            if (Velocity.Value.magnitude > _shipPreferences.MaxSpeed)
+                Velocity.Value = Velocity.Value.normalized * _shipPreferences.MaxSpeed;
             
-            Velocity.Value *= _playerPreferences.Friction;
+            Velocity.Value *= _shipPreferences.Friction;
             
-            Position.Value += (Vector3)Velocity.Value * deltaTime;
+            Position.Value += (Vector3)Velocity.Value * Time.deltaTime;
 
             Position.Value = _screenWrapService.GetInScreenPosition(Position.Value);
             
         }
         
-        public void UpdateRotation(float input, float deltaTime)
+        public void UpdateRotation(float input)
         {
             if (Mathf.Abs(input) > 0.1f)
             {
-                float rotationDelta = input * _playerPreferences.RotationSpeed * deltaTime;
+                float rotationDelta = input * _shipPreferences.RotationSpeed * Time.deltaTime;
                 Rotation.Value += rotationDelta;
                 
                 Rotation.Value %=  360f;

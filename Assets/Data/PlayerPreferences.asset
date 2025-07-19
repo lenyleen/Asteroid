@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: PlayerPreferences
   m_EditorClassIdentifier: 
   <Health>k__BackingField: 1
-  <Acceleration>k__BackingField: 25
-  <MaxSpeed>k__BackingField: 246.1
-  <RotationSpeed>k__BackingField: 250
-  <MaxRotationSpeed>k__BackingField: 20
-  <RotationFriction>k__BackingField: -1.87
+  <Acceleration>k__BackingField: 50
+  <MaxSpeed>k__BackingField: 10
+  <RotationSpeed>k__BackingField: 130
   <Friction>k__BackingField: 0.95
-  <ColliderData>k__BackingField: {fileID: 11400000, guid: dec1b64621762744088cbe0853dab4af, type: 2}
+  <ColliderData>k__BackingField: {fileID: 11400000, guid: b55ca60409612324593022be34dbf8d1, type: 2}

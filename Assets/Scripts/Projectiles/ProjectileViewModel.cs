@@ -1,4 +1,5 @@
 ﻿using System;
+using DataObjects;
 using Interfaces;
 using UniRx;
 using Unity.VisualScripting;
@@ -37,13 +38,27 @@ namespace Projectiles
             _model.UpdateMovement();
         }
 
+        public void UpdateLifeTime()
+        {
+            _model.UpdateLifetime();            
+        }
+
         public void MakeCollision(ICollisionReceiver collisionReceiver)
         {
-            collisionReceiver.Collide(_model.ColliderType, _model.Damage);   
+            if(collisionReceiver.ColliderType != ColliderType.Enemy)
+                return;
+            
+            collisionReceiver.Collide(_model.ColliderType, _model.Damage);
+            _model.TakeHit();
         }
         private void OnDestroy()
         {
             _disposables.Dispose();
+        }
+
+        ~ProjectileViewModel()
+        {
+            Debug.Log($"Collected {this.GetType().Name} object");
         }
     }
 }

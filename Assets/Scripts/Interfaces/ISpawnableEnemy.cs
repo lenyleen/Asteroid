@@ -8,7 +8,9 @@ namespace Interfaces
     public interface ISpawnableEnemy
     {
         public EnemyType Type { get; }
+        public int Score { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public IObservable<Unit> OnDead { get; }
+        public void Despawn();
     }
 }

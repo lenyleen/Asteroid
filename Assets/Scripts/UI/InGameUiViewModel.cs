@@ -13,6 +13,7 @@ namespace UI
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
         private readonly IPlayerPositionProvider _playerPositionProviderService;
         private readonly CompositeDisposable _disposables = new ();
+        private readonly IGameEvents _gameEvents;
         private readonly IFactory<IWeaponInfoProvider, IWeaponUiDataDisplayer> _displayersFactory;
         
         public ReactiveCollection<IWeaponUiDataDisplayer> _displayers{get;} = new();
@@ -23,7 +24,7 @@ namespace UI
 
         public InGameUiViewModel(IPlayerWeaponInfoProviderService playerWeaponInfoProviderService,
             IFactory<IWeaponInfoProvider,IWeaponUiDataDisplayer> displayersFactory,
-            IPlayerPositionProvider playerPositionProviderService)
+            IPlayerPositionProvider playerPositionProviderService, IGameEvents gameEvents)
         {
             Position = new ReactiveProperty<Vector3>(Vector3.zero);
             Rotation = new ReactiveProperty<float>(0);
@@ -31,6 +32,7 @@ namespace UI
             
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
             _playerPositionProviderService = playerPositionProviderService;
+            _gameEvents = gameEvents;
             _displayersFactory = displayersFactory;
         }
 
@@ -49,11 +51,10 @@ namespace UI
             _playerPositionProviderService.PositionProvider
                 .Subscribe(OnPositionProviderChanged)
                 .AddTo(_disposables);
-        }
 
-        public void Start()
-        {
-            IsStarted.Value = true;    
+            _gameEvents.OnGameStarted.Subscribe(_ => 
+                IsStarted.Value = true)
+                .AddTo(_disposables);
         }
         
         private void AddWeaponDisplayer(IWeaponInfoProvider  provider)

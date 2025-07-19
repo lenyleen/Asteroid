@@ -4,6 +4,7 @@
     {
         Player,
         Enemy,
-        Projectile
+        Projectile,
+        KillBox
     }
 }

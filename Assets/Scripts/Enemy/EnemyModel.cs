@@ -13,7 +13,7 @@ namespace Enemy
         public ReactiveProperty<int> Health { get; }
         public ReactiveCommand OnDeath { get; }
         public EnemyType Type => _data.Type;
-        public ColliderType ColliderType => _data.ColliderType;
+        public ColliderType ColliderType => _collisionData.ColliderType;
         public int Damage => _collisionData.Damage;
         public int Score { get; private set; }
         public ReactiveProperty<Vector3> Position { get; }
@@ -24,7 +24,7 @@ namespace Enemy
         private readonly IPositionProvider _followingPositionProvider;
         private readonly ColliderData _collisionData;
         private readonly HashSet<ColliderType>  _acceptableColliderTypes;
-        private IEnemyBehaviour _behaviour; //TODO поправить проджектайлы 
+        private IEnemyBehaviour _behaviour;
         
         
         public EnemyModel(EnemyData data,IEnemyBehaviour behaviour, Vector3 position, 
@@ -40,24 +40,18 @@ namespace Enemy
             _collisionData = data.CollisionData;
             _acceptableColliderTypes = new HashSet<ColliderType>(_collisionData.AcceptableColliderTypes);
         }
-
-        public void OnNothingToAttack()
-        {
-            Score = 0;
-            _behaviour = null;
-            Velocity.Value = Vector3.zero;
-            Position.Value = Vector3.zero;
-            Rotation.Value = 0;
-            OnDeath.Execute();
-        }
         public void TakeHit(ColliderType colliderType, int damage)
         {  
             if(!_acceptableColliderTypes.Contains(colliderType))
                 return;
 
             Health.Value -= damage;
-            if(Health.Value <= 0)
-                OnDeath.Execute();
+            
+            if (Health.Value > 0) return;
+            
+            if(colliderType == ColliderType.KillBox)
+                Score = 0;
+            OnDeath.Execute();
         }
         public void UpdateMovement()
         {
@@ -72,6 +66,16 @@ namespace Enemy
             Velocity.Value = curVelocity;
             Position.Value = curPosition;
             Rotation.Value = curRotation;
+        }
+        
+        public void Dispose()
+        {
+            Score = 0;
+            _behaviour = null;
+            Velocity.Value = Vector3.zero;
+            Position.Value = Vector3.zero;
+            Rotation.Value = 0;
+            OnDeath.Execute();
         }
         ~EnemyModel()
         {

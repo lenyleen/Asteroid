@@ -10,8 +10,7 @@ namespace Weapon
         private readonly WeaponData _weaponData;
         public WeaponType Type => _weaponData.Type;
         public ProjectileType ProjectileType => _weaponData.ProjectileType;
-        public Sprite Sprite => _weaponData.Sprite;
-        public int Damage => _weaponData.Damage;
+        public Vector3 OffsetFromHolder => _offsetFromHolder;
         public string Name => _name;
         public ReactiveProperty<float> ReloadTime { get; private set; }
         public ReactiveProperty<int> AmmoCount { get; private set; }
@@ -19,12 +18,15 @@ namespace Weapon
         private bool _canFire = true;
         
         private readonly string _name;
+        private readonly Vector3 _offsetFromHolder;
         
 
-        public WeaponModel(WeaponData weaponData, string name)
+        public WeaponModel(WeaponData weaponData, string name, Vector3 offsetFromHolder)
         {
             _weaponData = weaponData;
             _name = name;
+            _offsetFromHolder = offsetFromHolder;
+            
             ReloadTime = new ReactiveProperty<float>(weaponData.ReloadTimeInSeconds);
             AmmoCount = new ReactiveProperty<int>(_weaponData.AmmoCount);
         }

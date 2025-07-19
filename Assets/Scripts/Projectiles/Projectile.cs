@@ -24,6 +24,7 @@ namespace Projectiles
             _renderer.sprite = sprite;
             _onDestroy = onDestroy;
             _viewModel = viewModel;
+            _collider.enabled = true;
             _collider.size = sprite.bounds.size;
             _collider.offset = sprite.bounds.center;
             gameObject.SetActive(true);
@@ -50,11 +51,17 @@ namespace Projectiles
             _viewModel.UpdatePosition();
         }
 
+        private void FixedUpdate()
+        {
+            _viewModel.UpdateLifeTime();
+        }
+
         private void Despawn()
         {
             gameObject.SetActive(false);
             _renderer.sprite = null;
             _viewModel = null;
+            _collider.enabled = false;
             _disposable.Dispose();
         }
         

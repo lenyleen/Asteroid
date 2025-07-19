@@ -19,7 +19,7 @@ namespace Projectiles
         public void Initialize(Vector3 spawnPosition,float shooterRotation)
         {
             var forward = Quaternion.Euler(0, 0, - shooterRotation) * Vector3.up;
-            _direction = new Vector2(forward.x, forward.y).normalized;
+            _direction = new Vector2(-forward.x, forward.y).normalized;
         }
 
         public void Update(ref Vector3 position, ref float rotation, ref Vector2 velocity)

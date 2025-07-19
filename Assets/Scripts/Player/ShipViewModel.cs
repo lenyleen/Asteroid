@@ -8,7 +8,7 @@ using Zenject;
 
 namespace Player
 {
-    public class ShipViewModel: IMoveControllable, IPositionProvider
+    public class ShipViewModel:IPositionProvider, IPlayerStateNotifier
     {
         private readonly ShipModel _shipModel;
         private readonly PlayerInputController _inputController;
@@ -38,8 +38,8 @@ namespace Player
         
         public void Move(Vector2 direction)
         {
-            _shipModel.UpdateMovement(direction, Time.fixedDeltaTime);
-            _shipModel.UpdateRotation(-direction.x, Time.fixedDeltaTime);
+            _shipModel.UpdateMovement(direction);
+            _shipModel.UpdateRotation(-direction.x);
         }
 
         public void TakeDamage(ColliderType colliderType, int damage)
@@ -47,8 +47,6 @@ namespace Player
             _shipModel.TakeDamage(colliderType, damage);
         }
         
-        
-
         public void Dispose()
         {
             _signalBus.Fire<LoseSignal>();
