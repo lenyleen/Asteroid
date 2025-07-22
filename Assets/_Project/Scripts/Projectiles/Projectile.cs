@@ -60,7 +60,7 @@ namespace Projectiles
         {
             gameObject.SetActive(false);
             _renderer.sprite = null;
-            _viewModel = null;
+             _viewModel = null;
             _collider.enabled = false;
             _disposable.Dispose();
         }
@@ -70,7 +70,7 @@ namespace Projectiles
             if(!other.gameObject.TryGetComponent<ICollisionReceiver>(out var receiver))
                 return;
             
-            _viewModel.MakeCollision(receiver);
+            _viewModel?.MakeCollision(receiver);
         }
 
         public class Pool : MonoMemoryPool<Sprite, ProjectileViewModel,Action<Projectile>,Projectile>
