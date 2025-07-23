@@ -1,5 +1,4 @@
-﻿using System;
-using Enemy;
+﻿using Enemies;
 using UniRx;
 using UnityEngine;
 
@@ -10,6 +9,7 @@ namespace Interfaces
         public EnemyType Type { get; }
         public int Score { get; }
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
+
         public void Despawn();
     }
 }

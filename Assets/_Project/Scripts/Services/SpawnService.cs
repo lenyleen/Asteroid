@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataObjects;
-using Enemy;
+using Configs;
+using Enemies;
 using Interfaces;
 using Static;
 using UniRx;
 using UnityEngine;
-
 using Zenject;
 
 namespace Services
@@ -15,25 +14,31 @@ namespace Services
     public class SpawnService : IInitializable, IDisposable
     {
         private readonly Camera _camera;
-        private readonly IFactory<Vector3, EnemyData, EnemyViewModel> _enemyFactory;
-        private readonly Dictionary<EnemyType,EnemyData> _enemiesData;
-        private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
-        private readonly SpawnData _spawnData;
+        private readonly CompositeDisposable _disposable = new();
+        private readonly Dictionary<EnemyType, EnemyConfig> _enemiesData;
+        private readonly IFactory<Vector3, EnemyConfig, EnemyViewModel> _enemyFactory;
         private readonly IGameEvents _gameEvents;
-        private readonly CompositeDisposable _disposable = new ();
-
-        private CompositeDisposable _spawnDisposable = new ();
+        private readonly SpawnConfig _spawnConfig;
+        private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private bool _canSpawn;
 
-        public SpawnService(Camera camera, IFactory<Vector3, EnemyData, EnemyViewModel> enemyFactory, 
-            List<EnemyData> enemiesData, SpawnData spawnData, IGameEvents gameEvents)
+        private CompositeDisposable _spawnDisposable = new();
+
+        public SpawnService(Camera camera, IFactory<Vector3, EnemyConfig, EnemyViewModel> enemyFactory,
+            List<EnemyConfig> enemiesData, SpawnConfig spawnConfig, IGameEvents gameEvents)
         {
             _camera = camera;
             _enemyFactory = enemyFactory;
             _enemiesData = enemiesData.ToDictionary(data => data.Type, data => data);
-            _spawnData = spawnData;
+            _spawnConfig = spawnConfig;
             _gameEvents = gameEvents;
             _spawnedEnemies = new HashSet<ISpawnableEnemy>();
+        }
+
+        public void Dispose()
+        {
+            _disposable.Dispose();
+            _spawnDisposable.Dispose();
         }
 
         public void Initialize()
@@ -45,8 +50,8 @@ namespace Services
                     .AddTo(_disposable);
             }
 
-            _gameEvents.OnGameStarted.Subscribe(_ => 
-                EnableSpawn(true))
+            _gameEvents.OnGameStarted.Subscribe(_ =>
+                    EnableSpawn(true))
                 .AddTo(_disposable);
 
             _gameEvents.OnGameEnded.Subscribe(_ =>
@@ -54,22 +59,28 @@ namespace Services
                 .AddTo(_disposable);
         }
 
-        private void SpawnEnemy(EnemyData enemyData, Vector3 position = default)
+        private void SpawnEnemy(EnemyConfig enemyConfig, Vector3 position = default)
         {
-            if(!_canSpawn)
+            if (!_canSpawn)
+            {
                 return;
-            
-            if(_spawnData.MaxEnemies <= _spawnedEnemies.Count )
+            }
+
+            if (_spawnConfig.MaxEnemies <= _spawnedEnemies.Count)
+            {
                 return;
+            }
 
             position = position == default
                 ? RandomPositionGenerator.GetRandomPositionOutsideCamera(_camera)
                 : position;
-            
-            var enemy = _enemyFactory.Create(position, enemyData);
-            
-            if(enemy == null)
+
+            var enemy = _enemyFactory.Create(position, enemyConfig);
+
+            if (enemy == null)
+            {
                 return;
+            }
 
             _spawnedEnemies.Add(enemy);
             enemy.OnDead.Take(1)
@@ -80,9 +91,11 @@ namespace Services
         private void EnableSpawn(bool enable)
         {
             _canSpawn = enable;
-            if (_canSpawn) 
+            if (_canSpawn)
+            {
                 return;
-            
+            }
+
             _spawnDisposable.Dispose();
             _spawnDisposable = new CompositeDisposable();
 
@@ -90,35 +103,35 @@ namespace Services
             {
                 spawnableEnemy.Despawn();
             }
-            
+
             _spawnedEnemies.Clear();
         }
 
         private void OnEnemyDied(ISpawnableEnemy enemy)
         {
             if (!_spawnedEnemies.Contains(enemy))
+            {
                 return;
-            
+            }
+
             _spawnedEnemies.Remove(enemy);
             _gameEvents.PlayerReceivedScore(enemy.Score);
-            
-            if(enemy.Type != EnemyType.Asteroid)
-                return;
 
-            if(!_enemiesData.TryGetValue(EnemyType.LilAsteroid, out var data))
+            if (enemy.Type != EnemyType.Asteroid)
+            {
                 return;
-            
-            for (int i = 0; i < _spawnData.SpawnLilAsteroidCount; i++)
+            }
+
+            if (!_enemiesData.TryGetValue(EnemyType.LilAsteroid, out var data))
+            {
+                return;
+            }
+
+            for (var i = 0; i < _spawnConfig.SpawnLilAsteroidCount; i++)
             {
                 var postion = RandomPositionGenerator.GenerateRandomPositionNearPosition(enemy.Position.Value);
                 SpawnEnemy(data, postion);
             }
-        }
-
-        public void Dispose()
-        {
-            _disposable.Dispose();
-            _spawnDisposable.Dispose();
         }
     }
 }

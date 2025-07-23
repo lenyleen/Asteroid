@@ -16,31 +16,27 @@ namespace Static
             var minY = bottomLeft.y;
             var maxY = topRight.y;
 
-            int side = Random.Range(0, 4);
+            var side = Random.Range(0, 4);
 
             return side switch
             {
                 0 => new Vector3(minX - offset, Random.Range(minY, maxY), 0),
-                
                 1 => new Vector3(maxX + offset, Random.Range(minY, maxY), 0),
-
                 2 => new Vector3(Random.Range(minX, maxX), maxY + offset, 0),
-                
                 3 => new Vector3(Random.Range(minX, maxX), minY - offset, 0),
-                
                 _ => Vector3.zero
             };
         }
 
         public static Vector3 GenerateRandomPositionNearPosition(Vector3 centerPosition, float radius = 1f)
         {
-            float randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
-            
-            float randomDistance = Random.Range(0f, radius);
-            
-            float offsetX = Mathf.Cos(randomAngle) * randomDistance;
-            float offsetY = Mathf.Sin(randomAngle) * randomDistance;
-            
+            var randomAngle = Random.Range(0f, 360f) * Mathf.Deg2Rad;
+
+            var randomDistance = Random.Range(0f, radius);
+
+            var offsetX = Mathf.Cos(randomAngle) * randomDistance;
+            var offsetY = Mathf.Sin(randomAngle) * randomDistance;
+
             return new Vector3(centerPosition.x + offsetX, centerPosition.y + offsetY, centerPosition.z);
         }
     }

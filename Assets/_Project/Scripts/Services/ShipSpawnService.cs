@@ -8,19 +8,25 @@ namespace Services
 {
     public class ShipSpawnService : IInitializable, IDisposable
     {
-        private readonly PlayerShipFactory _playerShipFactory;
-        private readonly IGameEvents _gameEvents;
         private readonly CompositeDisposable _disposable = new();
+        private readonly IGameEvents _gameEvents;
+        private readonly PlayerShipFactory _playerShipFactory;
 
         public ShipSpawnService(PlayerShipFactory playerShipFactory, IGameEvents gameEvents)
         {
             _playerShipFactory = playerShipFactory;
             _gameEvents = gameEvents;
         }
+
+        public void Dispose()
+        {
+            _disposable.Dispose();
+        }
+
         public void Initialize()
         {
             _gameEvents.OnGameStarted.Subscribe(_ =>
-               SpawnShip())
+                    SpawnShip())
                 .AddTo(_disposable);
         }
 
@@ -28,11 +34,6 @@ namespace Services
         {
             var ship = _playerShipFactory.SpawnShip();
             _gameEvents.ApplyPlayerStateNotifier(ship);
-        }
-        
-        public void Dispose()
-        {
-            _disposable.Dispose();
         }
     }
 }

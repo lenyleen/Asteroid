@@ -1,22 +1,17 @@
 ﻿using System;
-using DataObjects;
+using Configs;
 using Interfaces;
 using UniRx;
-using Unity.VisualScripting;
 using UnityEngine;
 using Unit = UniRx.Unit;
 
 namespace Projectiles
 {
-    public class ProjectileViewModel : IInitializable
+    public class ProjectileViewModel
     {
-        public ReadOnlyReactiveProperty<Vector3> Position { get; }
-        public ReadOnlyReactiveProperty<float> Rotation { get; }
-        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
-        public IObservable<Unit> OnDeath => _model.OnDeath;
-        
-        private readonly ProjectileModel _model;
         private readonly CompositeDisposable _disposables = new();
+
+        private readonly ProjectileModel _model;
 
         public ProjectileViewModel(ProjectileModel model)
         {
@@ -27,30 +22,34 @@ namespace Projectiles
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
         }
 
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
+        public ReadOnlyReactiveProperty<float> Rotation { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public IObservable<Unit> OnDeath => _model.OnDeath;
+
         public void Initialize()
         {
             _model.OnDeath.Subscribe(_ => OnDestroy())
                 .AddTo(_disposables);
         }
 
-        public void UpdatePosition()
+        public void Update()
         {
             _model.UpdateMovement();
-        }
-
-        public void UpdateLifeTime()
-        {
-            _model.UpdateLifetime();            
+            _model.UpdateLifetime();
         }
 
         public void MakeCollision(ICollisionReceiver collisionReceiver)
         {
-            if(collisionReceiver.ColliderType != ColliderType.Enemy)
+            if (collisionReceiver.ColliderType != ColliderType.Enemy)
+            {
                 return;
-            
+            }
+
             collisionReceiver.Collide(_model.ColliderType, _model.Damage);
             _model.TakeHit();
         }
+
         private void OnDestroy()
         {
             _disposables.Dispose();

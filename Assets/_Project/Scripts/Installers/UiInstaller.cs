@@ -7,10 +7,10 @@ namespace Installers
 {
     public class UiInstaller : MonoInstaller<UiInstaller>
     {
-        [SerializeField]private InGameUi _inGameUi;
-        [SerializeField]private WeaponUiDataDisplayer  _dataDisplayerPrefab;
-        [SerializeField]private PlayerUiView _playerUi;
-        
+        [SerializeField] private InGameUi _inGameUi;
+        [SerializeField] private WeaponUiDataDisplayer _dataDisplayerPrefab;
+        [SerializeField] private PlayerUiView _playerUi;
+
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<WeaponUiDataDisplayerFactory>()
@@ -19,19 +19,20 @@ namespace Installers
 
             Container.BindInterfacesAndSelfTo<InGameUiViewModel>()
                 .AsSingle();
-            
+
             Container.BindInterfacesAndSelfTo<InGameUi>()
                 .FromInstance(_inGameUi)
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<PlayerModel>()
                 .AsSingle();
+
             Container.BindInterfacesAndSelfTo<PlayerViewModel>()
                 .AsSingle();
+
             Container.BindInterfacesAndSelfTo<PlayerUiView>()
                 .FromInstance(_playerUi)
                 .AsSingle();
-
         }
     }
 }

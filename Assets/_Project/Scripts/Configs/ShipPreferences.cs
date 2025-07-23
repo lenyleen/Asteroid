@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DataObjects
+namespace Configs
 {
     [CreateAssetMenu(fileName = "PlayerPreferences", menuName = "ScriptableObject/PlayerPreferences")]
     public class ShipPreferences : ScriptableObject
@@ -10,6 +10,6 @@ namespace DataObjects
         [field: SerializeField] public float MaxSpeed { get; private set; } = 10f;
         [field: SerializeField] public float RotationSpeed { get; private set; } = 200f;
         [field: SerializeField] public float Friction { get; private set; } = 0.5f;
-        [field: SerializeField] public ColliderData ColliderData { get; private set; }
+        [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
     }
 }

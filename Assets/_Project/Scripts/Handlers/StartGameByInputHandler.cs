@@ -19,10 +19,16 @@ namespace Handlers
 
         public void Tick()
         {
-            if (_isStarted) return;
+            if (_isStarted)
+            {
+                return;
+            }
 
-            if (_inputController.GetInputValues() == Vector2.zero) return;
-            
+            if (_inputController.GetInputValues() == Vector2.zero)
+            {
+                return;
+            }
+
             _isStarted = true;
             _gameEvents.RequestGameStart();
         }

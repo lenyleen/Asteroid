@@ -1,4 +1,4 @@
-﻿namespace DataObjects
+﻿namespace Configs
 {
     public enum ColliderType
     {

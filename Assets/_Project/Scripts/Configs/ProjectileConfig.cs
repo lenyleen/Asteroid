@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 
-namespace DataObjects
+namespace Configs
 {
-    [CreateAssetMenu(fileName = "ProjectileData", menuName = "ScriptableObject/ProjectileData", order = 0)]
-    public class ProjectileData : ScriptableObject
+    [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "ScriptableObject/ProjectileConfig", order = 0)]
+    public class ProjectileConfig : ScriptableObject
     {
         [field: SerializeField] public ProjectileType Type { get; private set; }
         [field: SerializeField] public Sprite Sprite { get; private set; }
-        [field: SerializeField] public ColliderData ColliderData { get; private set; }
+        [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
         [field: SerializeField] public float Speed { get; private set; }
         [field: SerializeField] public float LifetimeInSeconds { get; private set; }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using DataObjects;
+using Configs;
+using Enemies;
 using Factories;
 using Services;
 using UnityEngine;
@@ -9,19 +10,18 @@ namespace Installers
 {
     public class EnemyInstaller : MonoInstaller<EnemyInstaller>
     {
-        [SerializeField]private Enemy.Enemy _enemyPrefab;
-        [SerializeField]private List<EnemyData> _enemyDatas;
-        [SerializeField]private SpawnData _spawnData;
+        [SerializeField] private Enemy _enemyPrefab;
+        [SerializeField] private List<EnemyConfig> _enemyDatas;
+        [SerializeField] private SpawnConfig spawnConfig;
 
-        
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<Enemy.Enemy, Enemy.Enemy.Pool>().WithInitialSize(20)
+            Container.BindMemoryPool<Enemy, Enemy.Pool>().WithInitialSize(20)
                 .FromComponentInNewPrefab(_enemyPrefab).UnderTransformGroup("Enemies");
 
             Container.BindInterfacesAndSelfTo<EnemyFactory>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle().WithArguments(_enemyDatas, _spawnData);
+            Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle().WithArguments(_enemyDatas, spawnConfig);
         }
     }
 }

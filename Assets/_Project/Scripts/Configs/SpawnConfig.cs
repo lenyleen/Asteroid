@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 
-namespace DataObjects
+namespace Configs
 {
-    [CreateAssetMenu(fileName = "SpawnData", menuName = "ScriptableObject/Spawn Data")]
-    public class SpawnData : ScriptableObject
+    [CreateAssetMenu(fileName = "SpawnConfig", menuName = "ScriptableObject/SpawnConfig")]
+    public class SpawnConfig : ScriptableObject
     {
         [field: SerializeField] public int MaxEnemies { get; private set; }
         [field: SerializeField] public int SpawnLilAsteroidCount { get; private set; }

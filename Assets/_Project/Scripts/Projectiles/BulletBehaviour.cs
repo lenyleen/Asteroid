@@ -1,6 +1,4 @@
-﻿using DataObjects;
-using Interfaces;
-using UniRx;
+﻿using Interfaces;
 using UnityEngine;
 
 namespace Projectiles
@@ -8,17 +6,17 @@ namespace Projectiles
     public class BulletBehaviour : IProjectileBehaviour
     {
         private readonly float _speed;
-        
+
         private Vector2 _direction;
-        
+
         public BulletBehaviour(float speed)
         {
             _speed = speed;
         }
-        
-        public void Initialize(Vector3 spawnPosition,float shooterRotation)
+
+        public void Initialize(Vector3 spawnPosition, float shooterRotation)
         {
-            var forward = Quaternion.Euler(0, 0, - shooterRotation) * Vector3.up;
+            var forward = Quaternion.Euler(0, 0, -shooterRotation) * Vector3.up;
             _direction = new Vector2(-forward.x, forward.y).normalized;
         }
 
@@ -28,9 +26,11 @@ namespace Projectiles
             position += (Vector3)(velocity * Time.deltaTime);
         }
 
-        public bool CheckDeathAfterCollision() => true;
+        public bool CheckDeathAfterCollision()
+        {
+            return true;
+        }
 
-        public void Dispose()
-        { }
+        public void Dispose() { }
     }
 }

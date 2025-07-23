@@ -8,10 +8,17 @@ namespace Installers
     {
         public override void InstallBindings()
         {
-            Container.Bind<Camera>().FromInstance(Camera.main).AsSingle();
-            Container.Bind<GameInput>().AsSingle();
-            Container.BindInterfacesAndSelfTo<PlayerInputController>().AsSingle();
-            Container.BindInterfacesAndSelfTo<ScreenWrapService>().AsSingle();
+            Container.Bind<Camera>().FromInstance(Camera.main)
+                .AsSingle();
+
+            Container.Bind<GameInput>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PlayerInputController>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<ScreenWrapService>()
+                .AsSingle();
         }
     }
 }

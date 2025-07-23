@@ -1,5 +1,6 @@
 ﻿using System;
-
+using _Project.Scripts.DTO;
+using Interfaces;
 using UniRx;
 
 namespace UI
@@ -7,14 +8,25 @@ namespace UI
     [Serializable]
     public class PlayerModel
     {
+        private readonly PlayerData _playerData;
+
+        private readonly ISaveService _saveService;
+
+        private string _name;
+        private int _score;
+
+        public PlayerModel(ISaveService saveService)
+        {
+            _saveService = saveService;
+        }
+
         public ReactiveProperty<int> Score { get; } = new();
 
-        private int _score;
-        private string _name;
-        
-        public void SavePlayerDataToScore(string playerName)
+        public async void SavePlayerDataToScore(string playerName)
         {
-            Score.Value = 0;
+            await _saveService.TrySaveData("PlayerProgress",
+                new PlayerData { PlayerName = playerName, Score = Score.Value });
+            //TODO
         }
 
         public void UpdateScore(int scoreToAdd)

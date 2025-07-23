@@ -10,8 +10,8 @@ namespace UI
         [SerializeField] private TextMeshProUGUI _enteredText;
         [SerializeField] private Button _restartButton;
 
-        public ReactiveCommand<string> _restartCommand { get; } = new (); 
-        
+        public ReactiveCommand<string> _restartCommand { get; } = new();
+
         private void Awake()
         {
             _restartButton.onClick.AddListener(RestartButtonOnClick);
@@ -21,7 +21,8 @@ namespace UI
         {
             gameObject.SetActive(enable);
         }
-        public void RestartButtonOnClick()
+
+        private void RestartButtonOnClick()
         {
             _restartCommand.Execute(_enteredText.text);
         }
