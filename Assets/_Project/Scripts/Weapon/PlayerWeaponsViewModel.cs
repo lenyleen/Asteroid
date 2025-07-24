@@ -15,6 +15,8 @@ namespace Weapon
         private readonly List<WeaponViewModel> _mainWeapons;
         private readonly IPositionProvider _positionProvider;
 
+        public ReactiveCommand OnDeath { get; } = new();
+
         public PlayerWeaponsViewModel(List<WeaponViewModel> weapons, List<WeaponViewModel> heavyWeapons,
             PlayerInputController inputService, IPositionProvider positionProvider, IGameEvents gameEvents)
         {
@@ -24,8 +26,6 @@ namespace Weapon
             _heavyWeapons = heavyWeapons;
             _gameEvents = gameEvents;
         }
-
-        public ReactiveCommand OnDeath { get; } = new();
 
         public void Dispose()
         {
@@ -37,6 +37,11 @@ namespace Weapon
             _gameEvents.OnGameEnded.Subscribe(_
                     => OnLose())
                 .AddTo(_disposables);
+        }
+
+        public void Update()
+        {
+            HandleFireInput();
         }
 
         private void OnLose()
@@ -53,11 +58,6 @@ namespace Weapon
             }
 
             weapons.Clear();
-        }
-
-        public void Update()
-        {
-            HandleFireInput();
         }
 
         private void HandleFireInput()

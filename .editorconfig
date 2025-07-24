@@ -54,8 +54,8 @@ resharper_for_can_be_converted_to_foreach_highlighting = none
 # Naming
 
 # Symbols
-dotnet_naming_symbols.public_members.applicable_kinds = property,method,field,event,delegate
-dotnet_naming_symbols.public_members.applicable_accessibilities = public,internal,protected,protected_internal
+dotnet_naming_symbols.public_members.applicable_kinds = property, method, field, event, delegate
+dotnet_naming_symbols.public_members.applicable_accessibilities = public, internal, protected, protected_internal
 dotnet_naming_symbols.private_fields.applicable_kinds = field
 dotnet_naming_symbols.private_fields.applicable_accessibilities = private
 
@@ -65,10 +65,20 @@ dotnet_naming_style.first_word_upper.capitalization = first_word_upper
 
 # Rules
 
-# Private fields recommend to be camelCase
-dotnet_naming_rule.private_fields_camel_case.symbols = private_fields
-dotnet_naming_rule.private_fields_camel_case.severity = suggestion
-dotnet_naming_rule.private_fields_camel_case.style = camel_case
+# Определяем символы: приватные поля
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_symbols.private_fields.required_modifiers =
+
+# Стиль: _camelCase
+dotnet_naming_style.underscore_prefix_camel_case.capitalization = camel_case
+dotnet_naming_style.underscore_prefix_camel_case.required_prefix = _
+dotnet_naming_style.underscore_prefix_camel_case.required_suffix =
+
+# Правило: приватные поля должны быть _camelCase
+dotnet_naming_rule.private_fields_underscore_camel_case.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore_camel_case.style = underscore_prefix_camel_case
+dotnet_naming_rule.private_fields_underscore_camel_case.severity = suggestion
 
 # Public members must be first word upper
 dotnet_naming_rule.public_symbols_first_word_upper.symbols = public_members

@@ -12,14 +12,14 @@ namespace Services
         private readonly ReactiveCommand _onGameStarted = new();
         private readonly ReactiveCommand<int> _onScoreReceived = new();
 
+        public IObservable<Unit> OnGameStarted => _onGameStarted;
+        public IObservable<Unit> OnGameEnded => _onGameEnded;
+        public IObservable<int> OnScoreReceived => _onScoreReceived;
+
         public void Dispose()
         {
             _disposable.Dispose();
         }
-
-        public IObservable<Unit> OnGameStarted => _onGameStarted;
-        public IObservable<Unit> OnGameEnded => _onGameEnded;
-        public IObservable<int> OnScoreReceived => _onScoreReceived;
 
         public void ApplyPlayerStateNotifier(IPlayerStateNotifier player)
         {

@@ -12,7 +12,7 @@ namespace Factories
     public class PlayerShipFactory
     {
         private readonly IInstantiator _instantiator;
-        private readonly IPlayerPositionProvider _playerDataProvider;
+        private readonly IPlayerStateProviderService _playerDataProviderService;
         private readonly PlayerInputController _playerInputController;
         private readonly ShipInstaller.PlayerInstallData _playerInstallData;
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
@@ -21,13 +21,13 @@ namespace Factories
         public PlayerShipFactory(ShipInstaller.PlayerInstallData playerInstallData,
             IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel> weaponFactory,
             PlayerInputController playerInputController, DiContainer instantiator,
-            IPlayerPositionProvider playerDataProvider,
+            IPlayerStateProviderService playerDataProviderService,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
         {
             _playerInstallData = playerInstallData;
             _weaponFactory = weaponFactory;
             _playerInputController = playerInputController;
-            _playerDataProvider = playerDataProvider;
+            _playerDataProviderService = playerDataProviderService;
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
             _instantiator = instantiator;
         }
@@ -39,7 +39,7 @@ namespace Factories
             var shipViewModel = _instantiator.Instantiate<ShipViewModel>(new object[] { shipModel });
             shipViewModel.Initialize();
 
-            _playerDataProvider.ApplyPlayer(shipViewModel);
+            _playerDataProviderService.ApplyPlayer(shipViewModel);
 
             var shipView = _instantiator.InstantiatePrefabForComponent<Ship>(
                 _playerInstallData.ShipPrefab,
@@ -82,7 +82,7 @@ namespace Factories
             var weaponsViewModel = _instantiator.Instantiate<PlayerWeaponsViewModel>(new object[]
             {
                 mainWeapons, heavyWeapons, _playerInputController,
-                _playerDataProvider.PositionProvider.Value
+                _playerDataProviderService.PositionProvider.Value
             });
 
             weaponsViewModel.Initialize();

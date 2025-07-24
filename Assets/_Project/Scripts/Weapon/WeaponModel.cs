@@ -10,6 +10,12 @@ namespace Weapon
 
         private bool _canFire = true;
 
+        public ProjectileType ProjectileType => _weaponConfig.ProjectileType;
+        public Vector3 OffsetFromHolder { get; }
+        public string Name { get; }
+        public ReactiveProperty<float> ReloadTime { get; }
+        public ReactiveProperty<int> AmmoCount { get; }
+
         public WeaponModel(WeaponConfig weaponConfig, string name, Vector3 offsetFromHolder)
         {
             _weaponConfig = weaponConfig;
@@ -19,12 +25,6 @@ namespace Weapon
             ReloadTime = new ReactiveProperty<float>(weaponConfig.ReloadTimeInSeconds);
             AmmoCount = new ReactiveProperty<int>(_weaponConfig.AmmoCount);
         }
-
-        public ProjectileType ProjectileType => _weaponConfig.ProjectileType;
-        public Vector3 OffsetFromHolder { get; }
-        public string Name { get; }
-        public ReactiveProperty<float> ReloadTime { get; }
-        public ReactiveProperty<int> AmmoCount { get; }
 
         public bool TryFire()
         {

@@ -8,15 +8,14 @@ namespace Services
     public class PlayerWeaponsInfoProviderService : IPlayerWeaponInfoProviderService, IInitializable, IDisposable
     {
         private readonly CompositeDisposable _disposables = new();
-
+        private readonly CompositeDisposable _infoProvidersDisposables = new();
+        private readonly ReactiveCollection<IWeaponInfoProvider> _weaponInfoProviders = new();
         private readonly IGameEvents _gameEvents;
 
-        private readonly CompositeDisposable _infoProvidersDisposables = new();
+        public IReadOnlyReactiveCollection<IWeaponInfoProvider> WeaponInfoProviders => _weaponInfoProviders;
 
         public PlayerWeaponsInfoProviderService(IGameEvents gameEvents)
         {
-            WeaponInfoProviders = new ReactiveCollection<IWeaponInfoProvider>();
-
             _gameEvents = gameEvents;
         }
 
@@ -32,16 +31,14 @@ namespace Services
                 .AddTo(_disposables);
         }
 
-        public ReactiveCollection<IWeaponInfoProvider> WeaponInfoProviders { get; }
-
         public void ApplyWeaponInfoProvider(IWeaponInfoProvider provider)
         {
-            if (WeaponInfoProviders.Contains(provider))
+            if (_weaponInfoProviders.Contains(provider))
             {
                 return;
             }
 
-            WeaponInfoProviders.Add(provider);
+            _weaponInfoProviders.Add(provider);
             provider.OnDeath.Take(1)
                 .Subscribe(_ =>
                     RemoveInfoProvider(provider))
@@ -53,13 +50,13 @@ namespace Services
             _infoProvidersDisposables.Dispose();
             while (WeaponInfoProviders.Count > 0)
             {
-                WeaponInfoProviders.Remove(WeaponInfoProviders[^1]);
+                _weaponInfoProviders.Remove(WeaponInfoProviders[^1]);
             }
         }
 
         private void RemoveInfoProvider(IWeaponInfoProvider provider)
         {
-            WeaponInfoProviders.Remove(provider);
+            _weaponInfoProviders.Remove(provider);
         }
     }
 }

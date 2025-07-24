@@ -14,6 +14,14 @@ namespace Enemies
         private readonly EnemyModel _model;
         private readonly IPositionProvider _positionProvider;
 
+        public ReadOnlyReactiveProperty<float> Rotation { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public IObservable<Unit> OnDead => _model.OnDeath;
+
+        public EnemyType Type => _model.Type;
+        public int Score => _model.Score;
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
+
         public EnemyViewModel(EnemyModel model, IPositionProvider positionProvider)
         {
             _model = model;
@@ -22,10 +30,6 @@ namespace Enemies
             Position = new ReadOnlyReactiveProperty<Vector3>(_model.Position);
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
         }
-
-        public ReadOnlyReactiveProperty<float> Rotation { get; }
-        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
-        public IObservable<Unit> OnDead => _model.OnDeath;
 
         public void Initialize()
         {
@@ -36,10 +40,6 @@ namespace Enemies
                     => _model.Dispose())
                 .AddTo(_disposables);
         }
-
-        public EnemyType Type => _model.Type;
-        public int Score => _model.Score;
-        public ReadOnlyReactiveProperty<Vector3> Position { get; }
 
         public void Despawn()
         {

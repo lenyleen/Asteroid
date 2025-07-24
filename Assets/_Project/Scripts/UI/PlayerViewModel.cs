@@ -12,15 +12,15 @@ namespace UI
 
         private readonly PlayerModel _playerModel;
 
+        public ReactiveCommand<bool> OnEndScreenEnable { get; } = new();
+        public ReadOnlyReactiveProperty<int> Score { get; }
+
         public PlayerViewModel(PlayerModel model, IGameEvents gameEvents)
         {
             _playerModel = model;
             Score = new ReadOnlyReactiveProperty<int>(_playerModel.Score);
             _gameEvents = gameEvents;
         }
-
-        public ReactiveCommand<bool> OnEndScreenEnable { get; } = new();
-        public ReadOnlyReactiveProperty<int> Score { get; }
 
         public void Dispose()
         {

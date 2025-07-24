@@ -10,15 +10,15 @@ namespace Factories
 {
     public class EnemyFactory : IFactory<Vector3, EnemyConfig, EnemyViewModel>
     {
-        private readonly IPlayerPositionProvider _dataProvider;
+        private readonly IPlayerStateProviderService _dataProviderService;
         private readonly Enemy.Pool _enemyPool;
         private readonly IInstantiator _instantiator;
 
-        public EnemyFactory(Enemy.Pool enemyPool, IPlayerPositionProvider dataProvider,
+        public EnemyFactory(Enemy.Pool enemyPool, IPlayerStateProviderService dataProviderService,
             IInstantiator instantiator)
         {
             _enemyPool = enemyPool;
-            _dataProvider = dataProvider;
+            _dataProviderService = dataProviderService;
             _instantiator = instantiator;
         }
 
@@ -28,10 +28,11 @@ namespace Factories
             var model = _instantiator.Instantiate<EnemyModel>(new object[]
             {
                 config, behaviour, position,
-                _dataProvider.PositionProvider.Value
+                _dataProviderService.PositionProvider.Value
             });
             var viewModel =
-                _instantiator.Instantiate<EnemyViewModel>(new object[] { model, _dataProvider.PositionProvider.Value });
+                _instantiator.Instantiate<EnemyViewModel>(new object[]
+                    { model, _dataProviderService.PositionProvider.Value });
 
             viewModel.Initialize();
 

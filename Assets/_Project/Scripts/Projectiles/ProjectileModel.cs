@@ -7,15 +7,18 @@ namespace Projectiles
 {
     public class ProjectileModel
     {
-        private readonly IProjectileBehaviour _behaviour;
-
-        private readonly ColliderConfig _colliderConfig;
         public readonly ReactiveCommand OnDeath = new();
         public readonly ReactiveProperty<Vector3> Position;
         public readonly ReactiveProperty<float> Rotation;
         public readonly ReactiveProperty<Vector2> Velocity;
+        private readonly IProjectileBehaviour _behaviour;
+
+        private readonly ColliderConfig _colliderConfig;
 
         private float _lifetime;
+
+        public ColliderType ColliderType => _colliderConfig.ColliderType;
+        public int Damage => _colliderConfig.Damage;
 
         public ProjectileModel(ProjectileConfig config, IProjectileBehaviour behaviour,
             Vector3 position, float rotation, Vector2 velocity)
@@ -30,9 +33,6 @@ namespace Projectiles
 
             _behaviour.Initialize(position, rotation);
         }
-
-        public ColliderType ColliderType => _colliderConfig.ColliderType;
-        public int Damage => _colliderConfig.Damage;
 
         public void UpdateMovement()
         {

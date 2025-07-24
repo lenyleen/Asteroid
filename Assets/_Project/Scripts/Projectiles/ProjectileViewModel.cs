@@ -13,6 +13,11 @@ namespace Projectiles
 
         private readonly ProjectileModel _model;
 
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
+        public ReadOnlyReactiveProperty<float> Rotation { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public IObservable<Unit> OnDeath => _model.OnDeath;
+
         public ProjectileViewModel(ProjectileModel model)
         {
             _model = model;
@@ -21,11 +26,6 @@ namespace Projectiles
             Rotation = new ReadOnlyReactiveProperty<float>(_model.Rotation);
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_model.Velocity);
         }
-
-        public ReadOnlyReactiveProperty<Vector3> Position { get; }
-        public ReadOnlyReactiveProperty<float> Rotation { get; }
-        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
-        public IObservable<Unit> OnDeath => _model.OnDeath;
 
         public void Initialize()
         {

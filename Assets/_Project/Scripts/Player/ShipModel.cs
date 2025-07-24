@@ -15,6 +15,11 @@ namespace Player
 
         private int _health;
 
+        public ReactiveProperty<Vector3> Position { get; } = new(Vector2.zero);
+        public ReactiveProperty<float> Rotation { get; } = new(0);
+        public ReactiveProperty<Vector2> Velocity { get; } = new(Vector2.zero);
+        public ReactiveCommand OnDeath { get; } = new();
+
         public ShipModel(ShipPreferences shipPreferences, ScreenWrapService screenWrapService)
         {
             _shipPreferences = shipPreferences;
@@ -23,11 +28,6 @@ namespace Player
             var colliderConfig = shipPreferences.ColliderConfig;
             _acceptableColliderTypes = new HashSet<ColliderType>(colliderConfig.AcceptableColliderTypes);
         }
-
-        public ReactiveProperty<Vector3> Position { get; } = new(Vector2.zero);
-        public ReactiveProperty<float> Rotation { get; } = new(0);
-        public ReactiveProperty<Vector2> Velocity { get; } = new(Vector2.zero);
-        public ReactiveCommand OnDeath { get; } = new();
 
         public void TakeDamage(ColliderType colliderType, int damage)
         {

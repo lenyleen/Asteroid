@@ -14,6 +14,11 @@ namespace Weapon
         private readonly ReactiveCommand _onDeath = new();
         private readonly IFactory<ProjectileType, Vector3, IPositionProvider, ProjectileViewModel> _projectileFactory;
 
+        public string Name => _model.Name;
+        public IObservable<Unit> OnDeath => _onDeath;
+        public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
+        public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
+
         public WeaponViewModel(
             IFactory<ProjectileType, Vector3, IPositionProvider, ProjectileViewModel> projectileFactory,
             WeaponModel weaponModel)
@@ -21,11 +26,6 @@ namespace Weapon
             _projectileFactory = projectileFactory;
             _model = weaponModel;
         }
-
-        public string Name => _model.Name;
-        public IObservable<Unit> OnDeath => _onDeath;
-        public ReadOnlyReactiveProperty<float> ReloadTime { get; private set; }
-        public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 
         public void Initialize()
         {

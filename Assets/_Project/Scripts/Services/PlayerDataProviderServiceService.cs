@@ -4,16 +4,16 @@ using UniRx;
 
 namespace Services
 {
-    public class PlayerDataProviderService : IPlayerPositionProvider, IDisposable
+    public class PlayerDataProviderServiceService : IPlayerStateProviderService, IDisposable
     {
         private IDisposable _disposable;
+
+        public ReactiveProperty<IPositionProvider> PositionProvider { get; } = new();
 
         public void Dispose()
         {
             _disposable.Dispose();
         }
-
-        public ReactiveProperty<IPositionProvider> PositionProvider { get; } = new();
 
         public void ApplyPlayer(IPositionProvider player)
         {

@@ -13,6 +13,11 @@ namespace Player
 
         private readonly ShipModel _shipModel;
 
+        public ReadOnlyReactiveProperty<Vector3> Position { get; }
+        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
+        public ReadOnlyReactiveProperty<float> Rotation { get; }
+        public IObservable<Unit> OnDeath => _shipModel.OnDeath;
+
         public ShipViewModel(ShipModel shipModel, PlayerInputController playerInputController)
         {
             _shipModel = shipModel;
@@ -21,11 +26,6 @@ namespace Player
             Velocity = new ReadOnlyReactiveProperty<Vector2>(_shipModel.Velocity);
             Rotation = new ReadOnlyReactiveProperty<float>(_shipModel.Rotation);
         }
-
-        public ReadOnlyReactiveProperty<Vector3> Position { get; }
-        public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
-        public ReadOnlyReactiveProperty<float> Rotation { get; }
-        public IObservable<Unit> OnDeath => _shipModel.OnDeath;
 
         public void Initialize()
         {

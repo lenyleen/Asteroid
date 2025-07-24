@@ -18,6 +18,15 @@ namespace Enemies
 
         private int _health;
 
+        public ReactiveCommand OnDeath { get; }
+        public EnemyType Type => _config.Type;
+        public ColliderType ColliderType => _collisionConfig.ColliderType;
+        public int Damage => _collisionConfig.Damage;
+        public int Score { get; private set; }
+        public ReactiveProperty<Vector3> Position { get; }
+        public ReactiveProperty<Vector2> Velocity { get; } = new();
+        public ReactiveProperty<float> Rotation { get; } = new();
+
         public EnemyModel(EnemyConfig config, IEnemyBehaviour behaviour, Vector3 position,
             IPositionProvider followingPositionProvider)
         {
@@ -31,15 +40,6 @@ namespace Enemies
             _collisionConfig = config.CollisionConfig;
             _acceptableColliderTypes = new HashSet<ColliderType>(_collisionConfig.AcceptableColliderTypes);
         }
-
-        public ReactiveCommand OnDeath { get; }
-        public EnemyType Type => _config.Type;
-        public ColliderType ColliderType => _collisionConfig.ColliderType;
-        public int Damage => _collisionConfig.Damage;
-        public int Score { get; private set; }
-        public ReactiveProperty<Vector3> Position { get; }
-        public ReactiveProperty<Vector2> Velocity { get; } = new();
-        public ReactiveProperty<float> Rotation { get; } = new();
 
         public void TakeHit(ColliderType colliderType, int damage)
         {
