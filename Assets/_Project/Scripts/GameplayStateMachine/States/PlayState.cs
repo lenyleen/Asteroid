@@ -9,10 +9,12 @@ namespace _Project.Scripts.States
     {
         private readonly CompositeDisposable _disposables = new();
         private readonly IPlayerStateProviderService _playerStateProviderService;
+        private readonly GameplayStateMachine _gameplayStateMachine;
 
-        public PlayState(IPlayerStateProviderService playerStateProviderService)
+        public PlayState(IPlayerStateProviderService playerStateProviderService, GameplayStateMachine gameplayStateMachine)
         {
             _playerStateProviderService = playerStateProviderService;
+            _gameplayStateMachine = gameplayStateMachine;
         }
 
         public void Enter()
@@ -37,9 +39,10 @@ namespace _Project.Scripts.States
 
         private void OnPlayerStateChanged(IPositionProvider playerStateProvider)
         {
-            if (playerStateProvider == null)
-            {
-            }
+            if (_playerStateProviderService.PositionProvider.HasValue)
+                return;
+
+            _gameplayStateMachine.ChangeState<LoseState>();
         }
     }
 }

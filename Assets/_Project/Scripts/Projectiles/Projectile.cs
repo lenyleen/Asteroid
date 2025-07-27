@@ -15,7 +15,7 @@ namespace Projectiles
         private CompositeDisposable _disposable;
 
         private Action<Projectile> _onDestroy;
-        private ProjectileViewModel _viewModel;
+        private ProjectileViewModel _viewModel;//TODO переписать
 
         private void Update()
         {
@@ -84,3 +84,87 @@ namespace Projectiles
         }
     }
 }
+/*public class Projectile : MonoBehaviour
+{
+    [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private SpriteRenderer _renderer;
+    [SerializeField] private BoxCollider2D _collider;
+
+    private IProjectileBehaviour _behaviour;
+    private ColliderType _colliderType;
+    private int _damage;
+    private float _lifetime;
+    private Action<Projectile> _onDeath;
+
+    public void Initialize(Sprite sprite, ProjectileConfig config, IProjectileBehaviour behaviour, Vector3 position, float rotation, Vector2 velocity, Action<Projectile> onDeath)
+    {
+        _colliderType = config.ColliderConfig.ColliderType;
+        _damage = config.ColliderConfig.Damage;
+        _lifetime = config.LifetimeInSeconds;
+        _behaviour = behaviour;
+        _onDeath = onDeath;
+
+        _renderer.sprite = sprite;
+        _collider.size = sprite.bounds.size;
+        _collider.offset = sprite.bounds.center;
+        gameObject.SetActive(true);
+
+        _rb.position = position;
+        _rb.rotation = rotation;
+        _rb.velocity = velocity;
+
+        _behaviour.Initialize(position, rotation);
+    }
+
+    private void Update()
+    {
+        // Update movement
+        var pos = _rb.position;
+        var rot = _rb.rotation;
+        var vel = _rb.velocity;
+
+        _behaviour.Update(ref pos, ref rot, ref vel);
+
+        _rb.position = pos;
+        _rb.rotation = rot;
+        _rb.velocity = vel;
+
+        // Update lifetime
+        _lifetime -= Time.deltaTime;
+        if (_lifetime <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.TryGetComponent<ICollisionReceiver>(out var receiver))
+        {
+            if (receiver.ColliderType == ColliderType.Enemy)
+            {
+                receiver.Collide(_colliderType, _damage);
+
+                if (_behaviour.CheckDeathAfterCollision())
+                {
+                    Die();
+                }
+            }
+        }
+    }
+
+    private void Die()
+    {
+        _onDeath?.Invoke(this);
+        _behaviour.Dispose();
+        Despawn();
+    }
+
+    private void Despawn()
+    {
+        gameObject.SetActive(false);
+        _renderer.sprite = null;
+        _rb.velocity = Vector2.zero;
+        _behaviour = null;
+    }
+}*/

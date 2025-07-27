@@ -9,7 +9,7 @@ namespace Installers
     {
         [SerializeField] private InGameUi _inGameUi;
         [SerializeField] private WeaponUiDataDisplayer _dataDisplayerPrefab;
-        [SerializeField] private PlayerUiView _playerUi;
+
 
         public override void InstallBindings()
         {
@@ -24,15 +24,7 @@ namespace Installers
                 .FromInstance(_inGameUi)
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerModel>()
-                .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerViewModel>()
-                .AsSingle();
-
-            Container.BindInterfacesAndSelfTo<PlayerUiView>()
-                .FromInstance(_playerUi)
-                .AsSingle();
         }
     }
 }

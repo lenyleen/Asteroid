@@ -9,14 +9,13 @@ namespace Projectiles
 {
     public class ProjectileViewModel
     {
-        private readonly CompositeDisposable _disposables = new();
-
-        private readonly ProjectileModel _model;
-
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public IObservable<Unit> OnDeath => _model.OnDeath;
+
+        private readonly CompositeDisposable _disposables = new();
+        private readonly ProjectileModel _model;
 
         public ProjectileViewModel(ProjectileModel model)
         {
