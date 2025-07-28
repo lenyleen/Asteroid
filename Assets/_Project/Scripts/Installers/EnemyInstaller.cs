@@ -21,7 +21,7 @@ namespace Installers
 
             Container.BindInterfacesAndSelfTo<EnemyFactory>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle().WithArguments(_enemyDatas, spawnConfig);
+            Container.BindInterfacesAndSelfTo<EnemySpawnService>().AsSingle().WithArguments(_enemyDatas, spawnConfig);
         }
     }
 }

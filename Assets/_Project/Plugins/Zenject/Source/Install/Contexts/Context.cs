@@ -82,7 +82,6 @@ namespace Zenject
 
         public abstract IEnumerable<GameObject> GetRootGameObjects();
 
-
         public void AddNormalInstallerType(Type installerType)
         {
             Assert.IsNotNull(installerType);

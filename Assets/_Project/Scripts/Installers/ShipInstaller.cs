@@ -24,7 +24,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<GameEvenstService>()
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerDataProviderServiceService>()
+            Container.BindInterfacesAndSelfTo<PlayerDataProviderService>()
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<PlayerWeaponsInfoProviderService>()

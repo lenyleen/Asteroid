@@ -108,7 +108,6 @@ namespace UniRx.Operators
         }
     }
 
-
     internal class CatchObservable<T> : OperatorObservableBase<T>
     {
         private readonly IEnumerable<IObservable<T>> sources;
@@ -178,9 +177,7 @@ namespace UniRx.Operators
                             if (current == null) throw new InvalidOperationException("sequence is null.");
                         }
                         else
-                        {
                             e.Dispose();
-                        }
                     }
                     catch (Exception exception)
                     {

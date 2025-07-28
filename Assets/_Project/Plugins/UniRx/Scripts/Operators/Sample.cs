@@ -41,7 +41,6 @@ namespace UniRx.Operators
                 sourceSubscription = new SingleAssignmentDisposable();
                 sourceSubscription.Disposable = parent.source.Subscribe(this);
 
-
                 IDisposable scheduling;
                 var periodicScheduler = parent.scheduler as ISchedulerPeriodic;
                 if (periodicScheduler != null)
@@ -112,7 +111,6 @@ namespace UniRx.Operators
             public override void OnError(Exception error)
             {
                 lock (gate)
-                {
                     try
                     {
                         observer.OnError(error);
@@ -121,7 +119,6 @@ namespace UniRx.Operators
                     {
                         Dispose();
                     }
-                }
             }
 
             public override void OnCompleted()
@@ -190,7 +187,6 @@ namespace UniRx.Operators
             public override void OnError(Exception error)
             {
                 lock (gate)
-                {
                     try
                     {
                         observer.OnError(error);
@@ -199,7 +195,6 @@ namespace UniRx.Operators
                     {
                         Dispose();
                     }
-                }
             }
 
             public override void OnCompleted()

@@ -70,9 +70,7 @@ namespace UniRx.Operators
                         }
 
                         if (hasNext)
-                        {
                             observer.OnNext(current);
-                        }
                         else
                         {
                             e.Dispose();

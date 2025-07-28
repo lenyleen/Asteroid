@@ -57,7 +57,6 @@ namespace Zenject.Tests.Bindings
             Assert.Throws(() => container.ResolveRoots());
         }
 
-
         [Test]
         public void TestSuccess()
         {

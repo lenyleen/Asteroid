@@ -195,8 +195,6 @@ namespace UniRx.Toolkit
             observer.OnCompleted();
         }
 
-        #region IDisposable Support
-
         protected virtual void Dispose(bool disposing)
         {
             if (!isDisposed)
@@ -211,8 +209,6 @@ namespace UniRx.Toolkit
         {
             Dispose(true);
         }
-
-        #endregion
     }
 
     /// <summary>
@@ -410,8 +406,6 @@ namespace UniRx.Toolkit
             observer.OnCompleted();
         }
 
-        #region IDisposable Support
-
         protected virtual void Dispose(bool disposing)
         {
             if (!isDisposed)
@@ -426,8 +420,6 @@ namespace UniRx.Toolkit
         {
             Dispose(true);
         }
-
-        #endregion
     }
 }
 

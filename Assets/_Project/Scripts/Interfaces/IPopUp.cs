@@ -1,7 +1,5 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using Other;
-using UniRx;
 
 namespace Interfaces
 {
@@ -9,16 +7,15 @@ namespace Interfaces
     {
         public IObservable<IPopUp> OnClose { get; }
         public void Show();
-        public void Hide();
     }
 
-    public interface IPopUp<TParam> : IPopUp
+    /*public interface IPopUp<TParam> : IPopUp
     {
         public void Show(TParam param);
-    }
+    }*/
 
-    public interface IDialogMenu<TParams> : IPopUp<TParams>
+    public interface IDialogMenu<TParams, TResult> : IPopUp
     {
-        IObservable<bool> OnComplete { get; }
+        UniTask<TResult> ShowDialogAsync(TParams param);
     }
 }

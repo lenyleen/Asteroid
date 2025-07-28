@@ -5,6 +5,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 // require keep for Windows Universal App
 
 namespace UniRx.Triggers
@@ -30,6 +31,5 @@ namespace UniRx.Triggers
         }
     }
 }
-
 
 #endif

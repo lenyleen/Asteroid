@@ -8,15 +8,14 @@ namespace Player
 {
     public class ShipViewModel : IPositionProvider, IPlayerStateNotifier
     {
-        private readonly CompositeDisposable _disposables = new();
-        private readonly PlayerInputController _inputController;
-
-        private readonly ShipModel _shipModel;
-
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public IObservable<Unit> OnDeath => _shipModel.OnDeath;
+
+        private readonly CompositeDisposable _disposables = new();
+        private readonly PlayerInputController _inputController;
+        private readonly ShipModel _shipModel;
 
         public ShipViewModel(ShipModel shipModel, PlayerInputController playerInputController)
         {
@@ -51,9 +50,6 @@ namespace Player
 
         private void Dispose()
         {
-            Position.Dispose();
-            Velocity.Dispose();
-            Rotation.Dispose();
         }
     }
 }

@@ -46,7 +46,6 @@ namespace UniRx.Operators
             public override void OnNext(T value)
             {
                 if (seenValue)
-                {
                     try
                     {
                         observer.OnError(new InvalidOperationException("sequence is not single"));
@@ -55,7 +54,6 @@ namespace UniRx.Operators
                     {
                         Dispose();
                     }
-                }
                 else
                 {
                     seenValue = true;
@@ -95,7 +93,6 @@ namespace UniRx.Operators
                 else
                 {
                     if (!seenValue)
-                    {
                         try
                         {
                             observer.OnError(new InvalidOperationException("sequence is empty"));
@@ -104,7 +101,6 @@ namespace UniRx.Operators
                         {
                             Dispose();
                         }
-                    }
                     else
                     {
                         observer.OnNext(lastValue);
@@ -158,7 +154,6 @@ namespace UniRx.Operators
                 if (isPassed)
                 {
                     if (seenValue)
-                    {
                         try
                         {
                             observer.OnError(new InvalidOperationException("sequence is not single"));
@@ -167,7 +162,6 @@ namespace UniRx.Operators
                         {
                             Dispose();
                         }
-                    }
                     else
                     {
                         seenValue = true;
@@ -208,7 +202,6 @@ namespace UniRx.Operators
                 else
                 {
                     if (!seenValue)
-                    {
                         try
                         {
                             observer.OnError(new InvalidOperationException("sequence is empty"));
@@ -217,7 +210,6 @@ namespace UniRx.Operators
                         {
                             Dispose();
                         }
-                    }
                     else
                     {
                         observer.OnNext(lastValue);

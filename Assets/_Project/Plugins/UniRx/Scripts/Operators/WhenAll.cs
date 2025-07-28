@@ -121,23 +121,20 @@ namespace UniRx.Operators
                 public void OnNext(T value)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.values[index] = value;
-                    }
+                        if (!isCompleted)
+                            parent.values[index] = value;
                 }
 
                 public void OnError(Exception error)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.OnError(error);
-                    }
+                        if (!isCompleted)
+                            parent.OnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     lock (parent.gate)
-                    {
                         if (!isCompleted)
                         {
                             isCompleted = true;
@@ -148,7 +145,6 @@ namespace UniRx.Operators
                                 parent.OnCompleted();
                             }
                         }
-                    }
                 }
             }
         }
@@ -245,23 +241,20 @@ namespace UniRx.Operators
                 public void OnNext(T value)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.values[index] = value;
-                    }
+                        if (!isCompleted)
+                            parent.values[index] = value;
                 }
 
                 public void OnError(Exception error)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.OnError(error);
-                    }
+                        if (!isCompleted)
+                            parent.OnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     lock (parent.gate)
-                    {
                         if (!isCompleted)
                         {
                             isCompleted = true;
@@ -272,7 +265,6 @@ namespace UniRx.Operators
                                 parent.OnCompleted();
                             }
                         }
-                    }
                 }
             }
         }
@@ -396,15 +388,13 @@ namespace UniRx.Operators
                 public void OnError(Exception error)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.OnError(error);
-                    }
+                        if (!isCompleted)
+                            parent.OnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     lock (parent.gate)
-                    {
                         if (!isCompleted)
                         {
                             isCompleted = true;
@@ -415,7 +405,6 @@ namespace UniRx.Operators
                                 parent.OnCompleted();
                             }
                         }
-                    }
                 }
             }
         }
@@ -512,15 +501,13 @@ namespace UniRx.Operators
                 public void OnError(Exception error)
                 {
                     lock (parent.gate)
-                    {
-                        if (!isCompleted) parent.OnError(error);
-                    }
+                        if (!isCompleted)
+                            parent.OnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     lock (parent.gate)
-                    {
                         if (!isCompleted)
                         {
                             isCompleted = true;
@@ -531,7 +518,6 @@ namespace UniRx.Operators
                                 parent.OnCompleted();
                             }
                         }
-                    }
                 }
             }
         }

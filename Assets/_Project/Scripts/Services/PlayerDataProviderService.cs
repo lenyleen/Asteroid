@@ -4,7 +4,7 @@ using UniRx;
 
 namespace Services
 {
-    public class PlayerDataProviderServiceService : IPlayerStateProviderService, IDisposable
+    public class PlayerDataProviderService : IPlayerStateProviderService, IDisposable
     {
         private IDisposable _disposable;
 

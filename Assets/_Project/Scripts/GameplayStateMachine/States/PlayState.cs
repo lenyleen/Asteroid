@@ -1,5 +1,6 @@
 ﻿using System;
 using Interfaces;
+using Services;
 using UniRx;
 using Zenject;
 
@@ -10,15 +11,21 @@ namespace _Project.Scripts.States
         private readonly CompositeDisposable _disposables = new();
         private readonly IPlayerStateProviderService _playerStateProviderService;
         private readonly GameplayStateMachine _gameplayStateMachine;
+        private readonly ShipSpawnService _shipSpawnService;
+        private readonly EnemySpawnService _enemySpawnService;
 
-        public PlayState(IPlayerStateProviderService playerStateProviderService, GameplayStateMachine gameplayStateMachine)
+        public PlayState(IPlayerStateProviderService playerStateProviderService,
+            GameplayStateMachine gameplayStateMachine, ShipSpawnService shipSpawnService)
         {
             _playerStateProviderService = playerStateProviderService;
             _gameplayStateMachine = gameplayStateMachine;
+            _shipSpawnService = shipSpawnService;
         }
 
         public void Enter()
         {
+            _shipSpawnService.SpawnShip();
+            _enemySpawnService.EnableSpawn(true);
         }
 
         public void Initialize()
@@ -30,6 +37,7 @@ namespace _Project.Scripts.States
 
         public void Exit()
         {
+            _enemySpawnService.EnableSpawn(false);
         }
 
         public void Dispose()

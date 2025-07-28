@@ -37,9 +37,7 @@ namespace Zenject
 
             injectAction = null;
             if (_container.IsValidating && !TypeAnalyzer.ShouldAllowDuringValidation(context.MemberType))
-            {
                 buffer.Add(new ValidationMarker(typeof(TReturn)));
-            }
             else
             {
                 var result = _method(context);

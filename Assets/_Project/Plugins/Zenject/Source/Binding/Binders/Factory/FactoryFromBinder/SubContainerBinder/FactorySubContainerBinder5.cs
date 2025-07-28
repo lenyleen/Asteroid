@@ -15,8 +15,8 @@ namespace Zenject
 
         public ScopeConcreteIdArgConditionCopyNonLazyBinder ByMethod(
 #if !NET_4_6
-            #endif
-                Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
+#endif
+            Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
         {
             var subcontainerBindInfo = new SubContainerCreatorBindInfo();
 
@@ -32,8 +32,8 @@ namespace Zenject
 #if !NOT_UNITY3D
         public NameTransformScopeConcreteIdArgConditionCopyNonLazyBinder ByNewGameObjectMethod(
 #if !NET_4_6
-            #endif
-                Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
+#endif
+            Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
         {
             var gameObjectInfo = new GameObjectCreationParameters();
 
@@ -49,8 +49,8 @@ namespace Zenject
         public NameTransformScopeConcreteIdArgConditionCopyNonLazyBinder ByNewPrefabMethod(
             System.Func<InjectContext, Object> prefabGetter,
 #if !NET_4_6
-            #endif
-                Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
+#endif
+            Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
         {
             var gameObjectInfo = new GameObjectCreationParameters();
 
@@ -68,8 +68,8 @@ namespace Zenject
         public NameTransformScopeConcreteIdArgConditionCopyNonLazyBinder ByNewPrefabMethod(
             Object prefab,
 #if !NET_4_6
-            #endif
-                Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
+#endif
+            Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
         {
             BindingUtil.AssertIsValidPrefab(prefab);
 
@@ -89,8 +89,8 @@ namespace Zenject
         public NameTransformScopeConcreteIdArgConditionCopyNonLazyBinder ByNewPrefabResourceMethod(
             string resourcePath,
 #if !NET_4_6
-            #endif
-                Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
+#endif
+            Action<DiContainer, TParam1, TParam2, TParam3, TParam4, TParam5> installerMethod)
         {
             BindingUtil.AssertIsValidResourcePath(resourcePath);
 

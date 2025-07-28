@@ -55,7 +55,6 @@ namespace UniRx.Operators
             public override void OnError(Exception error)
             {
                 lock (gate)
-                {
                     try
                     {
                         observer.OnError(error);
@@ -64,7 +63,6 @@ namespace UniRx.Operators
                     {
                         Dispose();
                     }
-                }
             }
 
             public override void OnCompleted()
@@ -98,29 +96,25 @@ namespace UniRx.Operators
                 public void OnNext(T value)
                 {
                     lock (parent.gate)
-                    {
-                        if (parent.latest == id) parent.observer.OnNext(value);
-                    }
+                        if (parent.latest == id)
+                            parent.observer.OnNext(value);
                 }
 
                 public void OnError(Exception error)
                 {
                     lock (parent.gate)
-                    {
-                        if (parent.latest == id) parent.observer.OnError(error);
-                    }
+                        if (parent.latest == id)
+                            parent.observer.OnError(error);
                 }
 
                 public void OnCompleted()
                 {
                     lock (parent.gate)
-                    {
                         if (parent.latest == id)
                         {
                             parent.hasLatest = false;
                             if (parent.isStopped) parent.observer.OnCompleted();
                         }
-                    }
                 }
             }
         }

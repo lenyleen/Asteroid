@@ -40,7 +40,7 @@ csharp_style_var_when_type_is_apparent = true:suggestion
 csharp_style_var_elsewhere = true:suggestion
 
 # Prefer braces even on single line
-csharp_prefer_braces = true:suggestion
+csharp_prefer_braces = false:suggestion
 
 # Rider doesn't seem to default to these
 csharp_space_after_cast = false

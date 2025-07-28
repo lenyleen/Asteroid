@@ -30,7 +30,7 @@ namespace Services
                 .AddTo(_disposable);
         }
 
-        private void SpawnShip()
+        public void SpawnShip()
         {
             var ship = _playerShipFactory.SpawnShip();
             _gameEvents.ApplyPlayerStateNotifier(ship);

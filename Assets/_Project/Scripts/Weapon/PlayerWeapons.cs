@@ -49,10 +49,7 @@ namespace Weapon
 
         private void Die()
         {
-            foreach (var slot in _occupiedSlots)
-            {
-                Destroy(slot.gameObject);
-            }
+            foreach (var slot in _occupiedSlots) Destroy(slot.gameObject);
 
             Destroy(gameObject);
         }
@@ -61,10 +58,7 @@ namespace Weapon
         {
             var emptySlot = slots.FirstOrDefault(sl => !_occupiedSlots.Contains(sl));
 
-            if (emptySlot == null)
-            {
-                throw new Exception("No empty slot available for weapon application.");
-            }
+            if (emptySlot == null) throw new Exception("No empty slot available for weapon application.");
 
             _occupiedSlots.Add(emptySlot);
 

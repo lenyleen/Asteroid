@@ -111,16 +111,12 @@ namespace Zenject
 #if UNITY_EDITOR
             using (ProfileBlock.Start("Zenject.SceneContext.Install"))
 #endif
-            {
                 Install();
-            }
 
 #if UNITY_EDITOR
             using (ProfileBlock.Start("Zenject.SceneContext.Resolve"))
 #endif
-            {
                 Resolve();
-            }
         }
 
         public override IEnumerable<GameObject> GetRootGameObjects()

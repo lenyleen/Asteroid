@@ -41,7 +41,7 @@ namespace Weapon
 
         public void Update()
         {
-            HandleFireInput();
+            HandleFireInput(); //TODO: игрок не уничтожается а просто прячется, создать ерор бокс
         }
 
         private void OnLose()
@@ -52,10 +52,7 @@ namespace Weapon
 
         private void DisposeWeapons(List<WeaponViewModel> weapons)
         {
-            foreach (var weapon in weapons)
-            {
-                weapon.Dispose();
-            }
+            foreach (var weapon in weapons) weapon.Dispose();
 
             weapons.Clear();
         }
@@ -69,10 +66,7 @@ namespace Weapon
 
         private void Fire(bool isPressed, List<WeaponViewModel> weapons)
         {
-            if (!isPressed)
-            {
-                return;
-            }
+            if (!isPressed) return;
 
             weapons.ForEach(weapon =>
                 weapon.TryFiree(_positionProvider));

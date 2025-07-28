@@ -20,9 +20,7 @@ namespace Services
             var result = await _saveLoadService.TryLoadData(PlayerDataName, out _playerData);
 
             if (!result.IsEmpty())
-            {
-                _playerData = new PlayerData { PlayerName = "", Score = 0 };
-            }
+                _playerData = new PlayerData { Score = 0 };
 
             return result;
         }
@@ -30,9 +28,7 @@ namespace Services
         public async UniTask<string> TrySetDataAsync(PlayerData playerData)
         {
             if (_playerData.Score > playerData.Score)
-            {
                 return "";
-            }
 
             return await _saveLoadService.TrySaveData(PlayerDataName, playerData);
         }

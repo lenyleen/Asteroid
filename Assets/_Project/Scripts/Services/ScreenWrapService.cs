@@ -22,12 +22,10 @@ namespace Services
             return position != newPosition ? newPosition : position;
         }
 
-        private float WrapCoordinate(float value, float min, float max)
+        private static float WrapCoordinate(float value, float min, float max)
         {
             if (value < min)
-            {
                 return max;
-            }
 
             return value > max ? min : value;
         }

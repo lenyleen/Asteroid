@@ -1,44 +1,59 @@
 ﻿using System;
+using Cysharp.Threading.Tasks;
 using Interfaces;
 using Other;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace UI
 {
-    public class LosePopUp : MonoBehaviour, IDialogMenu<int>
+    public class LosePopUp : MonoBehaviour, IDialogMenu<int, DialogResult>
     {
         [SerializeField] private TextMeshProUGUI _enteredText;
         [SerializeField] private Button _restartButton;
+        [SerializeField] private Button _exitButton;
+
+        private readonly ReactiveCommand<IPopUp> _closeCommand = new();
+
+        private CompositeDisposable _closeDisposable = new();
 
         public IObservable<IPopUp> OnClose => _closeCommand;
-        public IObservable<bool> OnComplete => _confirmCommand;
 
-        private readonly CompositeDisposable _closeDisposable = new ();
-
-        private ReactiveCommand<IPopUp> _closeCommand;
-        private ReactiveCommand<bool>  _confirmCommand;
-
-        public void Show(int score)
+        public async UniTask<DialogResult> ShowDialogAsync(int score)
         {
             gameObject.SetActive(true);
             _enteredText.text = score.ToString();
 
+            var tcs = new UniTaskCompletionSource<DialogResult>();
+
             _restartButton.OnClickAsObservable().Subscribe(_ =>
-                    _confirmCommand.Execute(true))
-                .AddTo(_closeDisposable);
+            {
+                tcs.TrySetResult(DialogResult.Yes);
+                Hide();
+            }).AddTo(_closeDisposable);
+
+            _exitButton.OnClickAsObservable().Subscribe(_ =>
+            {
+                tcs.TrySetResult(DialogResult.Cancel);
+                Hide();
+            }).AddTo(_closeDisposable);
+
+            return await tcs.Task;
         }
 
-        public void Show()
-        {}
-
-        public void Hide()
+        private void Hide()
         {
             gameObject.SetActive(false);
             _closeCommand.Execute(this);
+
+            _closeDisposable.Dispose();
+            _closeDisposable = new CompositeDisposable();
+        }
+
+        public void Show()
+        {
         }
     }
 }
