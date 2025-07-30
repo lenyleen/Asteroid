@@ -26,10 +26,8 @@ namespace Projectiles
             position += (Vector3)(velocity * Time.deltaTime);
         }
 
-        public bool CheckDeathAfterCollision()
-        {
-            return true;
-        }
+        public bool CheckDeathAfterCollision() =>
+            true;
 
         public void Dispose() { }
     }

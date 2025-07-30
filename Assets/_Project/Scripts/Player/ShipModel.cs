@@ -18,7 +18,6 @@ namespace Player
         private readonly ReactiveProperty<float> _rotation = new(0);
         private readonly ReactiveProperty<Vector2> _velocity = new(Vector2.zero);
         private readonly ReactiveCommand _deathCommand = new();
-
         private readonly HashSet<ColliderType> _acceptableColliderTypes;
         private readonly ScreenWrapService _screenWrapService;
         private readonly ShipPreferences _shipPreferences;

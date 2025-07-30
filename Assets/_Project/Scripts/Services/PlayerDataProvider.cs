@@ -13,7 +13,10 @@ namespace Services
 
         private PlayerData _playerData;
 
-        public PlayerData PlayerData => _playerData;
+        public PlayerDataProvider(ISaveService saveLoadService)
+        {
+            _saveLoadService = saveLoadService;
+        }
 
         public async UniTask<string> TryInitializeAsync()
         {

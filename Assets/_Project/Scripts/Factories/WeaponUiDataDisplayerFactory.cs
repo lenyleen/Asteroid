@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Factories
 {
-    public class WeaponUiDataDisplayerFactory : IFactory<IWeaponInfoProvider, IWeaponUiDataDisplayer>
+    public class WeaponUiDataDisplayerFactory : IFactory<IWeaponInfoProvider, WeaponUiDataDisplayer>
     {
         private readonly IInstantiator _instantiator;
         private readonly WeaponUiDataDisplayer _prefab;
@@ -15,9 +15,9 @@ namespace Factories
             _instantiator = instantiator;
         }
 
-        public IWeaponUiDataDisplayer Create(IWeaponInfoProvider provider)
+        public WeaponUiDataDisplayer Create(IWeaponInfoProvider provider)
         {
-            var displayer = _instantiator.InstantiatePrefabForComponent<IWeaponUiDataDisplayer>(_prefab);
+            var displayer = _instantiator.InstantiatePrefabForComponent<WeaponUiDataDisplayer>(_prefab);
             displayer.Initialize(provider);
             return displayer;
         }

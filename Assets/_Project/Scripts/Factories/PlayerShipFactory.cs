@@ -18,6 +18,8 @@ namespace Factories
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
         private readonly IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel> _weaponFactory;
 
+        private ShipViewModel _shipViewModel;
+
         public PlayerShipFactory(ShipInstaller.PlayerInstallData playerInstallData,
             IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel> weaponFactory,
             PlayerInputController playerInputController, DiContainer instantiator,
@@ -32,14 +34,13 @@ namespace Factories
             _instantiator = instantiator;
         }
 
-        public ShipViewModel SpawnShip()
+        public void SpawnShip()
         {
             var shipModel = _instantiator.Instantiate<ShipModel>(new object[] { _playerInstallData.ShipPreferences });
 
-            var shipViewModel = _instantiator.Instantiate<ShipViewModel>(new object[] { shipModel });
-            shipViewModel.Initialize();
+            _shipViewModel = _instantiator.Instantiate<ShipViewModel>(new object[] { shipModel });
 
-            _playerDataProviderService.ApplyPlayer(shipViewModel);
+            _playerDataProviderService.ApplyPlayer(_shipViewModel);
 
             var shipView = _instantiator.InstantiatePrefabForComponent<Ship>(
                 _playerInstallData.ShipPrefab,
@@ -50,9 +51,7 @@ namespace Factories
 
             SpawnPlayerWeapons(shipView.PlayerWeapons);
 
-            shipView.Initialize(shipViewModel);
-
-            return shipViewModel;
+            shipView.Initialize(_shipViewModel);
         }
 
         private void SpawnPlayerWeapons(PlayerWeapons playerWeapons)

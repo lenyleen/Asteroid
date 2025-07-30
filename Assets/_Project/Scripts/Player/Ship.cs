@@ -33,19 +33,13 @@ namespace Player
                 .AddTo(_disposables);
         }
 
-        public void Collide(ColliderType colliderType, int damage)
-        {
+        public void Collide(ColliderType colliderType, int damage) =>
             _shipViewModel.TakeDamage(colliderType, damage);
-        }
 
-        public void OnDestroy()
-        {
+        public void OnDestroy() =>
             _disposables.Dispose();
-        }
 
-        private void Update()
-        {
+        private void Update() =>
             _shipViewModel.Update();
-        }
     }
 }

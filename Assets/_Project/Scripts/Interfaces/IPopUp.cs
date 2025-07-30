@@ -1,10 +1,12 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace Interfaces
 {
     public interface IPopUp
     {
+        public void Initialize(Transform parent);
         public IObservable<IPopUp> OnClose { get; }
         public void Show();
     }

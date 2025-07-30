@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Configs;
 using Factories;
-using Handlers;
 using Player;
 using Projectiles;
 using Services;
@@ -21,9 +20,6 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<GameEvenstService>()
-                .AsSingle();
-
             Container.BindInterfacesAndSelfTo<PlayerDataProviderService>()
                 .AsSingle();
 
@@ -45,12 +41,6 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<PlayerShipFactory>()
                 .AsSingle()
                 .WithArguments(_playerInstallData);
-
-            Container.BindInterfacesAndSelfTo<ShipSpawnService>()
-                .AsSingle();
-
-            Container.BindInterfacesAndSelfTo<StartGameByInputHandler>()
-                .AsSingle();
         }
 
         [Serializable]

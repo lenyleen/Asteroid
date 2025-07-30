@@ -1,6 +1,8 @@
 ﻿using System;
+using Factories;
 using Interfaces;
 using Services;
+using UI.ScoreBox;
 using UniRx;
 using Zenject;
 
@@ -8,23 +10,28 @@ namespace _Project.Scripts.States
 {
     public class PlayState : IState, IInitializable, IDisposable
     {
+        public IObservable<Type> OnStateChanged => _changeStateCommand;
+
         private readonly CompositeDisposable _disposables = new();
         private readonly IPlayerStateProviderService _playerStateProviderService;
-        private readonly GameplayStateMachine _gameplayStateMachine;
-        private readonly ShipSpawnService _shipSpawnService;
+        private readonly PlayerShipFactory _shipFactory;
         private readonly EnemySpawnService _enemySpawnService;
+        private readonly ReactiveCommand<Type> _changeStateCommand = new();
+        private readonly ScoreBoxModel _scoreBoxModel;
 
-        public PlayState(IPlayerStateProviderService playerStateProviderService,
-            GameplayStateMachine gameplayStateMachine, ShipSpawnService shipSpawnService)
+        public PlayState(IPlayerStateProviderService playerStateProviderService,PlayerShipFactory shipFactory,
+            ScoreBoxModel scoreBoxModel, EnemySpawnService enemySpawnService)
         {
             _playerStateProviderService = playerStateProviderService;
-            _gameplayStateMachine = gameplayStateMachine;
-            _shipSpawnService = shipSpawnService;
+            _shipFactory = shipFactory;
+            _scoreBoxModel = scoreBoxModel;
+            _enemySpawnService = enemySpawnService;
         }
 
         public void Enter()
         {
-            _shipSpawnService.SpawnShip();
+            _scoreBoxModel.Enable(true);
+            _shipFactory.SpawnShip();
             _enemySpawnService.EnableSpawn(true);
         }
 
@@ -35,22 +42,16 @@ namespace _Project.Scripts.States
                 .AddTo(_disposables);
         }
 
-        public void Exit()
-        {
-            _enemySpawnService.EnableSpawn(false);
-        }
+        public void Exit() => _enemySpawnService.EnableSpawn(false);
 
-        public void Dispose()
-        {
-            _disposables.Dispose();
-        }
+        public void Dispose() => _disposables.Dispose();
 
         private void OnPlayerStateChanged(IPositionProvider playerStateProvider)
         {
-            if (_playerStateProviderService.PositionProvider.HasValue)
+            if (_playerStateProviderService.PositionProvider.Value != null)
                 return;
 
-            _gameplayStateMachine.ChangeState<LoseState>();
+            _changeStateCommand.Execute(typeof(LoseState));
         }
     }
 }

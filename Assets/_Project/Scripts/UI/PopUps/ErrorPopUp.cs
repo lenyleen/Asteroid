@@ -9,16 +9,11 @@ using UnityEngine.UI;
 
 namespace UI.PopUps
 {
-    public class ErrorPopUp : MonoBehaviour, IDialogMenu<string, DialogResult>
+    public class ErrorPopUp : PopUpBase, IDialogMenu<string, DialogResult>
     {
         [SerializeField] private Button _closeButton;
         [SerializeField] private Button _okButton;
         [SerializeField] private TextMeshProUGUI _message;
-
-        public IObservable<IPopUp> OnClose => _closeCommand;
-
-        private CompositeDisposable _disposables = new();
-        private readonly ReactiveCommand<IPopUp> _closeCommand = new();
 
         public async UniTask<DialogResult> ShowDialogAsync(string message)
         {
@@ -42,15 +37,6 @@ namespace UI.PopUps
             return await tcs.Task;
         }
 
-        public void Show() { }
-
-        private void Hide()
-        {
-            gameObject.SetActive(false);
-            _closeCommand.Execute(this);
-
-            _disposables.Dispose();
-            _disposables = new CompositeDisposable();
-        }
+        public override void Show() { }
     }
 }

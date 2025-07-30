@@ -2,14 +2,15 @@
 using TMPro;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UI
 {
-    public class WeaponUiDataDisplayer : MonoBehaviour, IWeaponUiDataDisplayer
+    public class WeaponUiDataDisplayer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI _ammo;
         [SerializeField] private TextMeshProUGUI _name;
-        [SerializeField] private TextMeshProUGUI _realodTime;
+        [SerializeField] private Image _reloadTimeCircle;
 
         private readonly CompositeDisposable _disposables = new();
 
@@ -19,13 +20,18 @@ namespace UI
         {
             _name.text = infoProvider.Name;
 
-            infoProvider.ReloadTime.Subscribe(time
-                    => _realodTime.text = $"{time} sec.")
+            infoProvider.ReloadTimePercent.Subscribe(percent
+                    => _reloadTimeCircle.fillAmount = percent)
                 .AddTo(_disposables);
 
             infoProvider.AmmoCount.Subscribe(ammo
                     => _ammo.text = ammo.ToString())
                 .AddTo(_disposables);
+
+            infoProvider.OnDeath.Subscribe(_ =>
+                    Hide())
+                .AddTo(_disposables);
+
         }
 
         public void Hide()

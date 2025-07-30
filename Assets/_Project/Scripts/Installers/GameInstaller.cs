@@ -1,4 +1,6 @@
-﻿using Services;
+﻿using _Project.Scripts;
+using _Project.Scripts.States;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -11,6 +13,12 @@ namespace Installers
             Container.Bind<Camera>().FromInstance(Camera.main)
                 .AsSingle();
 
+            Container.BindInterfacesAndSelfTo<SaveLoadService>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PlayerDataProvider>()
+                .AsSingle();
+
             Container.Bind<GameInput>()
                 .AsSingle();
 
@@ -18,6 +26,23 @@ namespace Installers
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<ScreenWrapService>()
+                .AsSingle();
+
+            BindStates();
+
+            Container.BindInterfacesAndSelfTo<GameplayStateMachine>()
+                .AsSingle();
+        }
+
+        private void BindStates()
+        {
+            Container.BindInterfacesAndSelfTo<InputWaitState>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PlayState>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<LoseState>()
                 .AsSingle();
         }
     }

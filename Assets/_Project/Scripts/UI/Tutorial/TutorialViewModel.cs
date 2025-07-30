@@ -8,9 +8,7 @@ namespace UI
         private readonly ReactiveProperty<bool> _isEnabled = new(false);
         public IObservable<bool> IsTutorialEnabled => _isEnabled;
 
-        public void Enable(bool enable)
-        {
+        public void Enable(bool enable) =>
             _isEnabled.Value = enable;
-        }
     }
 }

@@ -24,9 +24,7 @@ namespace UI.WeaponUi
             _viewModel.OnDisplayerAdded.Subscribe(ApplyDisplayer);
         }
 
-        private void ApplyDisplayer(WeaponUiDataDisplayer displayer)
-        {
+        private void ApplyDisplayer(WeaponUiDataDisplayer displayer) =>
             displayer.transform.SetParent(_rectTransform);
-        }
     }
 }

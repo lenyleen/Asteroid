@@ -1,4 +1,5 @@
-﻿using Configs;
+﻿using System;
+using Configs;
 using UniRx;
 using UnityEngine;
 
@@ -6,15 +7,18 @@ namespace Weapon
 {
     public class WeaponModel
     {
+        public IObservable<float> ReloadTime => _reloadTime;
+        public IObservable<int> AmmoCount => _ammoCount;
+        public ProjectileType ProjectileType => _weaponConfig.ProjectileType;
+        public float ReloadTimeInSeconds => _weaponConfig.ReloadTimeInSeconds;
+        public string Name { get; }
+        public Vector3 OffsetFromHolder { get; }
+
+        private readonly ReactiveProperty<float> _reloadTime;
+        private readonly ReactiveProperty<int> _ammoCount;
         private readonly WeaponConfig _weaponConfig;
 
         private bool _canFire = true;
-
-        public ProjectileType ProjectileType => _weaponConfig.ProjectileType;
-        public Vector3 OffsetFromHolder { get; }
-        public string Name { get; }
-        public ReactiveProperty<float> ReloadTime { get; }
-        public ReactiveProperty<int> AmmoCount { get; }
 
         public WeaponModel(WeaponConfig weaponConfig, string name, Vector3 offsetFromHolder)
         {
@@ -22,34 +26,30 @@ namespace Weapon
             Name = name;
             OffsetFromHolder = offsetFromHolder;
 
-            ReloadTime = new ReactiveProperty<float>(weaponConfig.ReloadTimeInSeconds);
-            AmmoCount = new ReactiveProperty<int>(_weaponConfig.AmmoCount);
+            _reloadTime = new ReactiveProperty<float>(weaponConfig.ReloadTimeInSeconds);
+            _ammoCount = new ReactiveProperty<int>(_weaponConfig.AmmoCount);
         }
 
         public bool TryFire()
         {
-            if (!_canFire || AmmoCount.Value <= 0)
-            {
+            if (!_canFire || _ammoCount.Value <= 0)
                 return false;
-            }
 
             _canFire = false;
 
             if (_weaponConfig.Type != WeaponType.Main)
-            {
-                AmmoCount.Value -= 1;
-            }
+                _ammoCount.Value -= 1;
 
-            ReloadTime.Value = 0;
+            _reloadTime.Value = 0;
 
             return true;
         }
 
         public void UpdateReloadTime(float deltaTime)
         {
-            if (ReloadTime.Value < _weaponConfig.ReloadTimeInSeconds)
+            if (_reloadTime.Value < _weaponConfig.ReloadTimeInSeconds)
             {
-                ReloadTime.Value += deltaTime;
+                _reloadTime.Value += deltaTime;
                 return;
             }
 

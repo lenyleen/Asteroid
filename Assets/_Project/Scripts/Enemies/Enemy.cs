@@ -10,41 +10,18 @@ namespace Enemies
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public class Enemy : MonoBehaviour, ICollisionReceiver
     {
+        [field: SerializeField] public ColliderType ColliderType { get; private set; }
+
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _maxSpeed;
         [SerializeField] private BoxCollider2D _collider;
+
         private Vector2 _direction;
         private CompositeDisposable _disposables = new();
         private Action<Enemy> _onDeath;
-
         private EnemyViewModel _viewModel;
 
-        private void Update()
-        {
-            _viewModel.UpdatePosition();
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (!other.gameObject.TryGetComponent(out ICollisionReceiver receiver))
-            {
-                return;
-            }
-
-            _viewModel.MakeCollision(receiver);
-            Debug.Log("Collided");
-        }
-
-        [field: SerializeField] public ColliderType ColliderType { get; private set; }
-
-        public void Collide(ColliderType colliderType, int damage)
-        {
-            if (gameObject.activeInHierarchy)
-            {
-                _viewModel.TakeCollision(colliderType, damage);
-            }
-        }
 
         private void Initialize(Vector3 position, Sprite sprite, EnemyViewModel context, Action<Enemy> onDeath)
         {
@@ -67,6 +44,24 @@ namespace Enemies
 
             _viewModel.OnDead.Subscribe(_ => _onDeath?.Invoke(this))
                 .AddTo(_disposables);
+        }
+
+        private void Update()
+        {
+            _viewModel.UpdatePosition();
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.gameObject.TryGetComponent(out ICollisionReceiver receiver)) return;
+
+            _viewModel.MakeCollision(receiver);
+            Debug.Log("Collided");
+        }
+
+        public void Collide(ColliderType colliderType, int damage)
+        {
+            if (gameObject.activeInHierarchy) _viewModel.TakeCollision(colliderType, damage);
         }
 
         private void Despawn()

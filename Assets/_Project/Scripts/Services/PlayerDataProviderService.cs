@@ -6,14 +6,9 @@ namespace Services
 {
     public class PlayerDataProviderService : IPlayerStateProviderService, IDisposable
     {
-        private IDisposable _disposable;
-
         public ReactiveProperty<IPositionProvider> PositionProvider { get; } = new();
 
-        public void Dispose()
-        {
-            _disposable.Dispose();
-        }
+        private IDisposable _disposable = Disposable.Empty;
 
         public void ApplyPlayer(IPositionProvider player)
         {
@@ -21,6 +16,9 @@ namespace Services
             _disposable = PositionProvider.Value.OnDeath.Subscribe(_ =>
                 RemovePlayer());
         }
+
+        public void Dispose() =>
+            _disposable.Dispose();
 
         private void RemovePlayer()
         {

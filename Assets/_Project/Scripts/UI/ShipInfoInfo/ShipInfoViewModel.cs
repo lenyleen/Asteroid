@@ -8,17 +8,18 @@ namespace UI.PlayerInfo
 {
     public class ShipInfoViewModel : IInitializable, IDisposable
     {
-        private readonly ReactiveProperty<Vector3> _position;
-        private readonly ReactiveProperty<float> _rotation;
-        private readonly ReactiveProperty<Vector2> _velocity;
-        private readonly ReactiveProperty<bool> _isEnabled;
-        private readonly IPlayerStateProviderService _playerStateProviderServiceService;
-
-        private CompositeDisposable _disposables = new();
         public IObservable<Vector3> Position => _position;
         public IObservable<float> Rotation => _rotation;
         public IObservable<Vector2> Velocity => _velocity;
         public IObservable<bool> IsEnabled => _isEnabled;
+
+        private readonly ReactiveProperty<Vector3> _position = new ();
+        private readonly ReactiveProperty<float> _rotation = new ();
+        private readonly ReactiveProperty<Vector2> _velocity = new ();
+        private readonly ReactiveProperty<bool> _isEnabled = new (false);
+        private readonly IPlayerStateProviderService _playerStateProviderServiceService;
+
+        private readonly CompositeDisposable _disposables = new();
 
         public ShipInfoViewModel(IPlayerStateProviderService playerStateProviderService)
         {
@@ -32,21 +33,15 @@ namespace UI.PlayerInfo
                 .AddTo(_disposables);
         }
 
-        public void Dispose()
-        {
+        public void Dispose() =>
             _disposables.Dispose();
-        }
 
         private void OnPositionProviderChanged(IPositionProvider positionProvider)
         {
             _isEnabled.Value = positionProvider != null;
 
-            if (!_isEnabled.Value)
-            {
-                _disposables.Dispose();
-                _disposables = new CompositeDisposable();
+            if(!_isEnabled.Value)
                 return;
-            }
 
             positionProvider.Position.Subscribe(pos
                     => _position.Value = pos)

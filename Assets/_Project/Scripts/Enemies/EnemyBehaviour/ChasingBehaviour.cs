@@ -20,9 +20,7 @@ namespace Enemies.EnemyBehaviour
             currentVelocity = _direction * Time.deltaTime;
 
             if (currentVelocity.magnitude > Config.MaxSpeed)
-            {
                 currentVelocity *= Config.MaxSpeed;
-            }
 
             currentPosition += (Vector3)currentVelocity;
         }

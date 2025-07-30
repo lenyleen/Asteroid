@@ -24,11 +24,6 @@ namespace UI.WeaponUi
             OnDisplayerAdded = _displayerAddedCommand;
         }
 
-        public void Dispose()
-        {
-            _disposables.Dispose();
-        }
-
         public void Initialize()
         {
             _playerWeaponInfoProviderService.WeaponInfoProviders.ObserveAdd()
@@ -41,12 +36,15 @@ namespace UI.WeaponUi
                 .AddTo(_disposables);
         }
 
+        public void Dispose()
+        {
+            _disposables.Dispose();
+        }
+
         private void AddDisplayer(IWeaponInfoProvider provider)
         {
             if (!_isEnabled.Value)
-            {
                 _isEnabled.Value = true;
-            }
 
             var displayerView = _displayersFactory.Create(provider);
             _displayerAddedCommand.Execute(displayerView);
@@ -55,9 +53,7 @@ namespace UI.WeaponUi
         private void OnProviderRemoved()
         {
             if (_playerWeaponInfoProviderService.WeaponInfoProviders.Count > 0)
-            {
                 return;
-            }
 
             _isEnabled.Value = false;
         }

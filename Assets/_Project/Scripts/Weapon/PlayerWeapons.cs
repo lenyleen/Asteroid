@@ -18,14 +18,13 @@ namespace Weapon
 
         private PlayerWeaponsViewModel _viewModel;
 
-        private void FixedUpdate()
+        public void Initialize(PlayerWeaponsViewModel viewModel)
         {
-            _viewModel.Update();
-        }
+            _viewModel = viewModel;
 
-        private void OnDestroy()
-        {
-            _disposables.Dispose();
+            _viewModel.OnDeath
+                .Subscribe(_ => Die())
+                .AddTo(_disposables);
         }
 
         public Vector3 ApplyWeapon(WeaponType weaponType, WeaponView weapon)
@@ -38,20 +37,9 @@ namespace Weapon
             };
         }
 
-        public void Initialize(PlayerWeaponsViewModel viewModel)
+        private void FixedUpdate()
         {
-            _viewModel = viewModel;
-
-            _viewModel.OnDeath
-                .Subscribe(_ => Die())
-                .AddTo(_disposables);
-        }
-
-        private void Die()
-        {
-            foreach (var slot in _occupiedSlots) Destroy(slot.gameObject);
-
-            Destroy(gameObject);
+            _viewModel.Update();
         }
 
         private Vector3 ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
@@ -65,6 +53,18 @@ namespace Weapon
             weaponView.transform.SetParent(emptySlot);
             weaponView.transform.localPosition = Vector3.zero;
             return emptySlot.transform.localPosition;
+        }
+
+        private void Die()
+        {
+            foreach (var slot in _occupiedSlots) Destroy(slot.gameObject);
+
+            Destroy(gameObject);
+        }
+
+        private void OnDestroy()
+        {
+            _disposables.Dispose();
         }
     }
 }

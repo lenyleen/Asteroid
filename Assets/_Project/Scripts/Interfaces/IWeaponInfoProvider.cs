@@ -7,7 +7,7 @@ namespace Interfaces
     {
         public IObservable<Unit> OnDeath { get; }
         public string Name { get; }
-        public ReadOnlyReactiveProperty<float> ReloadTime { get; }
+        public ReadOnlyReactiveProperty<float> ReloadTimePercent { get; }
         public ReadOnlyReactiveProperty<int> AmmoCount { get; }
     }
 }

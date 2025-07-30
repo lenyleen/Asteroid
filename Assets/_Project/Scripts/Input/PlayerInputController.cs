@@ -4,8 +4,8 @@ using Zenject;
 public class PlayerInputController : ITickable
 {
     private readonly GameInput _gameInput;
-    private AttackInputData _attackInputData;
 
+    private AttackInputData _attackInputData;
     private Vector2 _inputValues;
 
     public PlayerInputController(GameInput gameInput)

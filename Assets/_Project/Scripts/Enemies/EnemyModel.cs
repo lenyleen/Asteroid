@@ -9,15 +9,6 @@ namespace Enemies
 {
     public class EnemyModel
     {
-        private readonly HashSet<ColliderType> _acceptableColliderTypes;
-        private readonly ColliderConfig _collisionConfig;
-
-        private readonly EnemyConfig _config;
-        private readonly IPositionProvider _followingPositionProvider;
-        private IEnemyBehaviour _behaviour;
-
-        private int _health;
-
         public ReactiveCommand OnDeath { get; }
         public EnemyType Type => _config.Type;
         public ColliderType ColliderType => _collisionConfig.ColliderType;
@@ -26,6 +17,14 @@ namespace Enemies
         public ReactiveProperty<Vector3> Position { get; }
         public ReactiveProperty<Vector2> Velocity { get; } = new();
         public ReactiveProperty<float> Rotation { get; } = new();
+
+        private readonly HashSet<ColliderType> _acceptableColliderTypes;
+        private readonly ColliderConfig _collisionConfig;
+        private readonly EnemyConfig _config;
+        private readonly IPositionProvider _followingPositionProvider;
+        private IEnemyBehaviour _behaviour;
+
+        private int _health;
 
         public EnemyModel(EnemyConfig config, IEnemyBehaviour behaviour, Vector3 position,
             IPositionProvider followingPositionProvider)
@@ -44,21 +43,15 @@ namespace Enemies
         public void TakeHit(ColliderType colliderType, int damage)
         {
             if (!_acceptableColliderTypes.Contains(colliderType))
-            {
                 return;
-            }
 
             _health -= damage;
 
             if (_health > 0)
-            {
                 return;
-            }
 
             if (colliderType == ColliderType.KillBox)
-            {
                 Score = 0;
-            }
 
             OnDeath.Execute();
         }
@@ -66,9 +59,7 @@ namespace Enemies
         public void UpdateMovement()
         {
             if (_behaviour == null)
-            {
                 return;
-            }
 
             var curPosition = Position.Value;
             var curRotation = Rotation.Value;

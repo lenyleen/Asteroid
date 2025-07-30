@@ -1,5 +1,7 @@
 ﻿using System;
+using Configs;
 using Interfaces;
+using Projectiles;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -12,69 +14,93 @@ namespace Projectiles
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private BoxCollider2D _collider;
-        private CompositeDisposable _disposable;
 
-        private Action<Projectile> _onDestroy;
-        private ProjectileViewModel _viewModel;//TODO переписать
+        private IProjectileBehaviour _behaviour;
+        private ProjectileConfig _projectileConfig;
+        private float _lifetime;
+        private Action<Projectile> _onDeath;
+
+        private void Initialize(ProjectileInitData data, Action<Projectile> onDeath)
+        {
+            _projectileConfig = data.Config;
+            _lifetime = _projectileConfig.LifetimeInSeconds;
+            _behaviour = data.Behaviour;
+            _onDeath = onDeath;
+
+            _renderer.sprite = _projectileConfig.Sprite;
+            _collider.size = _projectileConfig.Sprite.bounds.size;
+            _collider.offset = _projectileConfig.Sprite.bounds.center;
+            gameObject.SetActive(true);
+
+            _rb.position = data.Position;
+            _rb.rotation = data.Rotation;
+            _rb.linearVelocity = data.Velocity;
+
+            _behaviour.Initialize(data.Position, data.Rotation);
+        }
 
         private void Update()
         {
-            _viewModel.Update();
+            UpdateMovement();
+
+            UpdateLifetime();
+        }
+
+        private void UpdateMovement()
+        {
+            var pos = (Vector3)_rb.position;
+            var rot = _rb.rotation;
+            var vel = _rb.linearVelocity;
+
+            _behaviour.Update(ref pos, ref rot, ref vel);
+
+            _rb.position = pos;
+            _rb.rotation = rot;
+            _rb.linearVelocity = vel;
+        }
+
+        private void UpdateLifetime()
+        {
+            _lifetime -= Time.deltaTime;
+
+            if (_lifetime <= 0)
+                Die();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.gameObject.TryGetComponent<ICollisionReceiver>(out var receiver))
-            {
+            if (!other.TryGetComponent<ICollisionReceiver>(out var receiver))
                 return;
-            }
 
-            _viewModel?.MakeCollision(receiver);
+            if (receiver.ColliderType != ColliderType.Enemy)
+                return;
+
+            receiver.Collide(_projectileConfig.ColliderConfig.ColliderType,
+                _projectileConfig.ColliderConfig.Damage);
+
+            if (_behaviour.CheckDeathAfterCollision())
+                Die();
         }
 
-        private void Initialize(Sprite sprite, ProjectileViewModel viewModel, Action<Projectile> onDestroy)
+        private void Die()
         {
-            _disposable = new CompositeDisposable();
-            _renderer.sprite = sprite;
-            _onDestroy = onDestroy;
-            _viewModel = viewModel;
-            _collider.enabled = true;
-            _collider.size = sprite.bounds.size;
-            _collider.offset = sprite.bounds.center;
-            gameObject.SetActive(true);
-
-            _viewModel.Position.Subscribe(pos =>
-                    _rb.position = pos)
-                .AddTo(_disposable);
-
-            _viewModel.Rotation.Subscribe(rot =>
-                    _rb.rotation = rot)
-                .AddTo(_disposable);
-
-            _viewModel.Velocity.Subscribe(v =>
-                    _rb.linearVelocity = v)
-                .AddTo(_disposable);
-
-            _viewModel.OnDeath.Subscribe(_ =>
-                    _onDestroy?.Invoke(this))
-                .AddTo(_disposable);
+            _behaviour.Dispose();
+            _onDeath?.Invoke(this);
         }
 
         private void Despawn()
         {
             gameObject.SetActive(false);
             _renderer.sprite = null;
-            _viewModel = null;
-            _collider.enabled = false;
-            _disposable.Dispose();
+            _rb.linearVelocity = Vector2.zero;
+            _behaviour = null;
         }
 
-        public class Pool : MonoMemoryPool<Sprite, ProjectileViewModel, Action<Projectile>, Projectile>
+        public class Pool : MonoMemoryPool<ProjectileInitData, Action<Projectile>, Projectile>
         {
-            protected override void Reinitialize(Sprite sprite, ProjectileViewModel viewModel,
-                Action<Projectile> onDestroy, Projectile item)
+            protected override void Reinitialize(ProjectileInitData data, Action<Projectile> onDeath, Projectile item)
             {
-                item.Initialize(sprite, viewModel, onDestroy);
+                item.Initialize(data, onDeath);
             }
 
             protected override void OnDespawned(Projectile item)
@@ -83,88 +109,23 @@ namespace Projectiles
             }
         }
     }
+
+    public class ProjectileInitData
+    {
+        public ProjectileConfig Config {get;}
+        public IProjectileBehaviour Behaviour {get;}
+        public Vector3 Position {get;}
+        public float Rotation {get;}
+        public Vector2 Velocity {get;}
+
+        public ProjectileInitData(ProjectileConfig config, IProjectileBehaviour behaviour, Vector3 position, float rotation, Vector2 velocity)
+        {
+            Config = config;
+            Behaviour = behaviour;
+            Position = position;
+            Rotation = rotation;
+            Velocity = velocity;
+        }
+    }
 }
-/*public class Projectile : MonoBehaviour
-{
-    [SerializeField] private Rigidbody2D _rb;
-    [SerializeField] private SpriteRenderer _renderer;
-    [SerializeField] private BoxCollider2D _collider;
 
-    private IProjectileBehaviour _behaviour;
-    private ColliderType _colliderType;
-    private int _damage;
-    private float _lifetime;
-    private Action<Projectile> _onDeath;
-
-    public void Initialize(Sprite sprite, ProjectileConfig config, IProjectileBehaviour behaviour, Vector3 position, float rotation, Vector2 velocity, Action<Projectile> onDeath)
-    {
-        _colliderType = config.ColliderConfig.ColliderType;
-        _damage = config.ColliderConfig.Damage;
-        _lifetime = config.LifetimeInSeconds;
-        _behaviour = behaviour;
-        _onDeath = onDeath;
-
-        _renderer.sprite = sprite;
-        _collider.size = sprite.bounds.size;
-        _collider.offset = sprite.bounds.center;
-        gameObject.SetActive(true);
-
-        _rb.position = position;
-        _rb.rotation = rotation;
-        _rb.velocity = velocity;
-
-        _behaviour.Initialize(position, rotation);
-    }
-
-    private void Update()
-    {
-        // Update movement
-        var pos = _rb.position;
-        var rot = _rb.rotation;
-        var vel = _rb.velocity;
-
-        _behaviour.Update(ref pos, ref rot, ref vel);
-
-        _rb.position = pos;
-        _rb.rotation = rot;
-        _rb.velocity = vel;
-
-        // Update lifetime
-        _lifetime -= Time.deltaTime;
-        if (_lifetime <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.TryGetComponent<ICollisionReceiver>(out var receiver))
-        {
-            if (receiver.ColliderType == ColliderType.Enemy)
-            {
-                receiver.Collide(_colliderType, _damage);
-
-                if (_behaviour.CheckDeathAfterCollision())
-                {
-                    Die();
-                }
-            }
-        }
-    }
-
-    private void Die()
-    {
-        _onDeath?.Invoke(this);
-        _behaviour.Dispose();
-        Despawn();
-    }
-
-    private void Despawn()
-    {
-        gameObject.SetActive(false);
-        _renderer.sprite = null;
-        _rb.velocity = Vector2.zero;
-        _behaviour = null;
-    }
-}*/

@@ -42,14 +42,10 @@ namespace Projectiles
             velocity = Vector2.zero;
         }
 
-        public bool CheckDeathAfterCollision()
-        {
-            return false;
-        }
+        public bool CheckDeathAfterCollision() =>
+            false;
 
-        public void Dispose()
-        {
+        public void Dispose() =>
             _disposable.Dispose();
-        }
     }
 }
