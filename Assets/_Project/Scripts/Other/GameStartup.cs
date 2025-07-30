@@ -14,14 +14,14 @@ namespace Other
         [SerializeField] private LoadCurtain _loadCurtain;
 
         private UiService _uiService;
-        private PlayerDataProvider _playerDataProvider;
+        private PlayerProgressProvider _playerProgressProvider;
         private GameplayStateMachine _gameplayStateMachine;
 
         [Inject]
-        private void Construct(PlayerDataProvider playerDataProvider, GameplayStateMachine gameplayStateMachine,
+        private void Construct(PlayerProgressProvider playerProgressProvider, GameplayStateMachine gameplayStateMachine,
             UiService uiService)
         {
-            _playerDataProvider = playerDataProvider;
+            _playerProgressProvider = playerProgressProvider;
             _gameplayStateMachine = gameplayStateMachine;
             _uiService = uiService;
         }
@@ -30,7 +30,7 @@ namespace Other
         {
             try
             {
-                await _playerDataProvider.TryInitializeAsync();
+                await _playerProgressProvider.TryInitializeAsync();
                 await _loadCurtain.FadeOutAsync();
                 _gameplayStateMachine.Initialize(typeof(InputWaitState));
             }

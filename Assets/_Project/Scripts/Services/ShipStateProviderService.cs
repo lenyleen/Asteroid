@@ -4,7 +4,7 @@ using UniRx;
 
 namespace Services
 {
-    public class PlayerDataProviderService : IPlayerStateProviderService, IDisposable
+    public class ShipStateProviderService : IPlayerStateProviderService, IDisposable
     {
         public ReactiveProperty<IPositionProvider> PositionProvider { get; } = new();
 

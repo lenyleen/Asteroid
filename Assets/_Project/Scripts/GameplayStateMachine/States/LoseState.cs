@@ -1,5 +1,4 @@
 ﻿using System;
-using _Project.Scripts.DTO;
 using Other;
 using Services;
 using UI;
@@ -15,16 +14,16 @@ namespace _Project.Scripts.States
 
         private readonly UiService _uiService;
         private readonly ScoreBoxModel _scoreModel;
-        private readonly PlayerDataProvider _playerDataProvider;
+        private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
 
         private CompositeDisposable _disposables = new();
 
-        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerDataProvider playerDataProvider)
+        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
-            _playerDataProvider = playerDataProvider;
+            _playerProgressProvider = playerProgressProvider;
         }
 
         public async void Enter()
@@ -36,7 +35,7 @@ namespace _Project.Scripts.States
 
             try
             {
-                await _playerDataProvider.TrySetDataAsync(new PlayerData { Score = _scoreModel.Score.Value });
+                await _playerProgressProvider.TrySetDataAsync();
             }
             catch (Exception e)
             {
@@ -58,7 +57,7 @@ namespace _Project.Scripts.States
             if (result != DialogResult.Yes)
                 return; //переход в главное меню
 
-            _scoreModel.ToDefault();
+            _playerProgressProvider.ToDefault();
             _changeStateCommand.Execute(typeof(PlayState));
         }
     }

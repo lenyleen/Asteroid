@@ -1,5 +1,6 @@
 ﻿using System;
 using Interfaces;
+using Services;
 using UniRx;
 using Zenject;
 
@@ -12,31 +13,24 @@ namespace UI.ScoreBox
 
         private readonly ReactiveProperty<int> _score = new(0);
         private readonly ReactiveProperty<bool> _enabled = new(true);
-        private readonly IEnemyDiedNotifier _enemyDiedNotifier;
+        private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly CompositeDisposable _disposables = new();
 
-        public ScoreBoxModel(IEnemyDiedNotifier enemyDiedNotifier)
+        public ScoreBoxModel(PlayerProgressProvider playerProgressProvider)
         {
             Score = new ReadOnlyReactiveProperty<int>(_score);
-            _enemyDiedNotifier = enemyDiedNotifier;
+            _playerProgressProvider = playerProgressProvider;
         }
 
         public void Initialize()
         {
-            _enemyDiedNotifier.OnEnemyKilled
-                .Subscribe(AddScore)
+            _playerProgressProvider.PlayerProgress.ReactiveScore
+                .Subscribe(score =>  _score.Value = score)
                 .AddTo(_disposables);
         }
 
         public void Enable(bool enable) => _enabled.Value = enable;
 
-        public void ToDefault() => _score.Value = 0;
-
         public void Dispose() => _disposables.Dispose();
-
-        private void AddScore(KilledEnemyData killedEnemyData)
-        {
-            _score.Value += killedEnemyData.ScoreReward;
-        }
     }
 }

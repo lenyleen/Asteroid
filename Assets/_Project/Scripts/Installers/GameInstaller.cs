@@ -16,7 +16,7 @@ namespace Installers
             Container.BindInterfacesAndSelfTo<SaveLoadService>()
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerDataProvider>()
+            Container.BindInterfacesAndSelfTo<PlayerProgressProvider>()
                 .AsSingle();
 
             Container.Bind<GameInput>()

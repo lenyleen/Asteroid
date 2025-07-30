@@ -20,7 +20,7 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<PlayerDataProviderService>()
+            Container.BindInterfacesAndSelfTo<ShipStateProviderService>()
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<PlayerWeaponsInfoProviderService>()
