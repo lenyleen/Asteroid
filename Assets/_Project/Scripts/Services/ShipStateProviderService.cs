@@ -1,8 +1,8 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class ShipStateProviderService : IPlayerStateProviderService, IDisposable
     {

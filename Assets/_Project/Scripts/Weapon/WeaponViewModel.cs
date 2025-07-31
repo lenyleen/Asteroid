@@ -1,13 +1,10 @@
 ﻿using System;
-using Configs;
-using Factories;
-using Interfaces;
-using Projectiles;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     public class WeaponViewModel : IWeaponInfoProvider
     {

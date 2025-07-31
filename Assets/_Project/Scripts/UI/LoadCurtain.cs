@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace _Project.Scripts.UI
 {
     public class LoadCurtain : MonoBehaviour
     {

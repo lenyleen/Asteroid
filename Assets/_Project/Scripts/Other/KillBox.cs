@@ -1,8 +1,8 @@
-﻿using Configs;
-using Interfaces;
+﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using UnityEngine;
 
-namespace Other
+namespace _Project.Scripts.Other
 {
     public class KillBox : MonoBehaviour
     {

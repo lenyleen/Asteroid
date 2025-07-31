@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Configs;
-using Factories;
-using Player;
-using Projectiles;
-using Services;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Player;
+using _Project.Scripts.Projectiles;
+using _Project.Scripts.Services;
+using _Project.Scripts.Weapon;
 using UnityEngine;
-using Weapon;
 using Zenject;
 
-namespace Installers
+namespace _Project.Scripts.Installers
 {
     public class ShipInstaller : MonoInstaller<ShipInstaller>
     {

@@ -1,10 +1,10 @@
-﻿using Interfaces;
+﻿using _Project.Scripts.Interfaces;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI
+namespace _Project.Scripts.UI
 {
     public class WeaponUiDataDisplayer : MonoBehaviour
     {

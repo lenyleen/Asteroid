@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace UI.ScoreBox
+namespace _Project.Scripts.UI.ScoreBox
 {
     public class ScoreBoxView : MonoBehaviour
     {

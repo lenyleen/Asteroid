@@ -1,11 +1,11 @@
 ﻿using System;
-using Configs;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Enemies
+namespace _Project.Scripts.Enemies
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public class Enemy : MonoBehaviour, ICollisionReceiver

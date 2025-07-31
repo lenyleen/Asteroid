@@ -1,9 +1,9 @@
 ﻿using System;
-using Configs;
+using _Project.Scripts.Configs;
 using UniRx;
 using UnityEngine;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     public class WeaponModel
     {

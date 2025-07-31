@@ -1,9 +1,8 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
-using Zenject;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class PlayerWeaponsInfoProviderService : IPlayerWeaponInfoProviderService, IDisposable
     {

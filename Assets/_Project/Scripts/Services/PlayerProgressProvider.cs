@@ -1,12 +1,11 @@
 ﻿using System;
 using _Project.Scripts.DTO;
+using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Interfaces;
 using ModestTree;
 using UniRx;
-using UnityEngine;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class PlayerProgressProvider : IDisposable
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class WeaponView : MonoBehaviour

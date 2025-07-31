@@ -1,11 +1,11 @@
 ﻿using System;
-using Configs;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace Enemies
+namespace _Project.Scripts.Enemies
 {
     public class EnemyViewModel : IInitializable, ISpawnableEnemy
     {

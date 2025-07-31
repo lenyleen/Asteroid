@@ -1,8 +1,8 @@
-﻿using Configs;
+﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Weapon;
 using UnityEngine;
-using Weapon;
 
-namespace Interfaces
+namespace _Project.Scripts.Interfaces
 {
     public interface IWeaponsHolder
     {

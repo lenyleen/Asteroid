@@ -1,13 +1,12 @@
-﻿using System;
+﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
-using Interfaces;
-using Other;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UI.PopUps
+namespace _Project.Scripts.UI.PopUps
 {
     public class ErrorPopUp : PopUpBase, IDialogMenu<string, DialogResult>
     {

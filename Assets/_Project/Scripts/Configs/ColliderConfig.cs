@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Configs
+namespace _Project.Scripts.Configs
 {
     [CreateAssetMenu(fileName = "ColliderConfig", menuName = "ScriptableObject/ColliderConfig")]
     public class ColliderConfig : ScriptableObject

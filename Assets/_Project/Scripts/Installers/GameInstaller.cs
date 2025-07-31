@@ -1,10 +1,10 @@
-﻿using _Project.Scripts;
-using _Project.Scripts.States;
-using Services;
+﻿using _Project.Scripts.GameplayStateMachine.States;
+using _Project.Scripts.Input;
+using _Project.Scripts.Services;
 using UnityEngine;
 using Zenject;
 
-namespace Installers
+namespace _Project.Scripts.Installers
 {
     public class GameInstaller : MonoInstaller<GameInstaller>
     {
@@ -30,7 +30,7 @@ namespace Installers
 
             BindStates();
 
-            Container.BindInterfacesAndSelfTo<GameplayStateMachine>()
+            Container.BindInterfacesAndSelfTo<GameplayStateMachine.GameplayStateMachine>()
                 .AsSingle();
         }
 

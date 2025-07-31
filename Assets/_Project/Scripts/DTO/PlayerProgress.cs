@@ -1,5 +1,5 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;

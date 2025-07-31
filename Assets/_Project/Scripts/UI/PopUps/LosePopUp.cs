@@ -1,15 +1,12 @@
-﻿using System;
+﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
-using Interfaces;
-using Other;
 using TMPro;
-using UI.PopUps;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace UI
+namespace _Project.Scripts.UI.PopUps
 {
     public class LosePopUp : PopUpBase, IDialogMenu<int, DialogResult>
     {

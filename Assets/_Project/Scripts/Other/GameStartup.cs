@@ -1,13 +1,12 @@
 ﻿using System;
-using _Project.Scripts;
-using _Project.Scripts.States;
-using Services;
-using UI;
-using UI.PopUps;
+using _Project.Scripts.GameplayStateMachine.States;
+using _Project.Scripts.Services;
+using _Project.Scripts.UI;
+using _Project.Scripts.UI.PopUps;
 using UnityEngine;
 using Zenject;
 
-namespace Other
+namespace _Project.Scripts.Other
 {
     public class GameStartup : MonoBehaviour
     {
@@ -15,10 +14,10 @@ namespace Other
 
         private UiService _uiService;
         private PlayerProgressProvider _playerProgressProvider;
-        private GameplayStateMachine _gameplayStateMachine;
+        private GameplayStateMachine.GameplayStateMachine _gameplayStateMachine;
 
         [Inject]
-        private void Construct(PlayerProgressProvider playerProgressProvider, GameplayStateMachine gameplayStateMachine,
+        private void Construct(PlayerProgressProvider playerProgressProvider, GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
             UiService uiService)
         {
             _playerProgressProvider = playerProgressProvider;

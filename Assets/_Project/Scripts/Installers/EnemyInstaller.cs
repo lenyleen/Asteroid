@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Configs;
-using Enemies;
-using Factories;
-using Services;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Enemies;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Services;
 using UnityEngine;
 using Zenject;
 
-namespace Installers
+namespace _Project.Scripts.Installers
 {
     public class EnemyInstaller : MonoInstaller<EnemyInstaller>
     {

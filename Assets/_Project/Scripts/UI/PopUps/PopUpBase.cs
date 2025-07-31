@@ -1,9 +1,9 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
-namespace UI.PopUps
+namespace _Project.Scripts.UI.PopUps
 {
     public abstract class PopUpBase : MonoBehaviour, IPopUp
     {

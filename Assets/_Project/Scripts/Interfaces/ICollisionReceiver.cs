@@ -1,6 +1,6 @@
-﻿using Configs;
+﻿using _Project.Scripts.Configs;
 
-namespace Interfaces
+namespace _Project.Scripts.Interfaces
 {
     public interface ICollisionReceiver
     {

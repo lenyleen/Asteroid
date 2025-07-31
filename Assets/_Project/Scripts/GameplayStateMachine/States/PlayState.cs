@@ -1,12 +1,12 @@
 ﻿using System;
-using Factories;
-using Interfaces;
-using Services;
-using UI.ScoreBox;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
+using _Project.Scripts.UI.ScoreBox;
 using UniRx;
 using Zenject;
 
-namespace _Project.Scripts.States
+namespace _Project.Scripts.GameplayStateMachine.States
 {
     public class PlayState : IState, IInitializable, IDisposable
     {

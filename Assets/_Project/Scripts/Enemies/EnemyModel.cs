@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using Configs;
-using Enemies.EnemyBehaviour;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Enemies.EnemyBehaviour;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
-namespace Enemies
+namespace _Project.Scripts.Enemies
 {
     public class EnemyModel
     {

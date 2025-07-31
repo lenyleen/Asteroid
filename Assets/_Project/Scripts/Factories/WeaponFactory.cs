@@ -1,9 +1,9 @@
-﻿using Configs;
-using Interfaces;
-using Weapon;
+﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Weapon;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class WeaponFactory : IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel>
     {

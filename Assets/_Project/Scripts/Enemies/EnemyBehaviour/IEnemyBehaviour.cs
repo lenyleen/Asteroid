@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Enemies.EnemyBehaviour
+namespace _Project.Scripts.Enemies.EnemyBehaviour
 {
     public interface IEnemyBehaviour
     {

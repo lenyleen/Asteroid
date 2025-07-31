@@ -1,7 +1,7 @@
-﻿using Configs;
+﻿using _Project.Scripts.Configs;
 using UnityEngine;
 
-namespace Enemies.EnemyBehaviour
+namespace _Project.Scripts.Enemies.EnemyBehaviour
 {
     public abstract class EnemyBehaviourBase : IEnemyBehaviour
     {

@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
-using Configs;
-using Installers;
-using Interfaces;
-using Player;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Input;
+using _Project.Scripts.Installers;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Player;
+using _Project.Scripts.Weapon;
 using UnityEngine;
-using Weapon;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class PlayerShipFactory
     {

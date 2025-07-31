@@ -1,12 +1,12 @@
 ﻿using System;
-using Configs;
-using Enemies;
-using Enemies.EnemyBehaviour;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Enemies;
+using _Project.Scripts.Enemies.EnemyBehaviour;
+using _Project.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class EnemyFactory : IFactory<Vector3, EnemyConfig, EnemyViewModel>
     {

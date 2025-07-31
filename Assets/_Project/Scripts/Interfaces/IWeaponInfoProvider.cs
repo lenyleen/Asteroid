@@ -1,7 +1,7 @@
 ﻿using System;
 using UniRx;
 
-namespace Interfaces
+namespace _Project.Scripts.Interfaces
 {
     public interface IWeaponInfoProvider
     {

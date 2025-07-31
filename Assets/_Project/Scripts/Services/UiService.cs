@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Factories;
-using Interfaces;
 using UniRx;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class UiService
     {

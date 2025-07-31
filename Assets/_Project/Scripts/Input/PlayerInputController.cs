@@ -1,42 +1,45 @@
 using UnityEngine;
 using Zenject;
 
-public class PlayerInputController : ITickable
+namespace _Project.Scripts.Input
 {
-    private readonly GameInput _gameInput;
-
-    private AttackInputData _attackInputData;
-    private Vector2 _inputValues;
-
-    public PlayerInputController(GameInput gameInput)
+    public class PlayerInputController : ITickable
     {
-        _gameInput = gameInput;
-        _gameInput.Enable();
-    }
+        private readonly GameInput _gameInput;
 
-    public void Tick()
-    {
-        _inputValues = _gameInput.Player.Move.ReadValue<Vector2>();
-        _attackInputData = new AttackInputData
+        private AttackInputData _attackInputData;
+        private Vector2 _inputValues;
+
+        public PlayerInputController(GameInput gameInput)
         {
-            IsHeavyFirePressed = _gameInput.Player.HeavyAttack.IsPressed(),
-            IsMainFirePressed = _gameInput.Player.MainAttack.IsPressed()
-        };
-    }
+            _gameInput = gameInput;
+            _gameInput.Enable();
+        }
 
-    public Vector2 GetInputValues()
-    {
-        return _inputValues;
-    }
+        public void Tick()
+        {
+            _inputValues = _gameInput.Player.Move.ReadValue<Vector2>();
+            _attackInputData = new AttackInputData
+            {
+                IsHeavyFirePressed = _gameInput.Player.HeavyAttack.IsPressed(),
+                IsMainFirePressed = _gameInput.Player.MainAttack.IsPressed()
+            };
+        }
 
-    public AttackInputData GetAttackInputData()
-    {
-        return _attackInputData;
-    }
+        public Vector2 GetInputValues()
+        {
+            return _inputValues;
+        }
 
-    public struct AttackInputData
-    {
-        public bool IsMainFirePressed;
-        public bool IsHeavyFirePressed;
+        public AttackInputData GetAttackInputData()
+        {
+            return _attackInputData;
+        }
+
+        public struct AttackInputData
+        {
+            public bool IsMainFirePressed;
+            public bool IsHeavyFirePressed;
+        }
     }
 }
