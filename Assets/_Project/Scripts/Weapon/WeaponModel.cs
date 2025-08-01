@@ -11,6 +11,7 @@ namespace _Project.Scripts.Weapon
         public IObservable<int> AmmoCount => _ammoCount;
         public ProjectileType ProjectileType => _weaponConfig.ProjectileType;
         public float ReloadTimeInSeconds => _weaponConfig.ReloadTimeInSeconds;
+        public WeaponType Type => _weaponConfig.Type;
         public string Name { get; }
         public Vector3 OffsetFromHolder { get; }
 

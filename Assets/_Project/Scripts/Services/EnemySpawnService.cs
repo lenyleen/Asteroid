@@ -23,18 +23,20 @@ namespace _Project.Scripts.Services
         private readonly SpawnConfig _spawnConfig;
         private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private readonly ReactiveCommand<KilledEnemyData> _enemyDiedCommand = new();
+        private readonly IAnalyticsDataObserver _analyticsDataObserver;
 
         private bool _canSpawn;
         private CompositeDisposable _spawnDisposable = new();
 
         public EnemySpawnService(Camera camera, IFactory<Vector3, EnemyConfig, EnemyViewModel> enemyFactory,
-            List<EnemyConfig> enemiesData, SpawnConfig spawnConfig)
+            List<EnemyConfig> enemiesData, SpawnConfig spawnConfig, IAnalyticsService analyticsDataObserver)
         {
             _camera = camera;
             _enemyFactory = enemyFactory;
             _enemiesData = enemiesData.ToDictionary(data => data.Type, data => data);
             _spawnConfig = spawnConfig;
             _spawnedEnemies = new HashSet<ISpawnableEnemy>();
+            _analyticsDataObserver = analyticsDataObserver;
         }
 
         public void Initialize()
@@ -97,6 +99,8 @@ namespace _Project.Scripts.Services
             _spawnedEnemies.Remove(enemy);
             _enemyDiedCommand.Execute(
                 new KilledEnemyData(enemy.Type, enemy.Position.Value, enemy.Score));
+
+            _analyticsDataObserver.EnemyKilled(enemy.Type);
 
             if (enemy.Type != EnemyType.Asteroid)
                 return;

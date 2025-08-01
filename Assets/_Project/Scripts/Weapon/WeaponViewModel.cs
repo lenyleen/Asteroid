@@ -17,15 +17,15 @@ namespace _Project.Scripts.Weapon
         private readonly ReactiveCommand _onDeath = new();
         private readonly ReactiveProperty<float> _reloadTimePercent = new();
         private readonly ProjectileFactory _projectileFactory;
+        private readonly IAnalyticsDataObserver _analyticsDataObserver;
 
-        public WeaponViewModel(
-            ProjectileFactory projectileFactory,
-            WeaponModel weaponModel)
+        public WeaponViewModel(ProjectileFactory projectileFactory, WeaponModel weaponModel,
+            IAnalyticsService analyticsDataObserver)
         {
-
             ReloadTimePercent = new ReadOnlyReactiveProperty<float>(_reloadTimePercent);
             _projectileFactory = projectileFactory;
             _model = weaponModel;
+            _analyticsDataObserver = analyticsDataObserver;
         }
 
         public void Initialize()
@@ -46,6 +46,8 @@ namespace _Project.Scripts.Weapon
             var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
 
             _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+
+            _analyticsDataObserver.WeaponFire(_model.Type, _model.Name);
         }
 
         public void Update()

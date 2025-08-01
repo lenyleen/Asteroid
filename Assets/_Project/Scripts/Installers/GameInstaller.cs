@@ -32,6 +32,8 @@ namespace _Project.Scripts.Installers
 
             Container.BindInterfacesAndSelfTo<GameplayStateMachine.GameplayStateMachine>()
                 .AsSingle();
+
+            Container.Bind<FirebaseAnalyticsService>().AsSingle();
         }
 
         private void BindStates()

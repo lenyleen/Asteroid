@@ -1,7 +1,11 @@
-﻿namespace _Project.Scripts.Interfaces
+﻿using Cysharp.Threading.Tasks;
+
+namespace _Project.Scripts.Interfaces
 {
-    public class IAnalyticsService
+    public interface IAnalyticsService : IAnalyticsDataObserver
     {
-        
+        public UniTask InitializeAsync();
+        public void SetStartGameAnalytics();
+        public void SendEndGameAnalytics();
     }
 }
