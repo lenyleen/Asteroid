@@ -5,7 +5,7 @@ namespace _Project.Scripts.Interfaces
     public interface IAnalyticsService : IAnalyticsDataObserver
     {
         public UniTask InitializeAsync();
-        public void SetStartGameAnalytics();
+        public void SendStartGameAnalytics();
         public void SendEndGameAnalytics();
     }
 }

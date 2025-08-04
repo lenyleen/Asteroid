@@ -9,14 +9,11 @@ namespace _Project.Scripts.Services
 {
     public class PlayerProgressProvider : IDisposable
     {
-        const string PlayerProgressKey = "PlayerData";
-
-        public PlayerProgress PlayerProgress => _currentPlayerProgress;
+        public PlayerProgress PlayerProgress { get; }
 
         private readonly ISaveService _saveLoadService;
         private readonly IEnemyDiedNotifier _enemyDiedNotifier;
-        private readonly CompositeDisposable _disposable = new ();
-        private readonly PlayerProgress _currentPlayerProgress;
+        private readonly CompositeDisposable _disposable = new();
 
         private PlayerProgress _loadedPlayerProgress;
 
@@ -25,38 +22,42 @@ namespace _Project.Scripts.Services
             _saveLoadService = saveLoadService;
             _enemyDiedNotifier = enemyDiedNotifier;
 
-            _currentPlayerProgress = new PlayerProgress(0);
-            _currentPlayerProgress.InitializeReactiveValues();
+            PlayerProgress = new PlayerProgress(0);
+            PlayerProgress.InitializeReactiveValues();
         }
 
         public async UniTask<string> TryInitializeAsync()
         {
             _enemyDiedNotifier.OnEnemyKilled
                 .Subscribe(enemyData =>
-                    _currentPlayerProgress.AddScore(enemyData.ScoreReward))
+                    PlayerProgress.AddScore(enemyData.ScoreReward))
                 .AddTo(_disposable);
 
-            var result = await _saveLoadService.TryLoadData(PlayerProgressKey, out _loadedPlayerProgress);
+            var result = await _saveLoadService.TryLoadData(out _loadedPlayerProgress);
 
             if (result.IsEmpty())
                 return result;
 
-            _loadedPlayerProgress = _currentPlayerProgress;
+            _loadedPlayerProgress = PlayerProgress;
             return result;
         }
 
         public async UniTask<string> TrySetDataAsync()
         {
-            if (_loadedPlayerProgress.Score > _currentPlayerProgress.Score)
+            if (_loadedPlayerProgress.Score > PlayerProgress.Score)
                 return "";
 
-            return await _saveLoadService.TrySaveData(PlayerProgressKey, _currentPlayerProgress);
+            return await _saveLoadService.TrySaveData(PlayerProgress);
         }
 
-        public void ToDefault() =>
-            _currentPlayerProgress.ToDefault();
+        public void ToDefault()
+        {
+            PlayerProgress.ToDefault();
+        }
 
-        public void Dispose() =>
+        public void Dispose()
+        {
             _disposable.Dispose();
+        }
     }
 }

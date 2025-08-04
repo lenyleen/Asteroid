@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
@@ -15,18 +16,22 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private readonly ScoreBoxModel _scoreModel;
         private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
+        private readonly IAnalyticsService _analyticsService;
 
         private CompositeDisposable _disposables = new();
 
-        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider)
+        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
+            IAnalyticsService analyticsService)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
             _playerProgressProvider = playerProgressProvider;
+            _analyticsService = analyticsService;
         }
 
         public async void Enter()
         {
+            _analyticsService.SendEndGameAnalytics();
             _scoreModel.Enable(false);
 
             var restartDialogResult = await _uiService

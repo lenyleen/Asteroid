@@ -26,10 +26,11 @@ namespace _Project.Scripts.Services
                 return;
             }
 
+            _isReady = true;
             Debug.Log("Firebase is ready");
         }
 
-        public void SetStartGameAnalytics()
+        public void SendStartGameAnalytics()
         {
             if (!_isReady)
                 return;

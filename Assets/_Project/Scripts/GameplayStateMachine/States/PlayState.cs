@@ -18,18 +18,21 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private readonly EnemySpawnService _enemySpawnService;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
         private readonly ScoreBoxModel _scoreBoxModel;
+        private readonly IAnalyticsService _analyticsService;
 
-        public PlayState(IPlayerStateProviderService playerStateProviderService,PlayerShipFactory shipFactory,
-            ScoreBoxModel scoreBoxModel, EnemySpawnService enemySpawnService)
+        public PlayState(IPlayerStateProviderService playerStateProviderService, PlayerShipFactory shipFactory,
+            ScoreBoxModel scoreBoxModel, EnemySpawnService enemySpawnService, IAnalyticsService analyticsService)
         {
             _playerStateProviderService = playerStateProviderService;
             _shipFactory = shipFactory;
             _scoreBoxModel = scoreBoxModel;
             _enemySpawnService = enemySpawnService;
+            _analyticsService = analyticsService;
         }
 
         public void Enter()
         {
+            _analyticsService.SendStartGameAnalytics();
             _scoreBoxModel.Enable(true);
             _shipFactory.SpawnShip();
             _enemySpawnService.EnableSpawn(true);
@@ -42,9 +45,15 @@ namespace _Project.Scripts.GameplayStateMachine.States
                 .AddTo(_disposables);
         }
 
-        public void Exit() => _enemySpawnService.EnableSpawn(false);
+        public void Exit()
+        {
+            _enemySpawnService.EnableSpawn(false);
+        }
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _disposables.Dispose();
+        }
 
         private void OnPlayerStateChanged(IPositionProvider playerStateProvider)
         {
