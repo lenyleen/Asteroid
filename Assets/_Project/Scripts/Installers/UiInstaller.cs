@@ -7,6 +7,7 @@ using _Project.Scripts.UI.ScoreBox;
 using _Project.Scripts.UI.ShipInfoInfo;
 using _Project.Scripts.UI.Tutorial;
 using _Project.Scripts.UI.WeaponUi;
+using Factories;
 using UnityEngine;
 using Zenject;
 

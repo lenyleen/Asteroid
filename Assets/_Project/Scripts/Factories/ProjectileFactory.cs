@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Configs;
-using Interfaces;
-using Projectiles;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Projectiles;
+using Cysharp.Threading.Tasks;
+using Services;
 using UnityEngine;
-using Zenject;
 
 namespace Factories
 {

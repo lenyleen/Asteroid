@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Weapon;
 
 namespace _Project.Scripts.Weapon
 {

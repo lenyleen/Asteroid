@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Configs;
-using Enemies;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Data;
+using _Project.Scripts.Enemies;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Static;
 using Factories;
-using Interfaces;
-using Static;
 using UniRx;
 using UnityEngine;
 using Zenject;

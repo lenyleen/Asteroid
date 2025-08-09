@@ -1,11 +1,10 @@
 ﻿using System;
-using Configs;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Weapon;
+using Cysharp.Threading.Tasks;
 using Factories;
-using Interfaces;
-using Projectiles;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
 namespace Weapon
 {
@@ -40,7 +39,7 @@ namespace Weapon
             AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
         }
 
-        public void TryFiree(IPositionProvider positionProvider)
+        public async UniTask TryFiree(IPositionProvider positionProvider)
         {
             if (!_model.TryFire())
                 return;

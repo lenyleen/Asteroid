@@ -6,6 +6,7 @@ using _Project.Scripts.Player;
 using _Project.Scripts.Projectiles;
 using _Project.Scripts.Services;
 using _Project.Scripts.Weapon;
+using Factories;
 using UnityEngine;
 using Zenject;
 

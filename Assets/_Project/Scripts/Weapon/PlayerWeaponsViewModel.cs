@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using _Project.Scripts.Input;
 using _Project.Scripts.Interfaces;
 using UniRx;
+using Weapon;
 using IInitializable = Zenject.IInitializable;
 
 namespace _Project.Scripts.Weapon

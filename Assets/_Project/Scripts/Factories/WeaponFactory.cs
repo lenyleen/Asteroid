@@ -1,3 +1,6 @@
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Weapon;
 using Configs;
 using Cysharp.Threading.Tasks;
 using Interfaces;

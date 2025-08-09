@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using _Project.Scripts.Input;
+using _Project.Scripts.Installers;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Player;
+using _Project.Scripts.Weapon;
 using Configs;
 using Cysharp.Threading.Tasks;
-using Installers;
-using Interfaces;
-using Player;
 using Services;
-using UnityEditor;
 using UnityEngine;
 using Weapon;
 using Zenject;

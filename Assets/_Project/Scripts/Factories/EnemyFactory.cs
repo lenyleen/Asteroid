@@ -1,9 +1,9 @@
 ﻿using System;
-using Configs;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Enemies;
+using _Project.Scripts.Enemies.EnemyBehaviour;
+using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Enemies;
-using Enemies.EnemyBehaviour;
-using Interfaces;
 using Services;
 using UnityEngine;
 using Zenject;

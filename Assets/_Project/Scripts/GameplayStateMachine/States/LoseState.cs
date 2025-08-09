@@ -1,9 +1,11 @@
 ﻿using System;
-using Other;
+using _Project.Scripts.GameplayStateMachine.States;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Other;
+using _Project.Scripts.Services;
+using _Project.Scripts.UI.PopUps;
+using _Project.Scripts.UI.ScoreBox;
 using Services;
-using UI;
-using UI.PopUps;
-using UI.ScoreBox;
 using UniRx;
 
 namespace _Project.Scripts.States

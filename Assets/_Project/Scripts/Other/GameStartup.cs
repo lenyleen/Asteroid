@@ -1,12 +1,12 @@
 ﻿using System;
-using _Project.Scripts;
-using _Project.Scripts.Factories;
-using _Project.Scripts.States;
+using _Project.Scripts.GameplayStateMachine;
+using _Project.Scripts.GameplayStateMachine.States;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Other;
 using _Project.Scripts.UI;
 using _Project.Scripts.Services;
-using Services;
-using UI;
-using UI.PopUps;
+using _Project.Scripts.UI.PopUps;
+using Factories;
 using UnityEngine;
 using Zenject;
 
