@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Interfaces;
+using _Project.Scripts.Input;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using IInitializable = Zenject.IInitializable;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     public class PlayerWeaponsViewModel : IInitializable, IDisposable
     {

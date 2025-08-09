@@ -1,6 +1,5 @@
 ﻿using System;
 using Configs;
-using Cysharp.Threading.Tasks;
 using Factories;
 using Interfaces;
 using Projectiles;
@@ -21,15 +20,16 @@ namespace Weapon
         private readonly ReactiveCommand _onDeath = new();
         private readonly ReactiveProperty<float> _reloadTimePercent = new();
         private readonly ProjectileFactory _projectileFactory;
+        private readonly IAnalyticsDataObserver _analyticsDataObserver;
 
-        public WeaponViewModel(
-            ProjectileFactory projectileFactory,
-            WeaponModel weaponModel)
+        public WeaponViewModel(ProjectileFactory projectileFactory, WeaponModel weaponModel,
+            IAnalyticsService analyticsDataObserver)
         {
 
             ReloadTimePercent = new ReadOnlyReactiveProperty<float>(_reloadTimePercent);
             _projectileFactory = projectileFactory;
             _model = weaponModel;
+            _analyticsDataObserver = analyticsDataObserver;
         }
 
         public void Initialize()
@@ -40,7 +40,7 @@ namespace Weapon
             AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
         }
 
-        public async UniTask TryFiree(IPositionProvider positionProvider)
+        public void TryFiree(IPositionProvider positionProvider)
         {
             if (!_model.TryFire())
                 return;
@@ -49,6 +49,9 @@ namespace Weapon
             var rotatedOffset = Quaternion.Euler(0, 0, playerRotation) * _model.OffsetFromHolder;
             var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
 
+            _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+
+            _analyticsDataObserver.WeaponFire(_model.Type, _model.Name);
             await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
         }
 

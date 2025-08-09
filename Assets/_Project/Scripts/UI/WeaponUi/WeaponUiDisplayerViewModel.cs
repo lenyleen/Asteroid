@@ -1,9 +1,9 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using Zenject;
 
-namespace UI.WeaponUi
+namespace _Project.Scripts.UI.WeaponUi
 {
     public class WeaponUiDisplayerViewModel : IInitializable, IDisposable
     {

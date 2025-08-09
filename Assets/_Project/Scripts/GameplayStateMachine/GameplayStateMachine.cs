@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using _Project.Scripts.States;
+using _Project.Scripts.GameplayStateMachine.States;
 using UniRx;
 
-namespace _Project.Scripts
+namespace _Project.Scripts.GameplayStateMachine
 {
     public class GameplayStateMachine : IDisposable
     {

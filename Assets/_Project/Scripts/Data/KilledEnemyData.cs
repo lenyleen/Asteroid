@@ -1,7 +1,7 @@
-﻿using Enemies;
+﻿using _Project.Scripts.Enemies;
 using UnityEngine;
 
-namespace Interfaces
+namespace _Project.Scripts.Data
 {
     public class KilledEnemyData
     {

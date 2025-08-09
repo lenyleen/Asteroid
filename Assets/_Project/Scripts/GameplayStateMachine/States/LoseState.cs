@@ -17,20 +17,23 @@ namespace _Project.Scripts.States
         private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
         private readonly AssetProvider _assetProvider;
+        private readonly IAnalyticsService _analyticsService;
 
         private CompositeDisposable _disposables = new();
 
         public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
-            AssetProvider assetProvider)
+            AssetProvider assetProvider,  IAnalyticsService analyticsService)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
             _playerProgressProvider = playerProgressProvider;
             _assetProvider = assetProvider;
+            _analyticsService = analyticsService;
         }
 
         public async void Enter()
         {
+            _analyticsService.SendEndGameAnalytics();
             _scoreModel.Enable(false);
 
             var restartDialogResult = await _uiService

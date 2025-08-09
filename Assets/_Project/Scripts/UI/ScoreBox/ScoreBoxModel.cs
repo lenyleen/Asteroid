@@ -1,10 +1,9 @@
 ﻿using System;
-using Interfaces;
-using Services;
+using _Project.Scripts.Services;
 using UniRx;
 using Zenject;
 
-namespace UI.ScoreBox
+namespace _Project.Scripts.UI.ScoreBox
 {
     public class ScoreBoxModel : IInitializable, IDisposable
     {

@@ -1,12 +1,12 @@
 ﻿using System;
-using Factories;
-using Interfaces;
-using Services;
-using UI.ScoreBox;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
+using _Project.Scripts.UI.ScoreBox;
 using UniRx;
 using Zenject;
 
-namespace _Project.Scripts.States
+namespace _Project.Scripts.GameplayStateMachine.States
 {
     public class PlayState : IState, IInitializable, IDisposable
     {
@@ -18,18 +18,21 @@ namespace _Project.Scripts.States
         private readonly EnemySpawnService _enemySpawnService;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
         private readonly ScoreBoxModel _scoreBoxModel;
+        private readonly IAnalyticsService _analyticsService;
 
-        public PlayState(IPlayerStateProviderService playerStateProviderService,PlayerShipFactory shipFactory,
-            ScoreBoxModel scoreBoxModel, EnemySpawnService enemySpawnService)
+        public PlayState(IPlayerStateProviderService playerStateProviderService, PlayerShipFactory shipFactory,
+            ScoreBoxModel scoreBoxModel, EnemySpawnService enemySpawnService, IAnalyticsService analyticsService)
         {
             _playerStateProviderService = playerStateProviderService;
             _shipFactory = shipFactory;
             _scoreBoxModel = scoreBoxModel;
             _enemySpawnService = enemySpawnService;
+            _analyticsService = analyticsService;
         }
 
         public void Enter()
         {
+            _analyticsService.SendStartGameAnalytics();
             _scoreBoxModel.Enable(true);
             _shipFactory.SpawnShip();
             _enemySpawnService.EnableSpawn(true);
@@ -42,9 +45,15 @@ namespace _Project.Scripts.States
                 .AddTo(_disposables);
         }
 
-        public void Exit() => _enemySpawnService.EnableSpawn(false);
+        public void Exit()
+        {
+            _enemySpawnService.EnableSpawn(false);
+        }
 
-        public void Dispose() => _disposables.Dispose();
+        public void Dispose()
+        {
+            _disposables.Dispose();
+        }
 
         private void OnPlayerStateChanged(IPositionProvider playerStateProvider)
         {

@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Configs
+namespace _Project.Scripts.Configs
 {
     [CreateAssetMenu(fileName = "PopUpsConfig", menuName = "ScriptableObject/PopUpsConfig")]
     public class PopUpsConfig : ScriptableObject

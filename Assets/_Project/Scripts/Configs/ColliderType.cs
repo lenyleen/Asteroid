@@ -1,4 +1,4 @@
-﻿namespace Configs
+﻿namespace _Project.Scripts.Configs
 {
     public enum ColliderType
     {

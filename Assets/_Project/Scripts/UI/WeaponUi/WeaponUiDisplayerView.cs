@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace UI.WeaponUi
+namespace _Project.Scripts.UI.WeaponUi
 {
     public class WeaponUiDisplayerView : MonoBehaviour
     {

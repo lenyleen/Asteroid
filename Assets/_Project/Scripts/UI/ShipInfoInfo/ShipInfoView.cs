@@ -3,7 +3,7 @@ using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace UI.PlayerInfo
+namespace _Project.Scripts.UI.ShipInfoInfo
 {
     public class ShipInfoView : MonoBehaviour
     {

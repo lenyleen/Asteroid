@@ -1,10 +1,10 @@
 ﻿using System;
-using Interfaces;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace UI.PlayerInfo
+namespace _Project.Scripts.UI.ShipInfoInfo
 {
     public class ShipInfoViewModel : IInitializable, IDisposable
     {

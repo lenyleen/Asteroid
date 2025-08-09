@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using Configs;
-using Services;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Services;
 using UniRx;
 using UnityEngine;
 
-namespace Player
+namespace _Project.Scripts.Player
 {
     public class ShipModel
     {

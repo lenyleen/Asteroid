@@ -1,15 +1,16 @@
 ﻿using System;
-using Configs;
-using Factories;
-using Services;
-using UI;
-using UI.PlayerInfo;
-using UI.ScoreBox;
-using UI.WeaponUi;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Factories;
+using _Project.Scripts.Services;
+using _Project.Scripts.UI;
+using _Project.Scripts.UI.ScoreBox;
+using _Project.Scripts.UI.ShipInfoInfo;
+using _Project.Scripts.UI.Tutorial;
+using _Project.Scripts.UI.WeaponUi;
 using UnityEngine;
 using Zenject;
 
-namespace Installers
+namespace _Project.Scripts.Installers
 {
     public class UiInstaller : MonoInstaller<UiInstaller>
     {

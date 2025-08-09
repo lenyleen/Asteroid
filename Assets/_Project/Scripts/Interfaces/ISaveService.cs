@@ -1,11 +1,12 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using _Project.Scripts.DTO;
+using Cysharp.Threading.Tasks;
 
-namespace Interfaces
+namespace _Project.Scripts.Interfaces
 {
     public interface ISaveService
     {
-        public UniTask<string> TrySaveData(string name, object data);
+        public UniTask<string> TrySaveData(object data);
 
-        public UniTask<string> TryLoadData<T>(string name, out T data) where T : class, ISavableData;
+        public UniTask<string> TryLoadData(out PlayerProgress data);
     }
 }

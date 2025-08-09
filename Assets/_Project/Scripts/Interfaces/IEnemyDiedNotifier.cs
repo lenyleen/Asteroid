@@ -1,6 +1,7 @@
 ﻿using System;
+using _Project.Scripts.Data;
 
-namespace Interfaces
+namespace _Project.Scripts.Interfaces
 {
     public interface IEnemyDiedNotifier
     {

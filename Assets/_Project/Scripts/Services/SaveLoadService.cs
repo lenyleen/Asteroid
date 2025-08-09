@@ -1,32 +1,34 @@
 ﻿using System;
+using _Project.Scripts.DTO;
+using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Interfaces;
 using UnityEngine;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class SaveLoadService : ISaveService
     {
-        public UniTask<string> TryLoadData<T>(string name, out T data) where T : class, ISavableData
-        {
-            data = JsonUtility.FromJson<T>(PlayerPrefs.GetString(name));
+        private const string _playerProgressKey = "PlayerData";
 
-            return data == null ?
-                UniTask.FromResult("Data not found or invalid format") : UniTask.FromResult("");
-        }
-
-        public UniTask<string> TrySaveData(string name, object data)
+        public UniTask<string> TrySaveData(object data)
         {
             try
             {
                 var json = JsonUtility.ToJson(data);
-                PlayerPrefs.SetString(name, json);
+                PlayerPrefs.SetString(_playerProgressKey, json);
                 return UniTask.FromResult("");
             }
             catch (Exception e)
             {
                 return UniTask.FromResult(e.Message);
             }
+        }
+
+        public UniTask<string> TryLoadData(out PlayerProgress data)
+        {
+            data = JsonUtility.FromJson<PlayerProgress>(PlayerPrefs.GetString(_playerProgressKey));
+
+            return data == null ? UniTask.FromResult("Data not found or invalid format") : UniTask.FromResult("");
         }
     }
 }

@@ -1,19 +1,17 @@
 ﻿using System;
-using Interfaces;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace _Project.Scripts.DTO
 {
     [Serializable]
-    public class PlayerProgress : ISavableData
+    public class PlayerProgress
     {
-        [field:SerializeField] public int Score { get; private set; }
+        [field: SerializeField] public int Score { get; private set; }
 
-        [field: NonSerialized]public ReadOnlyReactiveProperty<int> ReactiveScore { get; private set; }
+        [field: NonSerialized] public ReadOnlyReactiveProperty<int> ReactiveScore { get; private set; }
 
-        [NonSerialized]private ReactiveProperty<int> _reactiveScore;
+        [NonSerialized] private ReactiveProperty<int> _reactiveScore;
 
         public PlayerProgress(int score)
         {

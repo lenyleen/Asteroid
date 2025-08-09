@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Configs;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     public class PlayerWeapons : MonoBehaviour, IWeaponsHolder
     {

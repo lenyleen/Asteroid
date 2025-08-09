@@ -1,8 +1,8 @@
-﻿using Interfaces;
-using UI;
+﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.UI;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class WeaponUiDataDisplayerFactory : IFactory<IWeaponInfoProvider, WeaponUiDataDisplayer>
     {

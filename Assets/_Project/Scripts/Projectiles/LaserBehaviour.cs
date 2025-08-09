@@ -1,8 +1,8 @@
-﻿using Interfaces;
+﻿using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
-namespace Projectiles
+namespace _Project.Scripts.Projectiles
 {
     public class LaserBehaviour : IProjectileBehaviour
     {

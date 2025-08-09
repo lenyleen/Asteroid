@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Configs
+namespace _Project.Scripts.Configs
 {
     [CreateAssetMenu(fileName = "PlayerPreferences", menuName = "ScriptableObject/PlayerPreferences")]
     public class ShipPreferences : ScriptableObject

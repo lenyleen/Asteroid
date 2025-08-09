@@ -1,8 +1,8 @@
-﻿using Enemies;
+﻿using _Project.Scripts.Enemies;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Configs
+namespace _Project.Scripts.Configs
 {
     [CreateAssetMenu(fileName = "EnemyConfig", menuName = "ScriptableObject/EnemyConfig")]
     public class EnemyConfig : ScriptableObject

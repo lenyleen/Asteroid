@@ -1,4 +1,4 @@
-﻿namespace Other
+﻿namespace _Project.Scripts.Other
 {
     public enum DialogResult
     {

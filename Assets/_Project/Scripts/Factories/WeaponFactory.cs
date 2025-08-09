@@ -1,4 +1,4 @@
-﻿using Configs;
+using Configs;
 using Cysharp.Threading.Tasks;
 using Interfaces;
 using Services;

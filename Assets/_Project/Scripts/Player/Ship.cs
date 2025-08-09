@@ -1,10 +1,10 @@
-﻿using Configs;
-using Interfaces;
+﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
+using _Project.Scripts.Weapon;
 using UniRx;
 using UnityEngine;
-using Weapon;
 
-namespace Player
+namespace _Project.Scripts.Player
 {
     public class Ship : MonoBehaviour, ICollisionReceiver
     {

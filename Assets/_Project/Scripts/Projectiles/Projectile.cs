@@ -1,12 +1,10 @@
 ﻿using System;
-using Configs;
-using Interfaces;
-using Projectiles;
-using UniRx;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
 
-namespace Projectiles
+namespace _Project.Scripts.Projectiles
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
     public class Projectile : MonoBehaviour

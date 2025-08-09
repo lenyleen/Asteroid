@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _Project.Scripts.States
+namespace _Project.Scripts.GameplayStateMachine.States
 {
     public interface IState
     {

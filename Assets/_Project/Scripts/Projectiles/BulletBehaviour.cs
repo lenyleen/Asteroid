@@ -1,7 +1,7 @@
-﻿using Interfaces;
+﻿using _Project.Scripts.Interfaces;
 using UnityEngine;
 
-namespace Projectiles
+namespace _Project.Scripts.Projectiles
 {
     public class BulletBehaviour : IProjectileBehaviour
     {

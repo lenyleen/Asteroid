@@ -1,7 +1,7 @@
 ﻿using System;
 using UniRx;
 
-namespace UI
+namespace _Project.Scripts.UI.Tutorial
 {
     public class TutorialViewModel
     {

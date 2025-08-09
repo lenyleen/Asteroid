@@ -2,7 +2,7 @@
 using UnityEngine;
 using Zenject;
 
-namespace UI
+namespace _Project.Scripts.UI.Tutorial
 {
     public class TutorialView : MonoBehaviour
     {

@@ -1,10 +1,11 @@
 ﻿using System;
-using Configs;
-using Interfaces;
+using _Project.Scripts.Configs;
+using _Project.Scripts.Input;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
-namespace Player
+namespace _Project.Scripts.Player
 {
     public class ShipViewModel : IPositionProvider
     {

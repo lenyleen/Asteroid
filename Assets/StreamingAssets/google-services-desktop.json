@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "981238379103",
+    "project_id": "asteroid-de754",
+    "storage_bucket": "asteroid-de754.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981238379103:android:7db31b0b1297fc6a3e61ea",
+        "android_client_info": {
+          "package_name": "leen.games"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMTikChddBFKBBIhdg2aN9lTHalkH_1RA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981238379103:android:29b77132f676f0653e61ea",
+        "android_client_info": {
+          "package_name": "leengames.asteroid"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMTikChddBFKBBIhdg2aN9lTHalkH_1RA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

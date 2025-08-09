@@ -1,10 +1,11 @@
 ﻿using System;
-using UI;
+using _Project.Scripts.Input;
+using _Project.Scripts.UI.Tutorial;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
-namespace _Project.Scripts.States
+namespace _Project.Scripts.GameplayStateMachine.States
 {
     public class InputWaitState : IState, ITickable
     {
