@@ -21,7 +21,7 @@ namespace Services
         public async UniTask<TResult> ShowDialogAwaitable<TPopUp, TParam, TResult>(TParam param)
             where TPopUp : class, IDialogMenu<TParam, TResult>
         {
-            var popUp = _popUpFactory.CreatePopUp<TPopUp>();
+            var popUp = await _popUpFactory.CreatePopUp<TPopUp>();
 
             popUp.OnClose.Take(1)
                 .Subscribe(Despawn);

@@ -16,12 +16,15 @@ namespace Installers
 
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<Enemy, Enemy.Pool>().WithInitialSize(20)
-                .FromComponentInNewPrefab(_enemyPrefab).UnderTransformGroup("Enemies");
+            Container.BindMemoryPool<Enemy, Enemy.Pool>()
+                .WithInitialSize(20)
+                .FromComponentInNewPrefab(_enemyPrefab)
+                .UnderTransformGroup("Enemies");
 
-            Container.BindInterfacesAndSelfTo<EnemyFactory>().AsSingle();
+            Container.Bind<EnemyFactory>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<EnemySpawnService>().AsSingle().WithArguments(_enemyDatas, spawnConfig);
+            Container.BindInterfacesAndSelfTo<EnemySpawnService>().AsSingle()
+                .WithArguments(_enemyDatas, spawnConfig);
         }
     }
 }

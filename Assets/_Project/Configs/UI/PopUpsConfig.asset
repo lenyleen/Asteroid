@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace97bfc504b4c62a137f6a093848c9f, type: 3}
   m_Name: PopUpsConfig
   m_EditorClassIdentifier: 
-  <PopUpPrefabs>k__BackingField:
-  - {fileID: 4628943260505659137, guid: ef094fe699f135246aa11f49938d2c19, type: 3}
-  - {fileID: 503819208784102154, guid: a3417ba3b6590124e9fd32adeadec5ef, type: 3}
+  <PopUpPrefabsReferences>k__BackingField:
+  - m_AssetGUID: a3417ba3b6590124e9fd32adeadec5ef
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  - m_AssetGUID: ef094fe699f135246aa11f49938d2c19
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0

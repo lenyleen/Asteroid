@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Configs;
+using Cysharp.Threading.Tasks;
 using Interfaces;
 using Projectiles;
+using Services;
 using UnityEngine;
 using Zenject;
 
@@ -13,15 +15,18 @@ namespace Factories
     {
         private readonly Projectile.Pool _pool;
         private readonly Dictionary<ProjectileType, ProjectileConfig> _projectileDatas;
+        private readonly AssetProvider _assetProvider;
 
-        public ProjectileFactory(Projectile.Pool pool, List<ProjectileConfig> projectileDatas)
+        public ProjectileFactory(Projectile.Pool pool, List<ProjectileConfig> projectileDatas,
+            AssetProvider assetProvider)
         {
             _pool = pool;
+            _assetProvider = assetProvider;
 
             _projectileDatas = projectileDatas.ToDictionary(data => data.Type, data => data);
         }
 
-        public void Create(ProjectileType type, Vector3 spawnPosition,
+        public async UniTask Create(ProjectileType type, Vector3 spawnPosition,
             IPositionProvider positionProvider)
         {
             if (!_projectileDatas.TryGetValue(type, out var data))
@@ -29,8 +34,10 @@ namespace Factories
 
             var behaviour = CreateBehaviour(type, positionProvider);
 
-            var projectileInitData = new ProjectileInitData(data,behaviour, spawnPosition,
-                positionProvider.Rotation.Value, positionProvider.Velocity.Value);
+            var sprite = await _assetProvider.Load<Sprite>(data.Sprite);
+
+            var projectileInitData = new ProjectileInitData(sprite,behaviour, spawnPosition,
+                positionProvider.Rotation.Value, positionProvider.Velocity.Value, data.ColliderConfig, data.LifetimeInSeconds);
 
             _pool.Spawn(projectileInitData, prj => _pool.Despawn(prj));
         }

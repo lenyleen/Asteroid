@@ -16,27 +16,28 @@ namespace Projectiles
         [SerializeField] private BoxCollider2D _collider;
 
         private IProjectileBehaviour _behaviour;
-        private ProjectileConfig _projectileConfig;
         private float _lifetime;
         private Action<Projectile> _onDeath;
+        private ProjectileInitData _data;
 
         private void Initialize(ProjectileInitData data, Action<Projectile> onDeath)
         {
-            _projectileConfig = data.Config;
-            _lifetime = _projectileConfig.LifetimeInSeconds;
-            _behaviour = data.Behaviour;
+            _data = data;
+
+            _lifetime = _data.LifetimeInSeconds;
+            _behaviour = _data.Behaviour;
             _onDeath = onDeath;
 
-            _renderer.sprite = _projectileConfig.Sprite;
-            _collider.size = _projectileConfig.Sprite.bounds.size;
-            _collider.offset = _projectileConfig.Sprite.bounds.center;
+            _renderer.sprite = _data.Sprite;
+            _collider.size = _data.Sprite.bounds.size;
+            _collider.offset = _data.Sprite.bounds.center;
             gameObject.SetActive(true);
 
-            _rb.position = data.Position;
-            _rb.rotation = data.Rotation;
-            _rb.linearVelocity = data.Velocity;
+            _rb.position = _data.Position;
+            _rb.rotation = _data.Rotation;
+            _rb.linearVelocity = _data.Velocity;
 
-            _behaviour.Initialize(data.Position, data.Rotation);
+            _behaviour.Initialize(_data.Position, _data.Rotation);
         }
 
         private void Update()
@@ -75,8 +76,8 @@ namespace Projectiles
             if (receiver.ColliderType != ColliderType.Enemy)
                 return;
 
-            receiver.Collide(_projectileConfig.ColliderConfig.ColliderType,
-                _projectileConfig.ColliderConfig.Damage);
+            receiver.Collide(_data.ColliderConfig.ColliderType,
+                _data.ColliderConfig.Damage);
 
             if (_behaviour.CheckDeathAfterCollision())
                 Die();
@@ -112,19 +113,25 @@ namespace Projectiles
 
     public class ProjectileInitData
     {
-        public ProjectileConfig Config {get;}
+        public Sprite Sprite { get; }
+        public ColliderConfig ColliderConfig { get; }
+        public float LifetimeInSeconds { get; }
         public IProjectileBehaviour Behaviour {get;}
         public Vector3 Position {get;}
         public float Rotation {get;}
         public Vector2 Velocity {get;}
 
-        public ProjectileInitData(ProjectileConfig config, IProjectileBehaviour behaviour, Vector3 position, float rotation, Vector2 velocity)
+        public ProjectileInitData(Sprite sprite, IProjectileBehaviour behaviour, Vector3 position, float rotation,
+            Vector2 velocity, ColliderConfig colliderConfig, float lifetimeInSeconds)
         {
-            Config = config;
+            Sprite = sprite;
+
             Behaviour = behaviour;
             Position = position;
             Rotation = rotation;
             Velocity = velocity;
+            ColliderConfig = colliderConfig;
+            LifetimeInSeconds = lifetimeInSeconds;
         }
     }
 }

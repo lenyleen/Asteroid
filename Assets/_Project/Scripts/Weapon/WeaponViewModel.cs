@@ -1,5 +1,6 @@
 ﻿using System;
 using Configs;
+using Cysharp.Threading.Tasks;
 using Factories;
 using Interfaces;
 using Projectiles;
@@ -39,7 +40,7 @@ namespace Weapon
             AmmoCount = new ReadOnlyReactiveProperty<int>(_model.AmmoCount);
         }
 
-        public void TryFiree(IPositionProvider positionProvider)
+        public async UniTask TryFiree(IPositionProvider positionProvider)
         {
             if (!_model.TryFire())
                 return;
@@ -48,7 +49,7 @@ namespace Weapon
             var rotatedOffset = Quaternion.Euler(0, 0, playerRotation) * _model.OffsetFromHolder;
             var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
 
-            _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+            await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
         }
 
         public void Update()

@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using Configs;
+using Cysharp.Threading.Tasks;
 using Installers;
 using Interfaces;
 using Player;
+using Services;
+using UnityEditor;
 using UnityEngine;
 using Weapon;
 using Zenject;
@@ -16,14 +19,15 @@ namespace Factories
         private readonly PlayerInputController _playerInputController;
         private readonly ShipInstaller.PlayerInstallData _playerInstallData;
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
-        private readonly IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel> _weaponFactory;
+        private readonly WeaponFactory _weaponFactory;
+        private readonly ShipViewConfig _viewConfig;
+        private readonly AssetProvider _assetProvider;
 
         private ShipViewModel _shipViewModel;
 
         public PlayerShipFactory(ShipInstaller.PlayerInstallData playerInstallData,
-            IFactory<ProjectileType, WeaponConfig, string, IWeaponsHolder, WeaponViewModel> weaponFactory,
-            PlayerInputController playerInputController, DiContainer instantiator,
-            IPlayerStateProviderService playerDataProviderService,
+            WeaponFactory weaponFactory, PlayerInputController playerInputController, DiContainer instantiator,
+            IPlayerStateProviderService playerDataProviderService, AssetProvider assetProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
         {
             _playerInstallData = playerInstallData;
@@ -31,10 +35,11 @@ namespace Factories
             _playerInputController = playerInputController;
             _playerDataProviderService = playerDataProviderService;
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
+            _assetProvider = assetProvider;
             _instantiator = instantiator;
         }
 
-        public void SpawnShip()
+        public async void SpawnShip()
         {
             var shipModel = _instantiator.Instantiate<ShipModel>(new object[] { _playerInstallData.ShipPreferences });
 
@@ -49,32 +54,37 @@ namespace Factories
                 null
             );
 
-            SpawnPlayerWeapons(shipView.PlayerWeapons);
+            var shipSprite = await _assetProvider.Load<Sprite>(_viewConfig.ShipSprite);
 
-            shipView.Initialize(_shipViewModel);
+            await SpawnPlayerWeapons(shipView.PlayerWeapons);
+
+            shipView.Initialize(_shipViewModel,shipSprite);
         }
 
-        private void SpawnPlayerWeapons(PlayerWeapons playerWeapons)
+        private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons)
         {
             var heavyWeapons = new List<WeaponViewModel>();
             var mainWeapons = new List<WeaponViewModel>();
 
             var heavyWeaponIndex = 1;
 
-            foreach (var weaponData in _playerInstallData.PlayerHeavyWeaponsData)
+            foreach (var heavyWeaponSlot in _viewConfig.HeavyWeaponSlots)
             {
-                var name = $"{weaponData.Type} {heavyWeaponIndex}";
-                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData, name, playerWeapons);
+                var name = $"{_playerInstallData.PlayerHeavyWeaponsData.Type} {heavyWeaponIndex}";
+                var newWeapon = await _weaponFactory.Create(_playerInstallData.PlayerHeavyWeaponsData, name,
+                    playerWeapons, heavyWeaponSlot);
+
                 heavyWeapons.Add(newWeapon);
                 _playerWeaponInfoProviderService.ApplyWeaponInfoProvider(newWeapon);
 
                 heavyWeaponIndex++;
             }
 
-            foreach (var weaponData in _playerInstallData.PlayerMainWeaponsData)
+            foreach (var lightWeaponSlot in _viewConfig.LightWeaponSlots)
             {
-                var newWeapon = _weaponFactory.Create(weaponData.ProjectileType, weaponData, weaponData.Type.ToString(),
-                    playerWeapons);
+                var newWeapon = await _weaponFactory.Create(_playerInstallData.PlayerMainWeaponsData,
+                    _playerInstallData.PlayerMainWeaponsData.Type.ToString(), playerWeapons, lightWeaponSlot);
+
                 mainWeapons.Add(newWeapon);
             }
 

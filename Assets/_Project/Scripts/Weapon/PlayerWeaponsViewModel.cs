@@ -49,12 +49,12 @@ namespace Weapon
             Fire(attackInput.IsHeavyFirePressed, _mainWeapons);
         }
 
-        private void Fire(bool isPressed, List<WeaponViewModel> weapons)
+        private async void Fire(bool isPressed, List<WeaponViewModel> weapons)
         {
             if (!isPressed) return;
 
-            weapons.ForEach(weapon =>
-                weapon.TryFiree(_positionProvider));
+            foreach (var weaponViewModel in weapons)
+                await weaponViewModel.TryFiree(_positionProvider);
         }
 
         private void DisposeWeapons(List<WeaponViewModel> weapons)

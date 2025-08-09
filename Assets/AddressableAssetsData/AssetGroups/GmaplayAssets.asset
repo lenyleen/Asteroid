@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GmaplayAssets
+  m_EditorClassIdentifier: 
+  m_GroupName: GmaplayAssets
+  m_GUID: 8bafc284f5559e548b956bfaaa6ce16b
+  m_SerializeEntries:
+  - m_GUID: 1e3a425cbb16e404d91b5dabb792a474
+    m_Address: WeaponReloadView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22b61a2f41130894ab36ab60bce12dc1
+    m_Address: Exhaust_Frame_02_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7e4bd15416aba2e468f934da30d5931f
+    m_Address: Asteroid 04_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88b03c7e585c91f40ba1811473658e69
+    m_Address: Hud
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1048d7f498d739439d4eef604249f5e
+    m_Address: GunTurret_ExampleGun_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bd780d5682f2ff2419e2cc6ea20223a5
+    m_Address: Laser_Medium_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7818bef7aedd5c43b60905cdacc2a46
+    m_Address: Asteroid 02_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e000f95d33350d344a3d391e02dac3b0
+    m_Address: GameplayAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e16a7b8e0d10bef498af3cca5733347f
+    m_Address: Cover_Blue_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc7b2a9df2d43a54d8b54f2d80f1577f
+    m_Address: PlayerPositionView
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fe9c69a21aa0b354b84bdd1fd2ccb791
+    m_Address: GunTurret_Green_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 1e4ae8e15d05e7442a9931c0ae1b290b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3d3b680236c650147ad94d83b0a529b1, type: 2}
+    - {fileID: 11400000, guid: 7cabbe4bb97714144b04adc76349a556, type: 2}

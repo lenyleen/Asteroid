@@ -16,7 +16,7 @@ namespace Player
 
         private ShipViewModel _shipViewModel;
 
-        public void Initialize(ShipViewModel shipViewModel)
+        public void Initialize(ShipViewModel shipViewModel, Sprite sprite)
         {
             _shipViewModel = shipViewModel;
 

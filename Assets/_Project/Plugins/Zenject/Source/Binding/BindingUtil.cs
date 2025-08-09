@@ -5,11 +5,11 @@ using System.Linq;
 using ModestTree;
 using Zenject.Internal;
 using TypeExtensions = ModestTree.TypeExtensions;
-
+using UnityEngine;
 #if !NOT_UNITY3D
 using UnityEditor;
 #if UNITY_EDITOR
-using UnityEngine;
+
 #endif
 
 #endif

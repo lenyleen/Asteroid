@@ -1,28 +1,32 @@
 ﻿using System;
 using Configs;
+using Cysharp.Threading.Tasks;
 using Enemies;
 using Enemies.EnemyBehaviour;
 using Interfaces;
+using Services;
 using UnityEngine;
 using Zenject;
 
 namespace Factories
 {
-    public class EnemyFactory : IFactory<Vector3, EnemyConfig, EnemyViewModel>
+    public class EnemyFactory
     {
         private readonly IPlayerStateProviderService _dataProviderService;
         private readonly Enemy.Pool _enemyPool;
         private readonly IInstantiator _instantiator;
+        private readonly AssetProvider _assetProvider;
 
         public EnemyFactory(Enemy.Pool enemyPool, IPlayerStateProviderService dataProviderService,
-            IInstantiator instantiator)
+            IInstantiator instantiator, AssetProvider assetProvider)
         {
             _enemyPool = enemyPool;
             _dataProviderService = dataProviderService;
             _instantiator = instantiator;
+            _assetProvider = assetProvider;
         }
 
-        public EnemyViewModel Create(Vector3 position, EnemyConfig config)
+        public async UniTask<EnemyViewModel> Create(Vector3 position, EnemyConfig config)
         {
             var behaviour = CreateBehaviour(config);
             var model = _instantiator.Instantiate<EnemyModel>(new object[]
@@ -36,7 +40,9 @@ namespace Factories
 
             viewModel.Initialize();
 
-            var enemy = _enemyPool.Spawn(position, config.Sprite, viewModel, view => _enemyPool.Despawn(view));
+            var enemySprite = await _assetProvider.Load<Sprite>(config.Sprite);
+
+            var enemy = _enemyPool.Spawn(position, enemySprite, viewModel, view => _enemyPool.Despawn(view));
 
             return viewModel;
         }

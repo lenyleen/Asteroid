@@ -1,57 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
 using Configs;
+using Cysharp.Threading.Tasks;
 using Interfaces;
+using Services;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace Factories
 {
     public class PopUpFactory
     {
-        private readonly Dictionary<Type, GameObject> _popUpPrefabs;
+        private readonly PopUpsConfig _popUpsConfig;
+        private readonly AssetProvider _assetProvider;
         private readonly Transform _popUpParent;
         private readonly IInstantiator _instantiator;
 
-        public PopUpFactory(PopUpsConfig config, Transform popUpParent,
-            IInstantiator instantiator)
-        {
-            _popUpPrefabs = InitializePopUps(config.PopUpPrefabs);
+        private Dictionary<Type, AssetReferenceGameObject> _popUpPrefabs = new ();
 
+        public PopUpFactory(PopUpsConfig config, Transform popUpParent,
+            IInstantiator instantiator, AssetProvider assetProvider)
+        {
+            _popUpsConfig = config;
+            _assetProvider = assetProvider;
             _popUpParent = popUpParent;
             _instantiator = instantiator;
         }
 
-        public T CreatePopUp<T>() where T : IPopUp
+        public async UniTask InitializePopUpsAsync()
         {
-            var type = typeof(T);
-            if (!_popUpPrefabs.TryGetValue(type, out var prefab))
-                throw new Exception($"No prefab found for {type.Name}");
-
-            var instance = _instantiator.InstantiatePrefabForComponent<T>(prefab);
-            instance.Initialize(_popUpParent);
-            return instance;
-        }
-
-        private Dictionary<Type, GameObject> InitializePopUps(List<GameObject> popUps)
-        {
-            var popUpDictionary = new Dictionary<Type, GameObject>();
-
-            foreach (var popUp in popUps)
+            foreach (var reference in _popUpsConfig.PopUpPrefabsReferences)
             {
-                var componentGetResul = popUp.TryGetComponent<IPopUp>(out var component);
+                var prefab = await _assetProvider.Load<GameObject>(reference);
+                var componentGetResul = prefab.TryGetComponent<IPopUp>(out var component);
 
                 if(componentGetResul)
                 {
-                    popUpDictionary.TryAdd(component.GetType(), popUp);
+                    _popUpPrefabs.TryAdd(component.GetType(),reference);
+                    _assetProvider.ReleasePrefab(reference.AssetGUID);
                     continue;
                 }
 
-                Debug.LogWarning("PopUp prefab does not implement IPopUp interface: " + popUp.name);
+                Debug.LogWarning("PopUp prefab does not implement IPopUp interface: " + prefab.name);
+                _assetProvider.ReleasePrefab(reference.AssetGUID);
             }
+        }
 
-            return popUpDictionary;
+        public async Task<T> CreatePopUp<T>() where T : IPopUp
+        {
+            var type = typeof(T);
+            if (!_popUpPrefabs.TryGetValue(type, out var reference))
+                throw new Exception($"No prefab found for {type.Name}");
+
+            var prefab = await _assetProvider.Load<GameObject>(reference);
+
+            var instance = _instantiator.InstantiatePrefabForComponent<T>(prefab);
+            instance.Initialize(_popUpParent);
+
+            return instance;
         }
     }
 }

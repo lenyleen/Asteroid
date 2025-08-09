@@ -27,12 +27,12 @@ namespace Weapon
                 .AddTo(_disposables);
         }
 
-        public Vector3 ApplyWeapon(WeaponType weaponType, WeaponView weapon)
+        public Vector3 ApplyWeapon(WeaponType weaponType, WeaponView weapon, Vector3 localPosition)
         {
             return weaponType switch
             {
-                WeaponType.Main => ApplyWeaponInSlot(_mainSlots, weapon),
-                WeaponType.Secondary => ApplyWeaponInSlot(_heavySlots, weapon),
+                WeaponType.Main => ApplyWeaponInSlot(_mainSlots, weapon, localPosition),
+                WeaponType.Secondary => ApplyWeaponInSlot(_heavySlots, weapon, localPosition),
                 _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null)
             };
         }
@@ -42,7 +42,7 @@ namespace Weapon
             _viewModel.Update();
         }
 
-        private Vector3 ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView)
+        private Vector3 ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView, Vector3 localPosition)
         {
             var emptySlot = slots.FirstOrDefault(sl => !_occupiedSlots.Contains(sl));
 
@@ -51,7 +51,7 @@ namespace Weapon
             _occupiedSlots.Add(emptySlot);
 
             weaponView.transform.SetParent(emptySlot);
-            weaponView.transform.localPosition = Vector3.zero;
+            weaponView.transform.localPosition = localPosition;
             return emptySlot.transform.localPosition;
         }
 

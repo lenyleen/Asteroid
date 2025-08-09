@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Configs;
 using Enemies;
+using Factories;
 using Interfaces;
 using Static;
 using UniRx;
@@ -18,7 +19,7 @@ namespace Services
         private readonly Camera _camera;
         private readonly CompositeDisposable _disposable = new();
         private readonly Dictionary<EnemyType, EnemyConfig> _enemiesData;
-        private readonly IFactory<Vector3, EnemyConfig, EnemyViewModel> _enemyFactory;
+        private readonly EnemyFactory _enemyFactory;
         private readonly SpawnConfig _spawnConfig;
         private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private readonly ReactiveCommand<KilledEnemyData> _enemyDiedCommand = new();
@@ -26,7 +27,7 @@ namespace Services
         private bool _canSpawn;
         private CompositeDisposable _spawnDisposable = new();
 
-        public EnemySpawnService(Camera camera, IFactory<Vector3, EnemyConfig, EnemyViewModel> enemyFactory,
+        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory,
             List<EnemyConfig> enemiesData, SpawnConfig spawnConfig)
         {
             _camera = camera;
@@ -65,7 +66,7 @@ namespace Services
             _spawnDisposable.Dispose();
         }
 
-        private void SpawnEnemy(EnemyConfig enemyConfig, Vector3 position = default)
+        private async void SpawnEnemy(EnemyConfig enemyConfig, Vector3 position = default)
         {
             if (!_canSpawn)
                 return;
@@ -76,7 +77,7 @@ namespace Services
             position = position == default
                 ? RandomPositionGenerator.GetRandomPositionOutsideCamera(_camera)
                 : position;
-            var enemy = _enemyFactory.Create(position, enemyConfig);
+            var enemy = await _enemyFactory.Create(position, enemyConfig);
 
             if (enemy == null)
                 return;

@@ -30,11 +30,11 @@ namespace Installers
                 .WithInitialSize(20)
                 .FromComponentInNewPrefab(_projectilePrefab).UnderTransformGroup("Projectiles");
 
-            Container.BindInterfacesAndSelfTo<ProjectileFactory>()
+            Container.Bind<ProjectileFactory>()
                 .AsSingle()
                 .WithArguments(_projectileDatas);
 
-            Container.BindInterfacesAndSelfTo<WeaponFactory>()
+            Container.Bind<WeaponFactory>()
                 .AsSingle()
                 .WithArguments(_weaponViewPrefab);
 
@@ -49,8 +49,8 @@ namespace Installers
             [field: SerializeField] public Ship ShipPrefab { get; private set; }
             [field: SerializeField] public Transform PlayerSpawnPosition { get; private set; }
             [field: SerializeField] public ShipPreferences ShipPreferences { get; private set; }
-            [field: SerializeField] public List<WeaponConfig> PlayerHeavyWeaponsData { get; private set; }
-            [field: SerializeField] public List<WeaponConfig> PlayerMainWeaponsData { get; private set; }
+            [field: SerializeField] public WeaponConfig PlayerHeavyWeaponsData { get; private set; }
+            [field: SerializeField] public WeaponConfig PlayerMainWeaponsData { get; private set; }
         }
     }
 }

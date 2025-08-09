@@ -13,7 +13,13 @@ MonoBehaviour:
   m_Name: BulletProjectile
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 1
-  <Sprite>k__BackingField: {fileID: 9022410353708369243, guid: 22b61a2f41130894ab36ab60bce12dc1, type: 3}
+  <Sprite>k__BackingField:
+    m_AssetGUID: 22b61a2f41130894ab36ab60bce12dc1
+    m_SubObjectName: Exhaust_Frame_02_png_processed_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <ColliderConfig>k__BackingField: {fileID: 11400000, guid: 2b2c1d73c9b01f64291813bec57ef6b5, type: 2}
   <Speed>k__BackingField: 7
   <LifetimeInSeconds>k__BackingField: 2

@@ -16,14 +16,17 @@ namespace _Project.Scripts.States
         private readonly ScoreBoxModel _scoreModel;
         private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
+        private readonly AssetProvider _assetProvider;
 
         private CompositeDisposable _disposables = new();
 
-        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider)
+        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
+            AssetProvider assetProvider)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
             _playerProgressProvider = playerProgressProvider;
+            _assetProvider = assetProvider;
         }
 
         public async void Enter()
@@ -40,6 +43,7 @@ namespace _Project.Scripts.States
             catch (Exception e)
             {
                 await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(e.Message);
+                _assetProvider.Dispose();
                 return; //типа переход в главное меню
             }
 
@@ -55,7 +59,10 @@ namespace _Project.Scripts.States
         private void Restart(DialogResult result)
         {
             if (result != DialogResult.Yes)
+            {
+                _assetProvider.Dispose();
                 return; //переход в главное меню
+            }
 
             _playerProgressProvider.ToDefault();
             _changeStateCommand.Execute(typeof(PlayState));

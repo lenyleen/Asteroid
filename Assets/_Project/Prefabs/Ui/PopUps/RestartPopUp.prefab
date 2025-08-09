@@ -241,7 +241,7 @@ MonoBehaviour:
   _scoreText: {fileID: 5432994286359281575}
   _restartButton: {fileID: 6106217824855948763}
   _closeButton: {fileID: 3480479457590179659}
-  _message: 'You lose /t score:'
+  _message: 'You lose score:'
 --- !u!114 &3480479457590179659 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8542631506781954880, guid: ef094fe699f135246aa11f49938d2c19, type: 3}

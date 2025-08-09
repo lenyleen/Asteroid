@@ -14,7 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Type>k__BackingField: 0
   <ProjectileType>k__BackingField: 1
-  <Sprite>k__BackingField: {fileID: 6972191575210481628, guid: 8d1e3bcf34fbad34d8b9fb371757cb42, type: 3}
-  <Damage>k__BackingField: 1
+  <Sprite>k__BackingField:
+    m_AssetGUID: a1048d7f498d739439d4eef604249f5e
+    m_SubObjectName: GunTurret_ExampleGun_png_processed_0
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1
   <ReloadTimeInSeconds>k__BackingField: 1
   <AmmoCount>k__BackingField: 100

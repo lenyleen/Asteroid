@@ -1,12 +1,13 @@
 ﻿using Enemies;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 
 namespace Configs
 {
     [CreateAssetMenu(fileName = "EnemyConfig", menuName = "ScriptableObject/EnemyConfig")]
     public class EnemyConfig : ScriptableObject
     {
-        [field: SerializeField] public Sprite Sprite { get; private set; }
+        [field: SerializeField] public AssetReferenceSprite Sprite { get; private set; }
         [field: SerializeField] public int Health { get; private set; }
         [field: SerializeField] public EnemyType Type { get; private set; }
         [field: SerializeField] public int Score { get; private set; }
