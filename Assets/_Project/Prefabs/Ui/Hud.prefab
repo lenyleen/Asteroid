@@ -579,6 +579,7 @@ GameObject:
   - component: {fileID: 2043880173755896740}
   - component: {fileID: 2994105705026838693}
   - component: {fileID: 1054529800133210375}
+  - component: {fileID: 3700738660446941076}
   m_Layer: 5
   m_Name: Hud
   m_TagString: Untagged
@@ -669,6 +670,22 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &3700738660446941076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8142805496682810571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8cf653f6114fe3b17865343ecdcd09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <ShipInfoView>k__BackingField: {fileID: 5946250041411446463}
+  <WeaponUiDisplayerView>k__BackingField: {fileID: 8945251900384089737}
+  <ScoreBoxView>k__BackingField: {fileID: 4109056961150112961}
+  <TutorialView>k__BackingField: {fileID: 7850095437248831810}
 --- !u!1 &8930265099660071265
 GameObject:
   m_ObjectHideFlags: 0

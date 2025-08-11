@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine.AddressableAssets;
@@ -11,12 +12,37 @@ namespace Services
         Dictionary<string, AsyncOperationHandle> _completedHandles = new ();
         Dictionary<string, List<AsyncOperationHandle>> _handles = new();
 
-        public async Task<T> Load<T>(AssetReference reference) where T : class
+        public async UniTask<T> Load<T>(AssetReference reference) where T : class
         {
             if (_completedHandles.TryGetValue(reference.AssetGUID, out var completedHandle))
                 return completedHandle.Result as T;
 
             return await CompleteHandle(Addressables.LoadAssetAsync<T>(reference), reference.AssetGUID);
+        }
+
+        public async UniTask<T> Load<T>(string assetKey) where T : class
+        {
+            if(_completedHandles.TryGetValue(assetKey, out var completedHandle))
+                return completedHandle.Result as T;
+
+            return await CompleteHandle(Addressables.LoadAssetAsync<T>(assetKey), assetKey);
+        }
+
+        public async UniTask<List<T>> LoadMany<T>(string label) where T : class
+        {
+            if (_completedHandles.TryGetValue(label, out var completedHandle))
+                return completedHandle.Result as List<T>;
+
+            return await CompleteHandle(Addressables.LoadAssetsAsync<T>(label, null), label) as List<T>;
+        }
+
+        public T GetLoadedAsset<T>(string assetKey) where T : class
+        {
+            if (!_completedHandles.TryGetValue(assetKey, out var handle) &&
+                handle.Status == AsyncOperationStatus.Succeeded)
+                throw new Exception("Asset not loaded: " + assetKey);
+
+            return handle.Result as T;
         }
 
         private async UniTask<T> CompleteHandle<T>(AsyncOperationHandle<T> handle, string referenceKey) where T : class
@@ -25,15 +51,7 @@ namespace Services
                 _completedHandles[referenceKey] = hndl;
 
             AddHandle(referenceKey, handle);
-            return await handle.Task;
-        }
-
-        public void ReleasePrefab(string assetGUID)
-        {
-            foreach (var handle in _handles[assetGUID])
-                handle.Release();
-
-            _completedHandles.Remove(assetGUID);
+            return await handle.ToUniTask();
         }
 
         public void Dispose()
@@ -61,10 +79,5 @@ namespace Services
 
 
 
-/*public async Task<T> Load<T>(string assetKey) where T : class
-        {
-            if(_completedHandles.TryGetValue(assetKey, out var completedHandle))
-                return completedHandle.Result as T;
 
-            return await CompleteHandle(Addressables.LoadAssetAsync<T>(assetKey), assetKey);
-        }*/
+

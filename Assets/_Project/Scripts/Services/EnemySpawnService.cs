@@ -6,6 +6,7 @@ using _Project.Scripts.Data;
 using _Project.Scripts.Enemies;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Static;
+using Cysharp.Threading.Tasks;
 using Factories;
 using UniRx;
 using UnityEngine;
@@ -13,13 +14,15 @@ using Zenject;
 
 namespace Services
 {
-    public class EnemySpawnService : IInitializable, IDisposable, IEnemyDiedNotifier
+    public class EnemySpawnService : IAsyncInitializable, IDisposable, IEnemyDiedNotifier
     {
+        private const string EnemyConfigsLabel = "EnemiesConfigs";
+
         public IObservable<KilledEnemyData> OnEnemyKilled => _enemyDiedCommand;
 
         private readonly Camera _camera;
+        private readonly AssetProvider _assetProvider;
         private readonly CompositeDisposable _disposable = new();
-        private readonly Dictionary<EnemyType, EnemyConfig> _enemiesData;
         private readonly EnemyFactory _enemyFactory;
         private readonly SpawnConfig _spawnConfig;
         private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
@@ -27,19 +30,23 @@ namespace Services
 
         private bool _canSpawn;
         private CompositeDisposable _spawnDisposable = new();
+        private Dictionary<EnemyType, EnemyConfig> _enemiesData;
 
-        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory,
-            List<EnemyConfig> enemiesData, SpawnConfig spawnConfig)
+        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory, SpawnConfig spawnConfig, AssetProvider assetProvider)
         {
             _camera = camera;
             _enemyFactory = enemyFactory;
-            _enemiesData = enemiesData.ToDictionary(data => data.Type, data => data);
             _spawnConfig = spawnConfig;
             _spawnedEnemies = new HashSet<ISpawnableEnemy>();
+            _assetProvider = assetProvider;
         }
 
-        public void Initialize()
+        public async UniTask InitializeAsync()
         {
+            var enemyConfigs = await _assetProvider.LoadMany<EnemyConfig>(EnemyConfigsLabel);
+
+            _enemiesData = enemyConfigs.ToDictionary(data => data.Type, data => data);
+
             foreach (var enemyData in _enemiesData.Values)
                 Observable.Interval(TimeSpan.FromSeconds(enemyData.SpawnTimeInSeconds))
                     .Subscribe(_ => SpawnEnemy(enemyData))

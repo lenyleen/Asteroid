@@ -28,5 +28,24 @@ namespace _Project.Scripts.UI
 
             gameObject.SetActive(false);
         }
+
+        public async UniTask FadeInAsync()
+        {
+            gameObject.SetActive(true);
+            _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
+            _loadingText.color = new Color(_loadingText.color.r, _loadingText.color.g, _loadingText.color.b, 0);
+
+            var textFadeIn = _loadingText.DOFade(1, duration)
+                .SetEase(Ease.InOutQuad)
+                .AsyncWaitForCompletion()
+                .AsUniTask();
+
+            var imageFadeIn =  _image.DOFade(1, duration)
+                .SetEase(Ease.InOutQuad)
+                .AsyncWaitForCompletion()
+                .AsUniTask();
+
+            await UniTask.WhenAll(textFadeIn, imageFadeIn);
+        }
     }
 }

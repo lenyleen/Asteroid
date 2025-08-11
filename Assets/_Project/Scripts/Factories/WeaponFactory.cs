@@ -6,28 +6,36 @@ using Cysharp.Threading.Tasks;
 using Interfaces;
 using Services;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Weapon;
 using Zenject;
 
 namespace Factories
 {
-    public class WeaponFactory
+    public class WeaponFactory : IAsyncInitializable
     {
         private readonly IInstantiator _instantiator;
-        private readonly WeaponView _weaponViewPrefab;
+        private readonly AssetReference _weaponViewPrefabReference;
         private readonly AssetProvider _assetProvider;
 
-        public WeaponFactory(DiContainer instantiator, WeaponView weaponViewPrefab, AssetProvider assetProvider)
+        private WeaponView _prefab;
+
+        public WeaponFactory(DiContainer instantiator, AssetReference weaponViewPrefabReference, AssetProvider assetProvider)
         {
             _instantiator = instantiator;
-            _weaponViewPrefab = weaponViewPrefab;
+            _weaponViewPrefabReference = weaponViewPrefabReference;
             _assetProvider = assetProvider;
+        }
+
+        public async UniTask InitializeAsync()
+        {
+            _prefab = await _assetProvider.Load<WeaponView>(_weaponViewPrefabReference);
         }
 
         public async UniTask<WeaponViewModel> Create(WeaponConfig config, string name,
             IWeaponsHolder weaponsHolder, Vector3 position)
         {
-            var view = _instantiator.InstantiatePrefabForComponent<WeaponView>(_weaponViewPrefab);
+            var view = _instantiator.InstantiatePrefabForComponent<WeaponView>(_prefab);
             var offsetFromHolder = weaponsHolder.ApplyWeapon(config.Type, view, position);
 
             var model = _instantiator.Instantiate<WeaponModel>(new object[] { config, name, offsetFromHolder });

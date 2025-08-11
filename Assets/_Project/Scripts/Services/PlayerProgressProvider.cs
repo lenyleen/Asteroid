@@ -7,7 +7,7 @@ using UniRx;
 
 namespace _Project.Scripts.Services
 {
-    public class PlayerProgressProvider : IDisposable
+    public class PlayerProgressProvider : IDisposable, IAsyncInitializable
     {
         public PlayerProgress PlayerProgress { get; }
 
@@ -26,7 +26,7 @@ namespace _Project.Scripts.Services
             PlayerProgress.InitializeReactiveValues();
         }
 
-        public async UniTask<string> TryInitializeAsync()
+        public async UniTask InitializeAsync()
         {
             _enemyDiedNotifier.OnEnemyKilled
                 .Subscribe(enemyData =>
@@ -35,29 +35,17 @@ namespace _Project.Scripts.Services
 
             var result = await _saveLoadService.TryLoadData(out _loadedPlayerProgress);
 
-            if (result.IsEmpty())
-                return result;
-
-            _loadedPlayerProgress = PlayerProgress;
-            return result;
+            if (!result)
+                _loadedPlayerProgress = PlayerProgress;
         }
 
-        public async UniTask<string> TrySetDataAsync()
-        {
-            if (_loadedPlayerProgress.Score > PlayerProgress.Score)
-                return "";
+        public async UniTask SetDataAsync() =>
+            await _saveLoadService.SaveData(PlayerProgress);
 
-            return await _saveLoadService.TrySaveData(PlayerProgress);
-        }
-
-        public void ToDefault()
-        {
+        public void ToDefault() =>
             PlayerProgress.ToDefault();
-        }
 
-        public void Dispose()
-        {
+        public void Dispose() =>
             _disposable.Dispose();
-        }
     }
 }

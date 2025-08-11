@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using _Project.Scripts.Configs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -10,5 +11,7 @@ namespace Configs
         [field: SerializeField] public AssetReferenceSprite ShipSprite { get; private set; }
         [field: SerializeField] public List<Vector3> HeavyWeaponSlots { get; private set; }
         [field: SerializeField] public List<Vector3> LightWeaponSlots { get; private set; }
+        [field: SerializeField] public AssetReference MainWeaponConfig { get; private set; }
+        [field: SerializeField] public AssetReference HeavyWeaponConfig { get; private set; }
     }
 }

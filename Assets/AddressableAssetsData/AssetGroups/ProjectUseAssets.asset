@@ -15,8 +15,8 @@ MonoBehaviour:
   m_GroupName: ProjectUseAssets
   m_GUID: 75780150599bbe046b0244bbb9d93226
   m_SerializeEntries:
-  - m_GUID: 18e68f2191a73a442ad6f2a53471471f
-    m_Address: UiAtlas
+  - m_GUID: 1979cc0ee26a853449d9d33e3e993e85
+    m_Address: GameplayAssetsAddresses
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: PlayerSprites
+  m_Name: PlayerRelated
   m_EditorClassIdentifier: 
-  m_GroupName: PlayerSprites
+  m_GroupName: PlayerRelated
   m_GUID: 763624b3b2da4574cb60f5cf76d9c95f
   m_SerializeEntries:
   - m_GUID: 10f36fff3c350644796603b19b7999dc
@@ -25,10 +25,28 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 884ef2d407f3b0c4f8dfbf4df04505cf
+    m_Address: CommonShipConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ShipsConfigs
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8cf6c7746f2ad0042b7652268b983b18
     m_Address: RedShip
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c78943821f2889c4bace210d4d4ddefe
+    m_Address: GreenShipConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ShipsConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e8e3afb0b4ffa9b42b1db563d049b1cd
+    m_Address: BlueShipConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ShipsConfigs
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 1e4ae8e15d05e7442a9931c0ae1b290b, type: 2}

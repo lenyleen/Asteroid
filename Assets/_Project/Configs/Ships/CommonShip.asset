@@ -24,3 +24,15 @@ MonoBehaviour:
   <LightWeaponSlots>k__BackingField:
   - {x: -0.16560006, y: 0.02970004, z: 0}
   - {x: 0.1559, y: 0.0236, z: 0}
+  <MainWeaponConfig>k__BackingField:
+    m_AssetGUID: 87b73788221846940994412200cb3f46
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 0
+  <HeavyWeaponConfig>k__BackingField:
+    m_AssetGUID: acedae3795442474b9dc5f15cf615cbf
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_SubObjectGUID: 
+    m_EditorAssetChanged: 1

@@ -6,27 +6,42 @@ using _Project.Scripts.Services;
 using Factories;
 using Services;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace _Project.Scripts.Installers
 {
     public class EnemyInstaller : MonoInstaller<EnemyInstaller>
     {
-        [SerializeField] private Enemy _enemyPrefab;
-        [SerializeField] private List<EnemyConfig> _enemyDatas;
+        [SerializeField] private AssetReference _enemyPrefabReference;
         [SerializeField] private SpawnConfig spawnConfig;
+
+        private AssetProvider _assetProvider;
+
+        [Inject]
+        public void Construct(AssetProvider assetProvider)
+        {
+            _assetProvider = assetProvider;
+        }
 
         public override void InstallBindings()
         {
-            Container.BindMemoryPool<Enemy, Enemy.Pool>()
-                .WithInitialSize(20)
-                .FromComponentInNewPrefab(_enemyPrefab)
-                .UnderTransformGroup("Enemies");
+            InitializeEnemyPool();
 
             Container.Bind<EnemyFactory>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<EnemySpawnService>().AsSingle()
-                .WithArguments(_enemyDatas, spawnConfig);
+                .WithArguments(spawnConfig);
+        }
+
+        void InitializeEnemyPool()
+        {
+            var enemyPrefab = _assetProvider.GetLoadedAsset<GameObject>(_enemyPrefabReference.AssetGUID);
+
+            Container.BindMemoryPool<Enemy, Enemy.Pool>()
+                .WithInitialSize(20)
+                .FromComponentInNewPrefab(enemyPrefab)
+                .UnderTransformGroup("Enemies");
         }
     }
 }

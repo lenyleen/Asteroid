@@ -148,7 +148,7 @@ GameObject:
   - component: {fileID: 6213132444793084808}
   - component: {fileID: 5915511681035229771}
   m_Layer: 5
-  m_Name: WeaponReloadView
+  m_Name: WeaponUiDataDisplayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

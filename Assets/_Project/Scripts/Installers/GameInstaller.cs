@@ -15,9 +15,6 @@ namespace _Project.Scripts.Installers
             Container.Bind<Camera>().FromInstance(Camera.main)
                 .AsSingle();
 
-            Container.Bind<AssetProvider>()
-                .AsSingle();
-
             Container.BindInterfacesAndSelfTo<SaveLoadService>()
                 .AsSingle();
 

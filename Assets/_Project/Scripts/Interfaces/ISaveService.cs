@@ -5,8 +5,8 @@ namespace _Project.Scripts.Interfaces
 {
     public interface ISaveService
     {
-        public UniTask<string> TrySaveData(object data);
+        public UniTask SaveData(PlayerProgress data);
 
-        public UniTask<string> TryLoadData(out PlayerProgress data);
+        public UniTask<bool> TryLoadData(out PlayerProgress data);
     }
 }

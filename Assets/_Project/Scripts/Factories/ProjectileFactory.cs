@@ -12,17 +12,25 @@ namespace Factories
 {
     public class ProjectileFactory
     {
+        private const string ProjectileConfigLabel = "ProjectileConfigs";
+
         private readonly Projectile.Pool _pool;
-        private readonly Dictionary<ProjectileType, ProjectileConfig> _projectileDatas;
         private readonly AssetProvider _assetProvider;
 
-        public ProjectileFactory(Projectile.Pool pool, List<ProjectileConfig> projectileDatas,
-            AssetProvider assetProvider)
+        private Dictionary<ProjectileType, ProjectileConfig> _projectileDatas;
+
+        public ProjectileFactory(Projectile.Pool pool, AssetProvider assetProvider)
         {
             _pool = pool;
             _assetProvider = assetProvider;
+        }
 
-            _projectileDatas = projectileDatas.ToDictionary(data => data.Type, data => data);
+        public async UniTask InitializeAsync()
+        {
+            var projectileConfigs =
+                await _assetProvider.LoadMany<ProjectileConfig>(ProjectileConfigLabel);
+
+            _projectileDatas = projectileConfigs.ToDictionary(data => data.Type, data => data);
         }
 
         public async UniTask Create(ProjectileType type, Vector3 spawnPosition,

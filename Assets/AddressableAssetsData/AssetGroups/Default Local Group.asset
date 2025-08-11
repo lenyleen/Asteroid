@@ -15,6 +15,11 @@ MonoBehaviour:
   m_GroupName: Default Local Group
   m_GUID: 876224eb030242043b1ea9dc0df1014b
   m_SerializeEntries:
+  - m_GUID: 18e68f2191a73a442ad6f2a53471471f
+    m_Address: UiAtlas
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3417ba3b6590124e9fd32adeadec5ef
     m_Address: RestartPopUp
     m_ReadOnly: 0

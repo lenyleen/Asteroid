@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using _Project.Scripts.GameplayStateMachine;
 using _Project.Scripts.GameplayStateMachine.States;
 using _Project.Scripts.Interfaces;
@@ -6,7 +7,7 @@ using _Project.Scripts.Other;
 using _Project.Scripts.UI;
 using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
-using Factories;
+using Static;
 using UnityEngine;
 using Zenject;
 
@@ -14,33 +15,31 @@ namespace Other
 {
     public class GameStartup : MonoBehaviour
     {
-        [SerializeField] private LoadCurtain _loadCurtain;
-
+        private LoadCurtain _loadCurtain;
         private UiService _uiService;
-        private PlayerProgressProvider _playerProgressProvider;
         private GameplayStateMachine _gameplayStateMachine;
-        private PopUpFactory _popUpFactory;
-        private IAnalyticsService _analyticsService;
+        private SceneLoader _sceneLoader;
+        private List<IAsyncInitializable> _initializables;
 
         [Inject]
-        private void Construct(PlayerProgressProvider playerProgressProvider, GameplayStateMachine gameplayStateMachine,
-            UiService uiService, PopUpFactory popUpFactory,IAnalyticsService firebaseAnalytics)
+        private void Construct(List<IAsyncInitializable> initializables, GameplayStateMachine gameplayStateMachine,
+            UiService uiService, SceneLoader sceneLoader, LoadCurtain loadCurtain)
         {
-            _playerProgressProvider = playerProgressProvider;
+            _initializables = initializables;
             _gameplayStateMachine = gameplayStateMachine;
             _uiService = uiService;
-            _popUpFactory = popUpFactory;
-            _analyticsService = firebaseAnalytics;
+            _loadCurtain = loadCurtain;
+            _sceneLoader = sceneLoader;
         }
 
         private async void Start()
         {
             try
             {
-                await _playerProgressProvider.TryInitializeAsync();
+                foreach (var initializable in _initializables)
+                    await initializable.InitializeAsync();
+
                 await _loadCurtain.FadeOutAsync();
-                await _popUpFactory.InitializePopUpsAsync();
-                await _analyticsService.InitializeAsync();
 
                 _gameplayStateMachine.Initialize(typeof(InputWaitState));
             }
@@ -48,7 +47,7 @@ namespace Other
             {
                 await _uiService.ShowDialogAwaitable<ErrorPopUp,string,DialogResult>(e.Message);
 
-                //goto main menu
+                await _sceneLoader.LoadScene(Scenes.MainMenu);
             }
         }
     }

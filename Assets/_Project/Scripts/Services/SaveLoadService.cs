@@ -10,25 +10,18 @@ namespace _Project.Scripts.Services
     {
         private const string _playerProgressKey = "PlayerData";
 
-        public UniTask<string> TrySaveData(object data)
+        public UniTask SaveData(PlayerProgress data)
         {
-            try
-            {
-                var json = JsonUtility.ToJson(data);
-                PlayerPrefs.SetString(_playerProgressKey, json);
-                return UniTask.FromResult("");
-            }
-            catch (Exception e)
-            {
-                return UniTask.FromResult(e.Message);
-            }
+            var json = JsonUtility.ToJson(data);
+            PlayerPrefs.SetString(_playerProgressKey, json);
+            return UniTask.CompletedTask;
         }
 
-        public UniTask<string> TryLoadData(out PlayerProgress data)
+        public UniTask<bool> TryLoadData(out PlayerProgress data)
         {
             data = JsonUtility.FromJson<PlayerProgress>(PlayerPrefs.GetString(_playerProgressKey));
 
-            return data == null ? UniTask.FromResult("Data not found or invalid format") : UniTask.FromResult("");
+            return UniTask.FromResult(data == null);
         }
     }
 }

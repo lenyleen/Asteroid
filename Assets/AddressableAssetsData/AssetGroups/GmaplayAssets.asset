@@ -15,13 +15,23 @@ MonoBehaviour:
   m_GroupName: GmaplayAssets
   m_GUID: 8bafc284f5559e548b956bfaaa6ce16b
   m_SerializeEntries:
+  - m_GUID: 0a754c1dedef93947a09deb21d40cec3
+    m_Address: PlayerPrefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e3a425cbb16e404d91b5dabb792a474
-    m_Address: WeaponReloadView
+    m_Address: WeaponUiDataDisplayer
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 22b61a2f41130894ab36ab60bce12dc1
     m_Address: Exhaust_Frame_02_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 72b5205210e1a654d8ce1050e013388e
+    m_Address: Enemy Prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -40,8 +50,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b3c18ee20c3f91549b5cc9072d72df15
+    m_Address: ProjectilePrefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd780d5682f2ff2419e2cc6ea20223a5
     m_Address: Laser_Medium_png_processed
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c3b9b0310854b3e46945300b2b1b9f3c
+    m_Address: WeaponPrefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

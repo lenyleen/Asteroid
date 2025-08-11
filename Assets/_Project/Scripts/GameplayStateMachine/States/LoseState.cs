@@ -43,7 +43,7 @@ namespace _Project.Scripts.States
 
             try
             {
-                await _playerProgressProvider.TrySetDataAsync();
+                await _playerProgressProvider.SetDataAsync();
             }
             catch (Exception e)
             {

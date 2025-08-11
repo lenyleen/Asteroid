@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: GameplayConfigs
+  m_EditorClassIdentifier: 
+  m_GroupName: GameplayConfigs
+  m_GUID: fd11fed06d0f9b3478f3487dabfcbe95
+  m_SerializeEntries:
+  - m_GUID: 0ada80919cdac4a4fa7fc269289178ea
+    m_Address: LaserProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 60c60b7da5c92ca4fb116928260d0fd6
+    m_Address: Assets/_Project/Configs/Enemies/LilAsteroiBehaviour.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemiesConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 87b73788221846940994412200cb3f46
+    m_Address: BullerGun
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ProjectileConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8f7bf94fee3d24648a21f049298b1391
+    m_Address: Assets/_Project/Configs/Enemies/UFO.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemiesConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 97c1f883e0f47a94e8c8d3d848769be1
+    m_Address: Assets/_Project/Configs/Enemies/Asteroid.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - EnemiesConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: acedae3795442474b9dc5f15cf615cbf
+    m_Address: LaserGun
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cc995f9a971458641a23df6da525ec9f
+    m_Address: BulletProjectile
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ProjectileConfigs
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 1e4ae8e15d05e7442a9931c0ae1b290b, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: a252da7b3a1ac5546adee670458d3adc, type: 2}
+    - {fileID: 11400000, guid: a53a2401d27b2e34c85b45db9c6274c6, type: 2}

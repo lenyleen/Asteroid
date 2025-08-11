@@ -48,7 +48,7 @@ namespace Weapon
             var rotatedOffset = Quaternion.Euler(0, 0, playerRotation) * _model.OffsetFromHolder;
             var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
 
-            _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+            await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
 
             _analyticsDataObserver.WeaponFire(_model.Type, _model.Name);
             await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);

@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using UniRx;
 using Zenject;
@@ -11,12 +12,12 @@ namespace _Project.Scripts.UI.WeaponUi
         private readonly CompositeDisposable _disposables = new();
         private readonly ReactiveProperty<bool> _isEnabled = new(false);
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
-        private readonly IFactory<IWeaponInfoProvider, WeaponUiDataDisplayer> _displayersFactory;
+        private readonly WeaponUiDataDisplayerFactory _displayersFactory;
         public IObservable<WeaponUiDataDisplayer> OnDisplayerAdded { get; }
         public IObservable<bool> IsEnabled => _isEnabled;
 
         public WeaponUiDisplayerViewModel(IPlayerWeaponInfoProviderService playerWeaponInfoProviderService,
-            IFactory<IWeaponInfoProvider, WeaponUiDataDisplayer> displayersFactory)
+            WeaponUiDataDisplayerFactory displayersFactory)
         {
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
             _displayersFactory = displayersFactory;

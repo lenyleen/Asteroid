@@ -13,7 +13,7 @@ using Zenject;
 
 namespace Factories
 {
-    public class PopUpFactory
+    public class PopUpFactory : IAsyncInitializable
     {
         private readonly PopUpsConfig _popUpsConfig;
         private readonly AssetProvider _assetProvider;
@@ -31,22 +31,20 @@ namespace Factories
             _instantiator = instantiator;
         }
 
-        public async UniTask InitializePopUpsAsync()
+        public async UniTask InitializeAsync()
         {
             foreach (var reference in _popUpsConfig.PopUpPrefabsReferences)
             {
                 var prefab = await _assetProvider.Load<GameObject>(reference);
                 var componentGetResul = prefab.TryGetComponent<IPopUp>(out var component);
 
-                if(componentGetResul)
+                if(!componentGetResul)
                 {
-                    _popUpPrefabs.TryAdd(component.GetType(),reference);
-                    _assetProvider.ReleasePrefab(reference.AssetGUID);
+                    Debug.LogWarning("PopUp prefab does not implement IPopUp interface: " + prefab.name);
                     continue;
                 }
 
-                Debug.LogWarning("PopUp prefab does not implement IPopUp interface: " + prefab.name);
-                _assetProvider.ReleasePrefab(reference.AssetGUID);
+                _popUpPrefabs.TryAdd(component.GetType(),reference);
             }
         }
 
