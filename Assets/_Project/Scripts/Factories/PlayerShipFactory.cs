@@ -3,15 +3,13 @@ using _Project.Scripts.Configs;
 using _Project.Scripts.Input;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Player;
+using _Project.Scripts.Services;
 using _Project.Scripts.Weapon;
-using Configs;
 using Cysharp.Threading.Tasks;
-using Services;
 using UnityEngine;
-using Weapon;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class PlayerShipFactory : IAsyncInitializable
     {
@@ -32,7 +30,7 @@ namespace Factories
         private WeaponConfig _mainWeaponConfig;
         private WeaponConfig _heavyWeaponConfig;
 
-        public PlayerShipFactory(WeaponFactory weaponFactory,ShipPreferences shipPreferences,
+        public PlayerShipFactory(WeaponFactory weaponFactory, ShipPreferences shipPreferences,
             PlayerInputController playerInputController, IInstantiator instantiator,
             IPlayerStateProviderService playerDataProviderService, AssetProvider assetProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
@@ -58,9 +56,9 @@ namespace Factories
             _heavyWeaponConfig = await _assetProvider.Load<WeaponConfig>(_shipViewConfig.HeavyWeaponConfig);
         }
 
-        public async void SpawnShip()
+        public async UniTask SpawnShip()
         {
-            var shipModel = _instantiator.Instantiate<ShipModel>(new object[] {_shipPreferences});
+            var shipModel = _instantiator.Instantiate<ShipModel>(new object[] { _shipPreferences });
 
             _shipViewModel = _instantiator.Instantiate<ShipViewModel>(new object[] { shipModel });
 
@@ -73,12 +71,12 @@ namespace Factories
                 null
             );
 
-            await SpawnPlayerWeapons(shipView.PlayerWeapons, _shipViewConfig);
+            await SpawnPlayerWeapons(shipView.PlayerWeapons);
 
-            shipView.Initialize(_shipViewModel,_shipSprite);
+            shipView.Initialize(_shipViewModel, _shipSprite);
         }
 
-        private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons, ShipViewConfig shipViewConfig)
+        private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons)
         {
             var heavyWeapons =
                 await CreateWeapons(_heavyWeaponConfig, _shipViewConfig.HeavyWeaponSlots, playerWeapons);
@@ -96,7 +94,7 @@ namespace Factories
             playerWeapons.Initialize(weaponsViewModel);
         }
 
-        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponConfig config,List<Vector3> positions,
+        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponConfig config, List<Vector3> positions,
             PlayerWeapons playerWeapons)
         {
             var weapons = new List<WeaponViewModel>();
@@ -113,6 +111,7 @@ namespace Factories
 
                 weaponIndex++;
             }
+
             return weapons;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
 using _Project.Scripts.UI;
 using Cysharp.Threading.Tasks;
-using Services;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;

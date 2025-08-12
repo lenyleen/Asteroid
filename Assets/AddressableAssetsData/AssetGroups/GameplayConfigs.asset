@@ -18,7 +18,8 @@ MonoBehaviour:
   - m_GUID: 0ada80919cdac4a4fa7fc269289178ea
     m_Address: LaserProjectile
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - ProjectileConfigs
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 60c60b7da5c92ca4fb116928260d0fd6
     m_Address: Assets/_Project/Configs/Enemies/LilAsteroiBehaviour.asset
@@ -29,8 +30,7 @@ MonoBehaviour:
   - m_GUID: 87b73788221846940994412200cb3f46
     m_Address: BullerGun
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - ProjectileConfigs
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8f7bf94fee3d24648a21f049298b1391
     m_Address: Assets/_Project/Configs/Enemies/UFO.asset

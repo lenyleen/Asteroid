@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using _Project.Scripts.Configs;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
-namespace Configs
+namespace _Project.Scripts.Configs
 {
     [CreateAssetMenu (fileName = "ShipViewConfig", menuName = "ScriptableObject/ShipViewConfig")]
     public class ShipViewConfig : ScriptableObject

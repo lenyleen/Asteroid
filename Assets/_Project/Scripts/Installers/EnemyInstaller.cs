@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using _Project.Scripts.Configs;
+﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Enemies;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Services;
-using Factories;
-using Services;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;

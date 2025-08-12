@@ -2,7 +2,6 @@
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Factories;
 using UniRx;
 
 namespace _Project.Scripts.Services

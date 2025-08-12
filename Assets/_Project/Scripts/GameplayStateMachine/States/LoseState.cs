@@ -1,14 +1,12 @@
 ﻿using System;
-using _Project.Scripts.GameplayStateMachine.States;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
 using _Project.Scripts.UI.ScoreBox;
-using Services;
 using UniRx;
 
-namespace _Project.Scripts.States
+namespace _Project.Scripts.GameplayStateMachine.States
 {
     public class LoseState : IState
     {

@@ -1,8 +1,8 @@
 ﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Services;
+using _Project.Scripts.Static;
 using _Project.Scripts.UI;
 using Cysharp.Threading.Tasks;
-using Static;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;

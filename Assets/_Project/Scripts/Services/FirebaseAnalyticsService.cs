@@ -69,8 +69,7 @@ namespace _Project.Scripts.Services
             IncrementCountOf(type, _killedEnemies);
         }
 
-        private void ConvertDictionaryToParameters<T>
-            (Dictionary<T, int> data, in List<Parameter> parameters)
+        private void ConvertDictionaryToParameters<T>(Dictionary<T, int> data, in List<Parameter> parameters)
         {
             foreach (var kvp in data)
                 parameters.Add(new Parameter(kvp.Key.ToString(), kvp.Value));

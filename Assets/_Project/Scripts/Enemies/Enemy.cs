@@ -22,7 +22,6 @@ namespace _Project.Scripts.Enemies
         private Action<Enemy> _onDeath;
         private EnemyViewModel _viewModel;
 
-
         private void Initialize(Vector3 position, Sprite sprite, EnemyViewModel context, Action<Enemy> onDeath)
         {
             _viewModel = context;
@@ -46,6 +45,11 @@ namespace _Project.Scripts.Enemies
                 .AddTo(_disposables);
         }
 
+        public void Collide(ColliderType colliderType, int damage)
+        {
+            if (gameObject.activeInHierarchy) _viewModel.TakeCollision(colliderType, damage);
+        }
+
         private void Update()
         {
             _viewModel.UpdatePosition();
@@ -57,11 +61,6 @@ namespace _Project.Scripts.Enemies
 
             _viewModel.MakeCollision(receiver);
             Debug.Log("Collided");
-        }
-
-        public void Collide(ColliderType colliderType, int damage)
-        {
-            if (gameObject.activeInHierarchy) _viewModel.TakeCollision(colliderType, damage);
         }
 
         private void Despawn()

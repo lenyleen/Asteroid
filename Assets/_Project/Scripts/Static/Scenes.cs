@@ -1,4 +1,4 @@
-﻿namespace Static
+﻿namespace _Project.Scripts.Static
 {
     public static class Scenes
     {

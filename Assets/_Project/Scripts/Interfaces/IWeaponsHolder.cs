@@ -6,6 +6,6 @@ namespace _Project.Scripts.Interfaces
 {
     public interface IWeaponsHolder
     {
-        public Vector3 ApplyWeapon(WeaponType weaponType, WeaponView weapon,Vector3 localPosition);
+        public void ApplyWeapon(WeaponType weaponType, WeaponView weapon, Vector3 localPosition);
     }
 }

@@ -4,15 +4,14 @@ using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
 using _Project.Scripts.Enemies;
+using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Static;
 using Cysharp.Threading.Tasks;
-using Factories;
 using UniRx;
 using UnityEngine;
-using Zenject;
 
-namespace Services
+namespace _Project.Scripts.Services
 {
     public class EnemySpawnService : IAsyncInitializable, IDisposable, IEnemyDiedNotifier
     {
@@ -27,18 +26,21 @@ namespace Services
         private readonly SpawnConfig _spawnConfig;
         private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private readonly ReactiveCommand<KilledEnemyData> _enemyDiedCommand = new();
+        private readonly IAnalyticsService _analyticsService;
 
         private bool _canSpawn;
         private CompositeDisposable _spawnDisposable = new();
         private Dictionary<EnemyType, EnemyConfig> _enemiesData;
 
-        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory, SpawnConfig spawnConfig, AssetProvider assetProvider)
+        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory, SpawnConfig spawnConfig,
+            AssetProvider assetProvider, IAnalyticsService analyticsService)
         {
             _camera = camera;
             _enemyFactory = enemyFactory;
             _spawnConfig = spawnConfig;
             _spawnedEnemies = new HashSet<ISpawnableEnemy>();
             _assetProvider = assetProvider;
+            _analyticsService = analyticsService;
         }
 
         public async UniTask InitializeAsync()
@@ -106,6 +108,8 @@ namespace Services
             _enemyDiedCommand.Execute(
                 new KilledEnemyData(enemy.Type, enemy.Position.Value, enemy.Score));
 
+            _analyticsService.EnemyKilled(enemy.Type);
+
             if (enemy.Type != EnemyType.Asteroid)
                 return;
 
@@ -114,8 +118,8 @@ namespace Services
 
             for (var i = 0; i < _spawnConfig.SpawnLilAsteroidCount; i++)
             {
-                var postion = RandomPositionGenerator.GenerateRandomPositionNearPosition(enemy.Position.Value);
-                SpawnEnemy(data, postion);
+                var position = RandomPositionGenerator.GenerateRandomPositionNearPosition(enemy.Position.Value);
+                SpawnEnemy(data, position);
             }
         }
     }

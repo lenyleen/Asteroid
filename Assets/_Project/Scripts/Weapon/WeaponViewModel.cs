@@ -1,12 +1,11 @@
 ﻿using System;
+using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Weapon;
 using Cysharp.Threading.Tasks;
-using Factories;
 using UniRx;
 using UnityEngine;
 
-namespace Weapon
+namespace _Project.Scripts.Weapon
 {
     public class WeaponViewModel : IWeaponInfoProvider
     {
@@ -19,7 +18,7 @@ namespace Weapon
         private readonly ReactiveCommand _onDeath = new();
         private readonly ReactiveProperty<float> _reloadTimePercent = new();
         private readonly ProjectileFactory _projectileFactory;
-        private readonly IAnalyticsDataObserver _analyticsDataObserver;
+        private readonly IAnalyticsService _analyticsDataObserver;
 
         public WeaponViewModel(ProjectileFactory projectileFactory, WeaponModel weaponModel,
             IAnalyticsService analyticsDataObserver)

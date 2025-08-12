@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Weapon;
 
 namespace _Project.Scripts.Weapon
 {
@@ -10,15 +9,15 @@ namespace _Project.Scripts.Weapon
 
         private WeaponViewModel _viewModel;
 
-        private void FixedUpdate()
-        {
-            _viewModel.Update();
-        }
-
         public void Initialize(WeaponViewModel viewModel, Sprite sprite)
         {
             _viewModel = viewModel;
             _spriteRenderer.sprite = sprite;
+        }
+
+        private void FixedUpdate()
+        {
+            _viewModel.Update();
         }
     }
 }

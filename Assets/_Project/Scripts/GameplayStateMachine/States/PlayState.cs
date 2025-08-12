@@ -2,10 +2,7 @@
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
-using _Project.Scripts.States;
 using _Project.Scripts.UI.ScoreBox;
-using Factories;
-using Services;
 using UniRx;
 using Zenject;
 
@@ -33,11 +30,11 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _analyticsService = analyticsService;
         }
 
-        public void Enter()
+        public async void Enter()
         {
             _analyticsService.SendStartGameAnalytics();
             _scoreBoxModel.Enable(true);
-            _shipFactory.SpawnShip();
+            await _shipFactory.SpawnShip();
             _enemySpawnService.EnableSpawn(true);
         }
 

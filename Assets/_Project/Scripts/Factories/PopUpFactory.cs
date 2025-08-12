@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Interfaces;
-using Configs;
+using _Project.Scripts.Services;
 using Cysharp.Threading.Tasks;
-using Interfaces;
-using Services;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;
 
-namespace Factories
+namespace _Project.Scripts.Factories
 {
     public class PopUpFactory : IAsyncInitializable
     {

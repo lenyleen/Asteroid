@@ -1,8 +1,5 @@
-﻿using System;
-using _Project.Scripts.UI;
-using Cysharp.Threading.Tasks;
+﻿using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using Zenject;
 
 namespace _Project.Scripts.Services
 {

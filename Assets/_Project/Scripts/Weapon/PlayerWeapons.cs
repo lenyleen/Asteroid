@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Interfaces;
 using UniRx;
@@ -10,13 +9,11 @@ namespace _Project.Scripts.Weapon
 {
     public class PlayerWeapons : MonoBehaviour, IWeaponsHolder
     {
-        [SerializeField] private List<Transform> _heavySlots;
-        [SerializeField] private List<Transform> _mainSlots;
-
         private readonly CompositeDisposable _disposables = new();
-        private readonly HashSet<Transform> _occupiedSlots = new();
+        private readonly HashSet<WeaponView> _addedWeapons = new();
 
         private PlayerWeaponsViewModel _viewModel;
+        private bool _isInitialized;
 
         public void Initialize(PlayerWeaponsViewModel viewModel)
         {
@@ -25,39 +22,42 @@ namespace _Project.Scripts.Weapon
             _viewModel.OnDeath
                 .Subscribe(_ => Die())
                 .AddTo(_disposables);
+
+            _isInitialized = true;
         }
 
-        public Vector3 ApplyWeapon(WeaponType weaponType, WeaponView weapon, Vector3 localPosition)
+        public void ApplyWeapon(WeaponType weaponType, WeaponView weapon, Vector3 localPosition)
         {
-            return weaponType switch
+            switch (weaponType)
             {
-                WeaponType.Main => ApplyWeaponInSlot(_mainSlots, weapon, localPosition),
-                WeaponType.Secondary => ApplyWeaponInSlot(_heavySlots, weapon, localPosition),
-                _ => throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null)
-            };
+                case WeaponType.Main:
+                    ApplyWeapon(weapon, localPosition);
+                    break;
+                case WeaponType.Secondary:
+                    ApplyWeapon(weapon, localPosition);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(weaponType), weaponType, null);
+            }
         }
 
         private void FixedUpdate()
         {
-            _viewModel.Update();
+            if (_isInitialized)
+                _viewModel.Update();
         }
 
-        private Vector3 ApplyWeaponInSlot(List<Transform> slots, WeaponView weaponView, Vector3 localPosition)
+        private void ApplyWeapon(WeaponView weaponView, Vector3 localPosition)
         {
-            var emptySlot = slots.FirstOrDefault(sl => !_occupiedSlots.Contains(sl));
+            _addedWeapons.Add(weaponView);
 
-            if (emptySlot == null) throw new Exception("No empty slot available for weapon application.");
-
-            _occupiedSlots.Add(emptySlot);
-
-            weaponView.transform.SetParent(emptySlot);
+            weaponView.transform.SetParent(transform);
             weaponView.transform.localPosition = localPosition;
-            return emptySlot.transform.localPosition;
         }
 
         private void Die()
         {
-            foreach (var slot in _occupiedSlots) Destroy(slot.gameObject);
+            foreach (var slot in _addedWeapons) Destroy(slot.gameObject);
 
             Destroy(gameObject);
         }

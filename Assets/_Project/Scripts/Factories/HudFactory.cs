@@ -1,12 +1,12 @@
 ﻿using System;
 using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
 using _Project.Scripts.UI;
 using _Project.Scripts.UI.ScoreBox;
 using _Project.Scripts.UI.ShipInfoInfo;
 using _Project.Scripts.UI.Tutorial;
 using _Project.Scripts.UI.WeaponUi;
 using Cysharp.Threading.Tasks;
-using Services;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using Zenject;

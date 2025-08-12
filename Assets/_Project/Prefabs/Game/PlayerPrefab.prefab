@@ -44,8 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af22d848f9374d4aac291d6507596cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _heavySlots: []
-  _mainSlots: []
 --- !u!1 &2905462450423269017
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,4 +222,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <PlayerWeapons>k__BackingField: {fileID: 2390404531035815134}
   <ColliderType>k__BackingField: 0
-  rb: {fileID: 461641050108122700}
+  _rb: {fileID: 461641050108122700}
+  _spriteRenderer: {fileID: 5918662930192734080}
