@@ -2,8 +2,11 @@
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using _Project.Scripts.Services;
+using _Project.Scripts.Static;
+using _Project.Scripts.UI;
 using _Project.Scripts.UI.PopUps;
 using _Project.Scripts.UI.ScoreBox;
+using Cysharp.Threading.Tasks;
 using UniRx;
 
 namespace _Project.Scripts.GameplayStateMachine.States
@@ -18,17 +21,24 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
         private readonly AssetProvider _assetProvider;
         private readonly IAnalyticsService _analyticsService;
+        private readonly IAdvertisementService _advertisementService;
+        private readonly LoadCurtain _loadCurtain;
+        private readonly SceneLoader _sceneLoader;
 
         private CompositeDisposable _disposables = new();
 
         public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
-            AssetProvider assetProvider,  IAnalyticsService analyticsService)
+            AssetProvider assetProvider,  IAnalyticsService analyticsService, LoadCurtain loadCurtain, SceneLoader sceneLoader,
+            IAdvertisementService  advertisementService)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
             _playerProgressProvider = playerProgressProvider;
             _assetProvider = assetProvider;
             _analyticsService = analyticsService;
+            _loadCurtain = loadCurtain;
+            _sceneLoader = sceneLoader;
+            _advertisementService = advertisementService;
         }
 
         public async void Enter()
@@ -45,12 +55,11 @@ namespace _Project.Scripts.GameplayStateMachine.States
             }
             catch (Exception e)
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(e.Message);
-                _assetProvider.Dispose();
-                return; //типа переход в главное меню
+                await ThrowError(e.Message);
+                return;
             }
 
-            Restart(restartDialogResult);
+            await Restart(restartDialogResult);
         }
 
         public void Exit()
@@ -59,16 +68,50 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _disposables = new CompositeDisposable();
         }
 
-        private void Restart(DialogResult result)
+        private async UniTask Restart(DialogResult result)
         {
-            if (result != DialogResult.Yes)
+            try
             {
-                _assetProvider.Dispose();
-                return; //переход в главное меню
-            }
+                if (result != DialogResult.Yes)
+                {
+                    await _advertisementService.ShowInterstitial();
+                    await ToMainMenu();
+                    return;
+                }
 
+                var adResult = await _advertisementService.ShowRewarded();
+                if (adResult)
+                {
+                    await ToMainMenu();
+                    return;
+                }
+
+                ToGameplay();
+            }
+            catch (Exception e)
+            {
+                await ThrowError(e.Message);
+                await ToMainMenu();
+            }
+        }
+
+        private void ToGameplay()
+        {
             _playerProgressProvider.ToDefault();
             _changeStateCommand.Execute(typeof(PlayState));
+        }
+
+        private async UniTask ToMainMenu()
+        {
+            _assetProvider.Dispose();
+            await _loadCurtain.FadeInAsync();
+            await _sceneLoader.LoadScene(Scenes.MainMenu);
+        }
+
+        private async UniTask ThrowError(string message)
+        {
+            await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(message);
+            await ToMainMenu();
         }
     }
 }

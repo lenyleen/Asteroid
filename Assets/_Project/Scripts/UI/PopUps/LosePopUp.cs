@@ -1,10 +1,12 @@
-﻿using _Project.Scripts.Interfaces;
+﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace _Project.Scripts.UI.PopUps
 {
@@ -14,6 +16,13 @@ namespace _Project.Scripts.UI.PopUps
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _closeButton;
         [SerializeField] private string _message;
+
+        [Inject]
+        private void Construct(IAdvertisementService advertisementService)
+        {
+            advertisementService.CanShowInterstitialAds.Subscribe(canShowRewarded =>
+                _restartButton.interactable = canShowRewarded).AddTo(_disposables);
+        }
 
         public async UniTask<DialogResult> ShowDialogAsync(int score)
         {
