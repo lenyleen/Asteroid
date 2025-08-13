@@ -8,6 +8,7 @@ namespace _Project.Scripts.Interfaces
         public IObservable<bool> CanShowRewardedAds { get; }
         public IObservable<bool> CanShowInterstitialAds { get; }
 
+        public UniTask InitializeAsync();
         public UniTask<bool> ShowRewarded();
         public UniTask ShowInterstitial();
     }

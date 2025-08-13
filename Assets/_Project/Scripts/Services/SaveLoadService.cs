@@ -1,4 +1,5 @@
-﻿using _Project.Scripts.DTO;
+﻿using System;
+using _Project.Scripts.DTO;
 using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -18,9 +19,18 @@ namespace _Project.Scripts.Services
 
         public UniTask<bool> TryLoadData(out PlayerProgress data)
         {
-            data = JsonUtility.FromJson<PlayerProgress>(PlayerPrefs.GetString(_playerProgressKey));
+            try
+            {
+                data = JsonUtility.FromJson<PlayerProgress>(PlayerPrefs.GetString(_playerProgressKey));
+            }
+            catch (Exception e)
+            {
+                data = null;
+                Debug.LogWarning("Failed to load player data: " + e.Message);
+                return UniTask.FromResult(false);
+            }
 
-            return UniTask.FromResult(data == null);
+            return UniTask.FromResult(true);
         }
     }
 }

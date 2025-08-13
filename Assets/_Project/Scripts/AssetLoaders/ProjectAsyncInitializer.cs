@@ -1,4 +1,5 @@
 ﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
 using _Project.Scripts.UI;
@@ -9,17 +10,19 @@ using Zenject;
 
 namespace _Project.Scripts.AssetLoaders
 {
-    public class ProjectAssetLoader : MonoBehaviour
+    public class ProjectAsyncInitializer : MonoBehaviour
     {
         private const string AddressesAddress = "GameplayAssetsAddresses";
         private const string LoadCurtainPrefabAddress = "LoadCurtain";
 
         private SceneLoader _sceneLoader;
+        private IAdvertisementService _advertisementService;
 
         [Inject]
-        public void Construct(SceneLoader sceneLoader)
+        public void Construct(SceneLoader sceneLoader, IAdvertisementService advertisementService)
         {
             _sceneLoader = sceneLoader;
+            _advertisementService = advertisementService;
         }
 
         public async void Start()
@@ -41,6 +44,8 @@ namespace _Project.Scripts.AssetLoaders
             projectContextContainer.Bind<GameplayAssetsAddresses>()
                 .FromInstance(gameplayAssetsAddresses)
                 .AsSingle();
+
+            await _advertisementService.InitializeAsync();
 
             await _sceneLoader.LoadScene(Scenes.MainMenu);
         }

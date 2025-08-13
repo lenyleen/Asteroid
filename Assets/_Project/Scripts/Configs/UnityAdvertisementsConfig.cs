@@ -2,6 +2,7 @@
 
 namespace _Project.Scripts.Configs
 {
+    [CreateAssetMenu(fileName = "UnityAdvertisementsConfig", menuName = "ScriptableObject/UnityAdvertisementsConfig", order = 0)]
     public class UnityAdvertisementsConfig : ScriptableObject
     {
         [field: SerializeField] public string AndroidGameId { get; private set; } = "5922168";

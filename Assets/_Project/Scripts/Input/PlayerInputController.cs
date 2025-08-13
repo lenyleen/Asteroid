@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Zenject;
 
 namespace _Project.Scripts.Input
 {
-    public class PlayerInputController : ITickable
+    public class PlayerInputController : ITickable, IDisposable
     {
         private readonly GameInput _gameInput;
 
@@ -40,6 +41,12 @@ namespace _Project.Scripts.Input
         {
             public bool IsMainFirePressed;
             public bool IsHeavyFirePressed;
+        }
+
+        public void Dispose()
+        {
+            _gameInput.Disable();
+            _gameInput.Dispose();
         }
     }
 }

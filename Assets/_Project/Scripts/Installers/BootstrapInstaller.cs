@@ -6,12 +6,12 @@ namespace _Project.Scripts.Installers
 {
     public class BootstrapInstaller : MonoInstaller<BootstrapInstaller>
     {
-        [SerializeField] ProjectAssetLoader _projectAssetLoader;
+        [SerializeField] ProjectAsyncInitializer projectAsyncInitializer;
 
         public override void InstallBindings()
         {
-            Container.Bind<ProjectAssetLoader>()
-                .FromInstance(_projectAssetLoader)
+            Container.Bind<ProjectAsyncInitializer>()
+                .FromInstance(projectAsyncInitializer)
                 .AsSingle();
         }
     }

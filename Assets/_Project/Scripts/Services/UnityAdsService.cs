@@ -44,7 +44,7 @@ namespace _Project.Scripts.Services
 
         public async UniTask<bool> ShowRewarded()
         {
-            if (_canShowRewardedAds.Value)
+            if (!_canShowRewardedAds.Value)
                 return false;
             EnableAdShowing(false);
 
@@ -59,7 +59,7 @@ namespace _Project.Scripts.Services
 
         public async UniTask ShowInterstitial()
         {
-            if(_canShowInterstitialAds.Value)
+            if(!_canShowInterstitialAds.Value)
                 return;
 
             EnableAdShowing(false);

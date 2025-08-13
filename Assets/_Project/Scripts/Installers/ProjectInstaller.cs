@@ -12,6 +12,9 @@ namespace _Project.Scripts.Installers
 
             Container.BindInterfacesAndSelfTo<SceneLoader>()
                 .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<UnityAdsService>()
+                .AsSingle();
         }
     }
 }

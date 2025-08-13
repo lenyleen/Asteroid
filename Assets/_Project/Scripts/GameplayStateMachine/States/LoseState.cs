@@ -80,7 +80,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
                 }
 
                 var adResult = await _advertisementService.ShowRewarded();
-                if (adResult)
+                if (!adResult)
                 {
                     await ToMainMenu();
                     return;
@@ -106,6 +106,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _assetProvider.Dispose();
             await _loadCurtain.FadeInAsync();
             await _sceneLoader.LoadScene(Scenes.MainMenu);
+            await _loadCurtain.FadeOutAsync();
         }
 
         private async UniTask ThrowError(string message)
