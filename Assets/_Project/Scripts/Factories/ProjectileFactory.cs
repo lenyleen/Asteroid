@@ -41,10 +41,11 @@ namespace _Project.Scripts.Factories
 
             var behaviour = CreateBehaviour(type, positionProvider);
 
-            var sprite = await _assetProvider.Load<Sprite>(data.Sprite);
+            var sprite = await _assetProvider.Load<Sprite>(data.SpriteAddress);
 
-            var projectileInitData = new ProjectileInitData(sprite,behaviour, spawnPosition,
-                positionProvider.Rotation.Value, positionProvider.Velocity.Value, data.ColliderConfig, data.LifetimeInSeconds);
+            var projectileInitData = new ProjectileInitData(sprite, behaviour, spawnPosition,
+                positionProvider.Rotation.Value, positionProvider.Velocity.Value, data.ColliderConfig,
+                data.LifetimeInSeconds);
 
             _pool.Spawn(projectileInitData, prj => _pool.Despawn(prj));
         }

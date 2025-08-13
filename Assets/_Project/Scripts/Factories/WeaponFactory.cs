@@ -38,7 +38,7 @@ namespace _Project.Scripts.Factories
             var viewModel = _instantiator.Instantiate<WeaponViewModel>(new object[] { model });
             viewModel.Initialize();
 
-            var sprite = await _assetProvider.Load<Sprite>(config.Sprite);
+            var sprite = await _assetProvider.Load<Sprite>(config.SpriteAddress);
 
             var view = _instantiator.InstantiatePrefabForComponent<WeaponView>(_prefab);
             weaponsHolder.ApplyWeapon(config.Type, view, position);

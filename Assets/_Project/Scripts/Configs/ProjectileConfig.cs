@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace _Project.Scripts.Configs
 {
@@ -7,7 +6,7 @@ namespace _Project.Scripts.Configs
     public class ProjectileConfig : ScriptableObject
     {
         [field: SerializeField] public ProjectileType Type { get; private set; }
-        [field: SerializeField] public AssetReferenceSprite Sprite { get; private set; }
+        [field: SerializeField] public string SpriteAddress { get; private set; }
         [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
         [field: SerializeField] public float Speed { get; private set; }
         [field: SerializeField] public float LifetimeInSeconds { get; private set; }

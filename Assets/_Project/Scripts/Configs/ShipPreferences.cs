@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.AddressableAssets;
 
 namespace _Project.Scripts.Configs
 {
@@ -13,6 +12,6 @@ namespace _Project.Scripts.Configs
         [field: SerializeField] public float RotationSpeed { get; private set; } = 200f;
         [field: SerializeField] public float Friction { get; private set; } = 0.5f;
         [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
-        [field: SerializeField] public AssetReference PlayerShipPrefabReference { get; private set; }
+        [field: SerializeField] public string PlayerShipPrefabAddress { get; private set; }
     }
 }

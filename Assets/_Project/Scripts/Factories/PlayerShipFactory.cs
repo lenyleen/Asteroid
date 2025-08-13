@@ -27,8 +27,6 @@ namespace _Project.Scripts.Factories
         private Ship _shipPrefab;
         private Sprite _shipSprite;
         private ShipViewModel _shipViewModel;
-        private WeaponConfig _mainWeaponConfig;
-        private WeaponConfig _heavyWeaponConfig;
 
         public PlayerShipFactory(WeaponFactory weaponFactory, ShipPreferences shipPreferences,
             PlayerInputController playerInputController, IInstantiator instantiator,
@@ -47,13 +45,10 @@ namespace _Project.Scripts.Factories
         public async UniTask InitializeAsync()
         {
             _shipViewConfig = await _assetProvider.Load<ShipViewConfig>(ShipViewConfigAddress);
-            _shipPrefab = (await _assetProvider.Load<GameObject>(_shipPreferences.PlayerShipPrefabReference))
+            _shipPrefab = (await _assetProvider.Load<GameObject>(_shipPreferences.PlayerShipPrefabAddress))
                 .GetComponent<Ship>();
 
-            _shipSprite = await _assetProvider.Load<Sprite>(_shipViewConfig.ShipSprite);
-
-            _mainWeaponConfig = await _assetProvider.Load<WeaponConfig>(_shipViewConfig.MainWeaponConfig);
-            _heavyWeaponConfig = await _assetProvider.Load<WeaponConfig>(_shipViewConfig.HeavyWeaponConfig);
+            _shipSprite = await _assetProvider.Load<Sprite>(_shipViewConfig.ShipSpriteAdress);
         }
 
         public async UniTask SpawnShip()
@@ -79,10 +74,10 @@ namespace _Project.Scripts.Factories
         private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons)
         {
             var heavyWeapons =
-                await CreateWeapons(_heavyWeaponConfig, _shipViewConfig.HeavyWeaponSlots, playerWeapons);
+                await CreateWeapons(_shipViewConfig.HeavyWeaponConfig, _shipViewConfig.HeavyWeaponSlots, playerWeapons);
 
             var mainWeapons =
-                await CreateWeapons(_mainWeaponConfig, _shipViewConfig.LightWeaponSlots, playerWeapons);
+                await CreateWeapons(_shipViewConfig.MainWeaponConfig, _shipViewConfig.LightWeaponSlots, playerWeapons);
 
             var weaponsViewModel = _instantiator.Instantiate<PlayerWeaponsViewModel>(new object[]
             {
