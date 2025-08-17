@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Enemies;
+using _Project.Scripts.Installers;
 using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
 using Firebase;
@@ -13,21 +14,19 @@ namespace _Project.Scripts.Services
     {
         private readonly Dictionary<string, int> _shotBullets = new();
         private readonly Dictionary<EnemyType, int> _killedEnemies = new();
+        private readonly FirebaseInstaller _firebaseInstaller;
 
-        private bool _isReady;
+        private bool _isReady => _firebaseInstaller.IsInitialized;
+
+        public FirebaseAnalyticsService(FirebaseInstaller firebaseInstaller)
+        {
+            _firebaseInstaller = firebaseInstaller;
+        }
 
         public async UniTask InitializeAsync()
         {
-            var staus = await FirebaseApp.CheckAndFixDependenciesAsync();
-
-            if (staus != DependencyStatus.Available)
-            {
-                Debug.Log("Couldn't resolve all Firebase dependencies");
-                return;
-            }
-
-            _isReady = true;
-            Debug.Log("Firebase is ready");
+            if(!_firebaseInstaller.IsInitialized)
+                await _firebaseInstaller.InitializeAsync();
         }
 
         public void SendStartGameAnalytics()

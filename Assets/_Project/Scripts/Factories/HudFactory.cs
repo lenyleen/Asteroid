@@ -13,14 +13,14 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class HudFactory : IAsyncInitializable
+    public class HudFactory : IInGameInitializable
     {
-        private readonly AssetProvider _assetProvider;
+        private readonly IScenesAssetProvider _assetProvider;
         private readonly AssetReference _hudPrefabReference;
         private readonly DiContainer _container;
         private readonly Transform _hudParent;
 
-        public HudFactory(AssetProvider assetProvider, AssetReference hudPrefabReference, DiContainer container,
+        public HudFactory(IScenesAssetProvider assetProvider, AssetReference hudPrefabReference, DiContainer container,
             Transform hudParent)
         {
             _hudPrefabReference = hudPrefabReference;

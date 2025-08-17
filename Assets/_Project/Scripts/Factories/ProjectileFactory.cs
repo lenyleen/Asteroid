@@ -1,36 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Projectiles;
-using _Project.Scripts.Services;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class ProjectileFactory : IAsyncInitializable
+    public class ProjectileFactory : IInitializable
     {
-        private const string ProjectileConfigLabel = "ProjectileConfigs";
+        private const string ProjectilesRemoteConfigsKeys = "ActiveProjectilesKeys";
 
         private readonly Projectile.Pool _pool;
-        private readonly AssetProvider _assetProvider;
+        private readonly IScenesAssetProvider _assetProvider;
+        private readonly IRemoteConfigService _remoteConfigService;
 
-        private Dictionary<ProjectileType, ProjectileConfig> _projectileDatas;
+        private Dictionary<ProjectileType, ProjectileConfig> _projectileDatas = new ();
 
-        public ProjectileFactory(Projectile.Pool pool, AssetProvider assetProvider)
+        public ProjectileFactory(Projectile.Pool pool, IScenesAssetProvider assetProvider,
+            IRemoteConfigService remoteConfigService)
         {
             _pool = pool;
             _assetProvider = assetProvider;
+            _remoteConfigService = remoteConfigService;
         }
 
-        public async UniTask InitializeAsync()
+        public void Initialize()
         {
-            var projectileConfigs =
-                await _assetProvider.LoadMany<ProjectileConfig>(ProjectileConfigLabel);
+            var projectilesKeys = _remoteConfigService.GetConfig<List<string>>(ProjectilesRemoteConfigsKeys);
 
-            _projectileDatas = projectileConfigs.ToDictionary(data => data.Type, data => data);
+            foreach (var projectileKey in projectilesKeys)
+            {
+                var config = _remoteConfigService.GetConfig<ProjectileConfig>(projectileKey);
+                _projectileDatas.Add(config.Type, config);
+            }
         }
 
         public async UniTask Create(ProjectileType type, Vector3 spawnPosition,

@@ -26,7 +26,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 22b61a2f41130894ab36ab60bce12dc1
-    m_Address: Exhaust_Frame_02_png_processed
+    m_Address: BulletProjectileSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7e4bd15416aba2e468f934da30d5931f
-    m_Address: Asteroid 04_png_processed
+    m_Address: AsteroidSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a1048d7f498d739439d4eef604249f5e
-    m_Address: GunTurret_ExampleGun_png_processed
+    m_Address: BulletGunSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -56,7 +56,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd780d5682f2ff2419e2cc6ea20223a5
-    m_Address: Laser_Medium_png_processed
+    m_Address: LaserProjectileSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d7818bef7aedd5c43b60905cdacc2a46
-    m_Address: Asteroid 02_png_processed
+    m_Address: LilAsteroidSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -76,7 +76,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e16a7b8e0d10bef498af3cca5733347f
-    m_Address: Cover_Blue_png_processed
+    m_Address: UFOSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: fe9c69a21aa0b354b84bdd1fd2ccb791
-    m_Address: GunTurret_Green_png_processed
+    m_Address: LaserGunSprite
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

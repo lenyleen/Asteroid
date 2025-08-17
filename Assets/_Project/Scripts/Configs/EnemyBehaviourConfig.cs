@@ -1,12 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "EnemyBehaviourConfig", menuName = "ScriptableObject/EnemyBehaviourConfig")]
-    public class EnemyBehaviourConfig : ScriptableObject
+    [Serializable]
+    public class EnemyBehaviourConfig
     {
-        [field: SerializeField] public float Acceleration { get; private set; }
-        [field: SerializeField] public float AngularAcceleration { get; private set; }
-        [field: SerializeField] public float MaxSpeed { get; private set; }
+        public float Acceleration { get; private set; }
+
+        public float AngularAcceleration { get; private set; }
+
+        public float MaxSpeed { get; private set; }
+
+        [JsonConstructor]
+        public EnemyBehaviourConfig(float acceleration, float angularAcceleration, float maxSpeed)
+        {
+            Acceleration = acceleration;
+            AngularAcceleration = angularAcceleration;
+            MaxSpeed = maxSpeed;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using _Project.Scripts.Configs;
+﻿using System.Collections.Generic;
+using _Project.Scripts.Configs;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
@@ -17,37 +18,55 @@ namespace _Project.Scripts.AssetLoaders
 
         private SceneLoader _sceneLoader;
         private IAdvertisementService _advertisementService;
+        private List<IBootstrapInitializable> _bootstrapInitializables;
+        private List<IProjectImportanceInitializable> _projectImportanceInitializables;
+        private IProjectAssetProvider  _assetProvider;
 
         [Inject]
-        public void Construct(SceneLoader sceneLoader, IAdvertisementService advertisementService)
+        public void Construct(List<IBootstrapInitializable> bootstrapInitializables,
+            List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider)
         {
-            _sceneLoader = sceneLoader;
-            _advertisementService = advertisementService;
+            _projectImportanceInitializables = projectImportanceInitializables;
+            _bootstrapInitializables = bootstrapInitializables;
+            _assetProvider = assetProvider;
         }
 
         public async void Start()
         {
             var projectContextContainer = ProjectContext.Instance.Container;
 
-            var loadCurtain = (await Addressables
-                .InstantiateAsync(LoadCurtainPrefabAddress).ToUniTask()).GetComponent<LoadCurtain>();
+            var loadCurtainPrefab = (await _assetProvider.Load<GameObject>(LoadCurtainPrefabAddress))
+                .GetComponent<LoadCurtain>();
+
+            var loadCurtain = Instantiate<LoadCurtain>(loadCurtainPrefab);
             DontDestroyOnLoad(loadCurtain);
+
             loadCurtain.gameObject.SetActive(false);
 
             projectContextContainer.Bind<LoadCurtain>()
                 .FromInstance(loadCurtain)
                 .AsSingle();
 
-            var gameplayAssetsAddresses = await Addressables
-                .LoadAssetAsync<GameplayAssetsAddresses>(AddressesAddress).ToUniTask();
+            var gameplayAssetsAddresses = await _assetProvider.Load<GameplayAssetsAddresses>(AddressesAddress);
 
             projectContextContainer.Bind<GameplayAssetsAddresses>()
                 .FromInstance(gameplayAssetsAddresses)
                 .AsSingle();
 
-            await _advertisementService.InitializeAsync();
+            _sceneLoader = new SceneLoader(loadCurtain);
+            projectContextContainer.Bind<SceneLoader>()
+                .AsSingle();
+
+            await InitializeInitializables(_projectImportanceInitializables);
+            await InitializeInitializables(_bootstrapInitializables);
 
             await _sceneLoader.LoadScene(Scenes.MainMenu);
+        }
+
+        private async UniTask InitializeInitializables<T>(List<T> initializables) where T : IAsyncInitializable
+        {
+            foreach (var asyncInitializable in initializables)
+                await asyncInitializable.InitializeAsync();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Enemies;
 using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -11,12 +12,11 @@ namespace _Project.Scripts.Installers
     public class EnemyInstaller : MonoInstaller<EnemyInstaller>
     {
         [SerializeField] private AssetReference _enemyPrefabReference;
-        [SerializeField] private SpawnConfig spawnConfig;
 
-        private AssetProvider _assetProvider;
+        private IScenesAssetProvider _assetProvider;
 
         [Inject]
-        public void Construct(AssetProvider assetProvider)
+        public void Construct(IScenesAssetProvider assetProvider)
         {
             _assetProvider = assetProvider;
         }
@@ -25,10 +25,11 @@ namespace _Project.Scripts.Installers
         {
             InitializeEnemyPool();
 
-            Container.Bind<EnemyFactory>().AsSingle();
+            Container.Bind<EnemyFactory>()
+                .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<EnemySpawnService>().AsSingle()
-                .WithArguments(spawnConfig);
+            Container.BindInterfacesAndSelfTo<EnemySpawnService>()
+                .AsSingle();
         }
 
         void InitializeEnemyPool()

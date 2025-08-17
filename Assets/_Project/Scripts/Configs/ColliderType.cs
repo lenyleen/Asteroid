@@ -2,9 +2,9 @@
 {
     public enum ColliderType
     {
-        Player,
-        Enemy,
-        Projectile,
-        KillBox
+        Player = 0,
+        Enemy = 1,
+        Projectile = 2,
+        KillBox = 3
     }
 }

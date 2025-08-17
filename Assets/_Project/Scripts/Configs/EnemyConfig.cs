@@ -1,17 +1,38 @@
-﻿using _Project.Scripts.Enemies;
+﻿using System;
+using _Project.Scripts.Enemies;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "EnemyConfig", menuName = "ScriptableObject/EnemyConfig")]
-    public class EnemyConfig : ScriptableObject
+    [Serializable]
+    public class EnemyConfig
     {
-        [field: SerializeField] public string SpriteAddress { get; private set; }
-        [field: SerializeField] public int Health { get; private set; }
-        [field: SerializeField] public EnemyType Type { get; private set; }
-        [field: SerializeField] public int Score { get; private set; }
-        [field: SerializeField] public EnemyBehaviourConfig BehaviourConfig { get; private set; }
-        [field: SerializeField] public float SpawnTimeInSeconds { get; private set; }
-        [field: SerializeField] public ColliderConfig CollisionConfig { get; private set; }
+        public string SpriteAddress { get; private set; }
+
+        public int Health { get; private set; }
+
+        public EnemyType Type { get; private set; }
+
+        public int Score { get; private set; }
+
+        public EnemyBehaviourConfig BehaviourConfig { get; private set; }
+
+        public float SpawnTimeInSeconds { get; private set; }
+
+        public ColliderConfig CollisionConfig { get; private set; }
+
+        [JsonConstructor]
+        public EnemyConfig(string spriteAddress, int health, EnemyType type, int score,
+            EnemyBehaviourConfig behaviourConfig, float spawnTimeInSeconds, ColliderConfig collisionConfig)
+        {
+            SpriteAddress = spriteAddress;
+            Health = health;
+            Type = type;
+            Score = score;
+            BehaviourConfig = behaviourConfig;
+            SpawnTimeInSeconds = spawnTimeInSeconds;
+            CollisionConfig = collisionConfig;
+        }
     }
 }

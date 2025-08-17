@@ -1,12 +1,24 @@
-﻿using UnityEngine;
+﻿using System;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "UnityAdvertisementsConfig", menuName = "ScriptableObject/UnityAdvertisementsConfig", order = 0)]
-    public class UnityAdvertisementsConfig : ScriptableObject
+    [Serializable]
+    public class UnityAdvertisementsConfig
     {
-        [field: SerializeField] public string AndroidGameId { get; private set; } = "5922168";
-        [field: SerializeField] public string RewardedAdId { get; private set; } = "Rewarded_Android";
-        [field: SerializeField] public string InterstitialAdId { get; private set; } = "Interstitial_Android";
+        public string AndroidGameId { get; private set; }
+
+        public string RewardedAdId { get; private set; }
+
+        public string InterstitialAdId { get; private set; }
+
+        [JsonConstructor]
+        public UnityAdvertisementsConfig(string androidGameId, string rewardedAdId, string interstitialAdId)
+        {
+            AndroidGameId = androidGameId;
+            RewardedAdId = rewardedAdId;
+            InterstitialAdId = interstitialAdId;
+        }
     }
 }

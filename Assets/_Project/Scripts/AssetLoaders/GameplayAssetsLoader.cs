@@ -1,4 +1,5 @@
 ﻿using _Project.Scripts.Configs;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
 using Cysharp.Threading.Tasks;
@@ -11,17 +12,17 @@ namespace _Project.Scripts.AssetLoaders
     {
         private GameplayAssetsAddresses _gameplayAssetsAddresses;
         private SceneLoader _sceneLoader;
-        private AssetProvider _assetProvider;
+        private IScenesAssetProvider _assetProvider;
 
         [Inject]
-        public void Construct(SceneLoader sceneLoader, AssetProvider assetProvider, GameplayAssetsAddresses gameplayAssetsAddresses)
+        public void Construct(SceneLoader sceneLoader, IScenesAssetProvider assetProvider, GameplayAssetsAddresses gameplayAssetsAddresses)
         {
             _sceneLoader = sceneLoader;
             _assetProvider = assetProvider;
             _gameplayAssetsAddresses = gameplayAssetsAddresses;
         }
 
-        public async void Awake()
+        public async void Start()
         {
             Debug.Log($"SceneLoader exists? {ProjectContext.Instance.Container.HasBinding<SceneLoader>()}");
 

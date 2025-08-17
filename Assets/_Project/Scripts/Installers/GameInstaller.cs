@@ -32,8 +32,6 @@ namespace _Project.Scripts.Installers
 
             Container.BindInterfacesAndSelfTo<GameplayStateMachine.GameplayStateMachine>()
                 .AsSingle();
-
-            BindAnalytics();
         }
 
         private void BindStates()
@@ -45,12 +43,6 @@ namespace _Project.Scripts.Installers
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<LoseState>()
-                .AsSingle();
-        }
-
-        private void BindAnalytics()
-        {
-            Container.BindInterfacesAndSelfTo<FirebaseAnalyticsService>()
                 .AsSingle();
         }
     }

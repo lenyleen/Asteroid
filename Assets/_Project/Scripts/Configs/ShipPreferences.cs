@@ -1,17 +1,40 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Numerics;
+using Newtonsoft.Json;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "PlayerPreferences", menuName = "ScriptableObject/PlayerPreferences")]
-    public class ShipPreferences : ScriptableObject
+    [Serializable]
+    public class ShipPreferences
     {
-        [field: SerializeField] public Vector3 StartPosition { get; private set; }
-        [field: SerializeField] public int Health { get; private set; } = 1;
-        [field: SerializeField] public float Acceleration { get; private set; } = 5f;
-        [field: SerializeField] public float MaxSpeed { get; private set; } = 10f;
-        [field: SerializeField] public float RotationSpeed { get; private set; } = 200f;
-        [field: SerializeField] public float Friction { get; private set; } = 0.5f;
-        [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
-        [field: SerializeField] public string PlayerShipPrefabAddress { get; private set; }
+        public Vector3 StartPosition { get; private set; }
+
+        public int Health { get; private set; }
+
+        public float Acceleration { get; private set; }
+
+        public float MaxSpeed { get; private set; }
+
+        public float RotationSpeed { get; private set; }
+
+        public float Friction { get; private set; }
+
+        public ColliderConfig ColliderConfig { get; private set; }
+
+        public string PlayerShipPrefabAddress { get; private set; }
+
+        [JsonConstructor]
+        public ShipPreferences(Vector3 startPosition, int health, float acceleration, float maxSpeed,
+            float rotationSpeed, float friction, ColliderConfig colliderConfig, string playerShipPrefabAddress)
+        {
+            StartPosition = startPosition;
+            Health = health;
+            Acceleration = acceleration;
+            MaxSpeed = maxSpeed;
+            RotationSpeed = rotationSpeed;
+            Friction = friction;
+            ColliderConfig = colliderConfig;
+            PlayerShipPrefabAddress = playerShipPrefabAddress;
+        }
     }
 }

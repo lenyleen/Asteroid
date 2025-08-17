@@ -11,17 +11,17 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class PopUpFactory : IAsyncInitializable
+    public class PopUpFactory : IBootstrapInitializable
     {
         private readonly PopUpsConfig _popUpsConfig;
-        private readonly AssetProvider _assetProvider;
+        private readonly IProjectAssetProvider _assetProvider;
         private readonly Transform _popUpParent;
         private readonly IInstantiator _instantiator;
 
         private Dictionary<Type, AssetReferenceGameObject> _popUpPrefabs = new ();
 
         public PopUpFactory(PopUpsConfig config, Transform popUpParent,
-            IInstantiator instantiator, AssetProvider assetProvider)
+            IInstantiator instantiator, IProjectAssetProvider assetProvider)
         {
             _popUpsConfig = config;
             _assetProvider = assetProvider;
@@ -43,6 +43,8 @@ namespace _Project.Scripts.Factories
                 }
 
                 _popUpPrefabs.TryAdd(component.GetType(),reference);
+
+                _assetProvider.RemoveLoadedAsset(reference);
             }
         }
 

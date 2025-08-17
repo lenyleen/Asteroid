@@ -13,9 +13,7 @@ namespace _Project.Scripts.Installers
 {
     public class UiInstaller : MonoInstaller<UiInstaller>
     {
-        [SerializeField] private Transform _popUpParent;
         [SerializeField] private Transform _hudParent;
-        [SerializeField] private PopUpsConfig _popUpsConfig;
 
         [Header("Asset References")]
         [SerializeField] private AssetReference _weaponDataDisplayerPrefabReference;
@@ -23,13 +21,6 @@ namespace _Project.Scripts.Installers
 
         public override void InstallBindings()
         {
-            Container.BindInterfacesAndSelfTo<PopUpFactory>()
-                .AsSingle()
-                .WithArguments(_popUpsConfig, _popUpParent);
-
-            Container.Bind<UiService>()
-                .AsSingle();
-
             Container.BindInterfacesAndSelfTo<WeaponUiDataDisplayerFactory>()
                 .AsSingle()
                 .WithArguments(_weaponDataDisplayerPrefabReference);

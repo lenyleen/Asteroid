@@ -1,13 +1,25 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "ColliderConfig", menuName = "ScriptableObject/ColliderConfig")]
-    public class ColliderConfig : ScriptableObject
+    [Serializable]
+    public class ColliderConfig
     {
-        [field: SerializeField] public ColliderType ColliderType { get; private set; }
-        [field: SerializeField] public int Damage { get; private set; }
-        [field: SerializeField] public List<ColliderType> AcceptableColliderTypes { get; private set; }
+        public ColliderType ColliderType { get; private set; }
+
+        public int Damage { get; private set; }
+
+        public List<ColliderType> AcceptableColliderTypes { get; private set; }
+
+        [JsonConstructor]
+        public ColliderConfig(ColliderType colliderType, int damage, List<ColliderType> acceptableColliderTypes)
+        {
+            ColliderType = colliderType;
+            Damage = damage;
+            AcceptableColliderTypes = acceptableColliderTypes;
+        }
     }
 }

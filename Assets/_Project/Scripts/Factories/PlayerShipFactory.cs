@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using _Project.Scripts.Configs;
+using _Project.Scripts.Extensions;
 using _Project.Scripts.Input;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Player;
@@ -11,40 +12,43 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class PlayerShipFactory : IAsyncInitializable
+    public class PlayerShipFactory : IInGameInitializable
     {
-        private const string ShipViewConfigAddress = "CommonShipConfig"; //плейсхолдер до задания по скинам для корабля
+        private const string ShipViewRemoteConfig = "CommonShipConfig"; //плейсхолдер до задания по скинам для корабля
+        private const string PlayerSihipConfigRemoteKey = "PlayerShipConfig";
 
         private readonly IInstantiator _instantiator;
         private readonly IPlayerStateProviderService _playerDataProviderService;
         private readonly PlayerInputController _playerInputController;
-        private readonly ShipPreferences _shipPreferences;
         private readonly IPlayerWeaponInfoProviderService _playerWeaponInfoProviderService;
         private readonly WeaponFactory _weaponFactory;
-        private readonly AssetProvider _assetProvider;
+        private readonly IScenesAssetProvider _assetProvider;
+        private readonly IRemoteConfigService _remoteConfigService;
 
         private ShipViewConfig _shipViewConfig;
+        private ShipPreferences _shipPreferences;
         private Ship _shipPrefab;
         private Sprite _shipSprite;
         private ShipViewModel _shipViewModel;
 
-        public PlayerShipFactory(WeaponFactory weaponFactory, ShipPreferences shipPreferences,
-            PlayerInputController playerInputController, IInstantiator instantiator,
-            IPlayerStateProviderService playerDataProviderService, AssetProvider assetProvider,
-            IPlayerWeaponInfoProviderService playerWeaponInfoProviderService)
+        public PlayerShipFactory(WeaponFactory weaponFactory, PlayerInputController playerInputController, IInstantiator instantiator,
+            IPlayerStateProviderService playerDataProviderService, IScenesAssetProvider assetProvider,
+            IPlayerWeaponInfoProviderService playerWeaponInfoProviderService, IRemoteConfigService remoteConfigService)
         {
             _weaponFactory = weaponFactory;
             _playerInputController = playerInputController;
             _playerDataProviderService = playerDataProviderService;
             _playerWeaponInfoProviderService = playerWeaponInfoProviderService;
-            _shipPreferences = shipPreferences;
             _assetProvider = assetProvider;
             _instantiator = instantiator;
+            _remoteConfigService = remoteConfigService;
         }
 
         public async UniTask InitializeAsync()
         {
-            _shipViewConfig = await _assetProvider.Load<ShipViewConfig>(ShipViewConfigAddress);
+            _shipPreferences = _remoteConfigService.GetConfig<ShipPreferences>(PlayerSihipConfigRemoteKey);
+            _shipViewConfig = _remoteConfigService.GetConfig<ShipViewConfig>(ShipViewRemoteConfig);
+
             _shipPrefab = (await _assetProvider.Load<GameObject>(_shipPreferences.PlayerShipPrefabAddress))
                 .GetComponent<Ship>();
 
@@ -61,7 +65,7 @@ namespace _Project.Scripts.Factories
 
             var shipView = _instantiator.InstantiatePrefabForComponent<Ship>(
                 _shipPrefab,
-                _shipPreferences.StartPosition,
+                _shipPreferences.StartPosition.ToUnityVector3(),
                 Quaternion.identity,
                 null
             );
@@ -74,10 +78,11 @@ namespace _Project.Scripts.Factories
         private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons)
         {
             var heavyWeapons =
-                await CreateWeapons(_shipViewConfig.HeavyWeaponConfig, _shipViewConfig.HeavyWeaponSlots, playerWeapons);
+                await CreateWeapons(_shipViewConfig.HeavyWeaponType, _shipViewConfig.HeavyWeaponSlots, playerWeapons,
+                    true);
 
             var mainWeapons =
-                await CreateWeapons(_shipViewConfig.MainWeaponConfig, _shipViewConfig.LightWeaponSlots, playerWeapons);
+                await CreateWeapons(_shipViewConfig.MainWeaponType, _shipViewConfig.LightWeaponSlots, playerWeapons);
 
             var weaponsViewModel = _instantiator.Instantiate<PlayerWeaponsViewModel>(new object[]
             {
@@ -89,20 +94,22 @@ namespace _Project.Scripts.Factories
             playerWeapons.Initialize(weaponsViewModel);
         }
 
-        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponConfig config, List<Vector3> positions,
-            PlayerWeapons playerWeapons)
+        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponType type, List<System.Numerics.Vector3> positions,
+            PlayerWeapons playerWeapons, bool addToUi =false)
         {
             var weapons = new List<WeaponViewModel>();
             var weaponIndex = 1;
 
             foreach (var position in positions)
             {
-                var name = $"{config.Type} {weaponIndex}";
-                var newWeapon = await _weaponFactory.Create(config, name,
-                    playerWeapons, position);
+                var name = $"{type} {weaponIndex}";
+                var newWeapon = await _weaponFactory.Create(type, name,
+                    playerWeapons, position.ToUnityVector3());
 
                 weapons.Add(newWeapon);
-                _playerWeaponInfoProviderService.ApplyWeaponInfoProvider(newWeapon);
+
+                if(addToUi)
+                    _playerWeaponInfoProviderService.ApplyWeaponInfoProvider(newWeapon);
 
                 weaponIndex++;
             }

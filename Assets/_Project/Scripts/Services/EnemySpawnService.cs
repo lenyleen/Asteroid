@@ -10,44 +10,51 @@ using _Project.Scripts.Static;
 using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
+using Zenject;
 
 namespace _Project.Scripts.Services
 {
-    public class EnemySpawnService : IAsyncInitializable, IDisposable, IEnemyDiedNotifier
+    public class EnemySpawnService : IInitializable, IDisposable, IEnemyDiedNotifier
     {
-        private const string EnemyConfigsLabel = "EnemiesConfigs";
+        private const string EnemiesRemoteConfigsKey = "ActiveEnemiesKeys";
+        private const string SpawnRemoteConfigKey = "SpawnConfig";
 
         public IObservable<KilledEnemyData> OnEnemyKilled => _enemyDiedCommand;
 
         private readonly Camera _camera;
-        private readonly AssetProvider _assetProvider;
         private readonly CompositeDisposable _disposable = new();
         private readonly EnemyFactory _enemyFactory;
-        private readonly SpawnConfig _spawnConfig;
         private readonly HashSet<ISpawnableEnemy> _spawnedEnemies;
         private readonly ReactiveCommand<KilledEnemyData> _enemyDiedCommand = new();
         private readonly IAnalyticsService _analyticsService;
+        private readonly IRemoteConfigService _remoteConfigService;
 
         private bool _canSpawn;
+        private SpawnConfig _spawnConfig;
         private CompositeDisposable _spawnDisposable = new();
-        private Dictionary<EnemyType, EnemyConfig> _enemiesData;
+        private Dictionary<EnemyType, EnemyConfig> _enemiesData = new ();
 
-        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory, SpawnConfig spawnConfig,
-            AssetProvider assetProvider, IAnalyticsService analyticsService)
+        public EnemySpawnService(Camera camera, EnemyFactory enemyFactory,
+            IRemoteConfigService remoteConfigService, IAnalyticsService analyticsService)
         {
             _camera = camera;
             _enemyFactory = enemyFactory;
-            _spawnConfig = spawnConfig;
             _spawnedEnemies = new HashSet<ISpawnableEnemy>();
-            _assetProvider = assetProvider;
+            _remoteConfigService = remoteConfigService;
             _analyticsService = analyticsService;
         }
 
-        public async UniTask InitializeAsync()
+        public void Initialize()
         {
-            var enemyConfigs = await _assetProvider.LoadMany<EnemyConfig>(EnemyConfigsLabel);
+            var enemiesKeys = _remoteConfigService.GetConfig<List<string>>(EnemiesRemoteConfigsKey);
 
-            _enemiesData = enemyConfigs.ToDictionary(data => data.Type, data => data);
+            foreach (var key in enemiesKeys)
+            {
+                var config = _remoteConfigService.GetConfig<EnemyConfig>(key);
+                _enemiesData.Add(config.Type, config);
+            }
+
+            _spawnConfig = _remoteConfigService.GetConfig<SpawnConfig>(SpawnRemoteConfigKey);
 
             foreach (var enemyData in _enemiesData.Values)
                 Observable.Interval(TimeSpan.FromSeconds(enemyData.SpawnTimeInSeconds))

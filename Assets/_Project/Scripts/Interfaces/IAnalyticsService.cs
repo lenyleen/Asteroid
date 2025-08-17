@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 
 namespace _Project.Scripts.Interfaces
 {
-    public interface IAnalyticsService : IAsyncInitializable
+    public interface IAnalyticsService : IBootstrapInitializable
     {
         public void SendStartGameAnalytics();
         public void SendEndGameAnalytics();

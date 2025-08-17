@@ -1,11 +1,21 @@
-﻿using UnityEngine;
+﻿using System;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "SpawnConfig", menuName = "ScriptableObject/SpawnConfig")]
+    [Serializable]
     public class SpawnConfig : ScriptableObject
     {
-        [field: SerializeField] public int MaxEnemies { get; private set; }
-        [field: SerializeField] public int SpawnLilAsteroidCount { get; private set; }
+        public int MaxEnemies { get; private set; }
+
+        public int SpawnLilAsteroidCount { get; private set; }
+
+        [JsonConstructor]
+        public SpawnConfig(int maxEnemies, int spawnLilAsteroidCount)
+        {
+            MaxEnemies = maxEnemies;
+            SpawnLilAsteroidCount = spawnLilAsteroidCount;
+        }
     }
 }

@@ -32,6 +32,7 @@ namespace _Project.Scripts.UI
         public async UniTask FadeInAsync()
         {
             gameObject.SetActive(true);
+
             _image.color = new Color(_image.color.r, _image.color.g, _image.color.b, 0);
             _loadingText.color = new Color(_loadingText.color.r, _loadingText.color.g, _loadingText.color.b, 0);
 

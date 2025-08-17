@@ -7,7 +7,7 @@ using UniRx;
 
 namespace _Project.Scripts.Services
 {
-    public class PlayerProgressProvider : IDisposable, IAsyncInitializable
+    public class PlayerProgressProvider : IDisposable, IBootstrapInitializable
     {
         public PlayerProgress PlayerProgress { get; }
 
@@ -39,8 +39,13 @@ namespace _Project.Scripts.Services
                 _loadedPlayerProgress = PlayerProgress;
         }
 
-        public async UniTask SetDataAsync() =>
-            await _saveLoadService.SaveData(PlayerProgress);
+        public async UniTask SetDataAsync()
+        {
+            var progressToSave = _loadedPlayerProgress.Score > PlayerProgress.Score ?
+                _loadedPlayerProgress : PlayerProgress;
+
+            await _saveLoadService.SaveData(progressToSave);
+        }
 
         public void ToDefault() =>
             PlayerProgress.ToDefault();

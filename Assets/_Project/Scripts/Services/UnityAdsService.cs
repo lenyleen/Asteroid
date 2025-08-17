@@ -11,35 +11,35 @@ namespace _Project.Scripts.Services
 {
     public class UnityAdsService : IUnityAdsInitializationListener, IAdvertisementService
     {
-        private const string AdsConfigAddress = "UnityAdsConfig";
+        private const string AdsRemoteConfigKey = "UnityAdsConfig";
 
         public IObservable<bool> CanShowRewardedAds => _canShowRewardedAds;
-        public IObservable<bool> CanShowInterstitialAds => _canShowInterstitialAds;
 
-        private readonly AssetProvider  _assetProvider;
+        private readonly IRemoteConfigService _remoteConfigService;
         private readonly UnityAdsShowListener _showListener;
         private readonly ReactiveProperty<bool> _canShowRewardedAds = new (false);
-        private readonly ReactiveProperty<bool> _canShowInterstitialAds = new (false);
 
         private UnityAdvertisementsConfig _config;
+        private bool _canShowInterstitialAds;
 
-        public UnityAdsService(AssetProvider assetProvider)
+        public UnityAdsService(IRemoteConfigService remoteConfigService)
         {
-            _assetProvider = assetProvider;
+            _remoteConfigService = remoteConfigService;
         }
 
-        public async UniTask InitializeAsync()
+        public UniTask InitializeAsync()
         {
-            _config =
-                await _assetProvider.Load<UnityAdvertisementsConfig>(AdsConfigAddress);
+            _config = _remoteConfigService.GetConfig<UnityAdvertisementsConfig>(AdsRemoteConfigKey);
 
             Advertisement.Initialize(_config.AndroidGameId,true,this);
+
+            return UniTask.CompletedTask;
         }
 
         public void OnInitializationComplete()
         {
             _canShowRewardedAds.Value = true;
-            _canShowInterstitialAds.Value = true;
+            _canShowInterstitialAds = true;
         }
 
         public async UniTask<bool> ShowRewarded()
@@ -59,7 +59,7 @@ namespace _Project.Scripts.Services
 
         public async UniTask ShowInterstitial()
         {
-            if(!_canShowInterstitialAds.Value)
+            if(!_canShowInterstitialAds)
                 return;
 
             EnableAdShowing(false);
@@ -82,9 +82,12 @@ namespace _Project.Scripts.Services
         private void EnableAdShowing(bool enable)
         {
             _canShowRewardedAds.Value = enable;
-            _canShowInterstitialAds.Value = enable;
+            _canShowInterstitialAds = enable;
         }
 
-        public void OnInitializationFailed(UnityAdsInitializationError error, string message){}
+        public void OnInitializationFailed(UnityAdsInitializationError error, string message)
+        {
+            Debug.LogWarning("Ads initialization failed");
+        }
     }
 }

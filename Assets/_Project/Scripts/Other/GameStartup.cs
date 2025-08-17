@@ -13,7 +13,6 @@ namespace _Project.Scripts.Other
 {
     public class GameStartup : MonoBehaviour
     {
-        private LoadCurtain _loadCurtain;
         private UiService _uiService;
         private GameplayStateMachine.GameplayStateMachine _gameplayStateMachine;
         private SceneLoader _sceneLoader;
@@ -21,12 +20,11 @@ namespace _Project.Scripts.Other
 
         [Inject]
         private void Construct(List<IAsyncInitializable> initializables, GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
-            UiService uiService, SceneLoader sceneLoader, LoadCurtain loadCurtain)
+            UiService uiService, SceneLoader sceneLoader)
         {
             _initializables = initializables;
             _gameplayStateMachine = gameplayStateMachine;
             _uiService = uiService;
-            _loadCurtain = loadCurtain;
             _sceneLoader = sceneLoader;
         }
 
@@ -37,7 +35,7 @@ namespace _Project.Scripts.Other
                 foreach (var initializable in _initializables)
                     await initializable.InitializeAsync();
 
-                await _loadCurtain.FadeOutAsync();
+                await _sceneLoader.FadeOut();
 
                 _gameplayStateMachine.Initialize(typeof(InputWaitState));
             }

@@ -8,16 +8,16 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class WeaponUiDataDisplayerFactory : IAsyncInitializable
+    public class WeaponUiDataDisplayerFactory : IInGameInitializable
     {
         private readonly IInstantiator _instantiator;
         private readonly AssetReference _prefabReference;
-        private readonly AssetProvider _assetProvider;
+        private readonly IScenesAssetProvider _assetProvider;
 
         private WeaponUiDataDisplayer _prefab;
 
         public WeaponUiDataDisplayerFactory(AssetReference prefabReference, DiContainer instantiator,
-            AssetProvider assetProvider)
+            IScenesAssetProvider assetProvider)
         {
             _prefabReference = prefabReference;
             _instantiator = instantiator;

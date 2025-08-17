@@ -1,14 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using Newtonsoft.Json;
+using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
-    [CreateAssetMenu(fileName = "ProjectileConfig", menuName = "ScriptableObject/ProjectileConfig", order = 0)]
-    public class ProjectileConfig : ScriptableObject
+    [Serializable]
+    public class ProjectileConfig
     {
-        [field: SerializeField] public ProjectileType Type { get; private set; }
-        [field: SerializeField] public string SpriteAddress { get; private set; }
-        [field: SerializeField] public ColliderConfig ColliderConfig { get; private set; }
-        [field: SerializeField] public float Speed { get; private set; }
-        [field: SerializeField] public float LifetimeInSeconds { get; private set; }
+        public ProjectileType Type { get; private set; }
+
+        public string SpriteAddress { get; private set; }
+
+        public ColliderConfig ColliderConfig { get; private set; }
+
+        public float Speed { get; private set; }
+
+        public float LifetimeInSeconds { get; private set; }
+
+        [JsonConstructor]
+        public ProjectileConfig(ProjectileType type, string spriteAddress, ColliderConfig colliderConfig,
+            float speed, float lifetimeInSeconds)
+        {
+            Type = type;
+            SpriteAddress = spriteAddress;
+            ColliderConfig = colliderConfig;
+            Speed = speed;
+            LifetimeInSeconds = lifetimeInSeconds;
+        }
     }
 }

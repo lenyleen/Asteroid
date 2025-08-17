@@ -20,11 +20,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5f2451d51c0882b43bd5cb7eda4fd5b0
-    m_Address: UnityAdsConfig
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a3417ba3b6590124e9fd32adeadec5ef
     m_Address: RestartPopUp
     m_ReadOnly: 0

@@ -1,6 +1,7 @@
 ﻿using System;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Factories;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Projectiles;
 using _Project.Scripts.Services;
 using UnityEngine;
@@ -13,12 +14,11 @@ namespace _Project.Scripts.Installers
     {
         [SerializeField] private AssetReference _weaponViewPrefabReference;
         [SerializeField] private AssetReference _projectilePrefabReference;
-        [SerializeField] private PlayerInstallData _playerInstallData;
 
-        private AssetProvider _assetProvider;
+        private IScenesAssetProvider _assetProvider;
 
         [Inject]
-        public void Construct(AssetProvider assetProvider)
+        public void Construct(IScenesAssetProvider assetProvider)
         {
             _assetProvider = assetProvider;
         }
@@ -41,8 +41,7 @@ namespace _Project.Scripts.Installers
                 .WithArguments(_weaponViewPrefabReference);
 
             Container.BindInterfacesAndSelfTo<PlayerShipFactory>()
-                .AsSingle()
-                .WithArguments(_playerInstallData.ShipPreferences);
+                .AsSingle();
         }
 
         private void InitializeProjectilePool()
@@ -53,13 +52,6 @@ namespace _Project.Scripts.Installers
                 .WithInitialSize(20)
                 .FromComponentInNewPrefab(projectilePrefab)
                 .UnderTransformGroup("Projectiles");
-        }
-
-        [Serializable]
-        public class PlayerInstallData
-        {
-            [field: SerializeField] public AssetReference PlayerShipPrefabReference { get; private set; }
-            [field: SerializeField] public ShipPreferences ShipPreferences { get; private set; }
         }
     }
 }

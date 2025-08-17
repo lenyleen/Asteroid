@@ -20,7 +20,7 @@ namespace _Project.Scripts.UI.PopUps
         [Inject]
         private void Construct(IAdvertisementService advertisementService)
         {
-            advertisementService.CanShowInterstitialAds.Subscribe(canShowRewarded =>
+            advertisementService.CanShowRewardedAds.Subscribe(canShowRewarded =>
                 _restartButton.interactable = canShowRewarded).AddTo(_disposables);
         }
 

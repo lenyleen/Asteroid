@@ -19,7 +19,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private readonly ScoreBoxModel _scoreModel;
         private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
-        private readonly AssetProvider _assetProvider;
+        private readonly IScenesAssetProvider _assetProvider;
         private readonly IAnalyticsService _analyticsService;
         private readonly IAdvertisementService _advertisementService;
         private readonly LoadCurtain _loadCurtain;
@@ -28,7 +28,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private CompositeDisposable _disposables = new();
 
         public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
-            AssetProvider assetProvider,  IAnalyticsService analyticsService, LoadCurtain loadCurtain, SceneLoader sceneLoader,
+            IScenesAssetProvider assetProvider,  IAnalyticsService analyticsService, LoadCurtain loadCurtain, SceneLoader sceneLoader,
             IAdvertisementService  advertisementService)
         {
             _uiService = uiService;
@@ -104,8 +104,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private async UniTask ToMainMenu()
         {
             _assetProvider.Dispose();
-            await _loadCurtain.FadeInAsync();
-            await _sceneLoader.LoadScene(Scenes.MainMenu);
+            await _sceneLoader.LoadSceneWithCurtain(Scenes.MainMenu);
             await _loadCurtain.FadeOutAsync();
         }
 

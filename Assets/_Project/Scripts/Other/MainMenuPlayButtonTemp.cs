@@ -13,12 +13,10 @@ namespace _Project.Scripts.Other
         [SerializeField] private Button _playButton;
 
         private SceneLoader _sceneLoader;
-        private LoadCurtain _loadCurtain;
 
         [Inject]
-        private void Construct(SceneLoader sceneLoader, LoadCurtain loadCurtain)
+        private void Construct(SceneLoader sceneLoader)
         {
-            _loadCurtain = loadCurtain;
             _sceneLoader = sceneLoader;
         }
 
@@ -31,8 +29,7 @@ namespace _Project.Scripts.Other
         {
             try
             {
-                await _loadCurtain.FadeInAsync();
-                await _sceneLoader.LoadScene(Scenes.GameplayInitial);
+                await _sceneLoader.LoadSceneWithCurtain(Scenes.GameplayInitial);
             }
             catch (Exception e)
             {
