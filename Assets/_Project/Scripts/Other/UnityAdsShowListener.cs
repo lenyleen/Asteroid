@@ -36,7 +36,10 @@ namespace _Project.Scripts.Other
         public void OnUnityAdsShowFailure(string placementId, UnityAdsShowError error, string message) =>
             _showTcs?.TrySetException(new Exception($"Show failed: {error} - {message}"));
 
-        public void OnUnityAdsShowStart(string placementId) { }
-        public void OnUnityAdsShowClick(string placementId) { }
+        public void OnUnityAdsShowStart(string placementId) =>
+            Debug.Log("UnityAdsShowStart");
+
+        public void OnUnityAdsShowClick(string placementId) =>
+            Debug.Log("UnityAdsShowClick");
     }
 }

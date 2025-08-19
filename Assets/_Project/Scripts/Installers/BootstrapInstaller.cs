@@ -28,7 +28,7 @@ namespace _Project.Scripts.Installers
                 .AsSingle()
                 .WithArguments(_popUpsConfig, _crashHandler.transform);
 
-            projectContainer.Bind<UiService>()
+            projectContainer.Bind<PopupService>()
                 .AsSingle();
 
             projectContainer.Bind<CrashHandler>()

@@ -13,18 +13,18 @@ namespace _Project.Scripts.Other
 {
     public class GameStartup : MonoBehaviour
     {
-        private UiService _uiService;
+        private PopupService _popupService;
         private GameplayStateMachine.GameplayStateMachine _gameplayStateMachine;
         private SceneLoader _sceneLoader;
         private List<IAsyncInitializable> _initializables;
 
         [Inject]
         private void Construct(List<IAsyncInitializable> initializables, GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
-            UiService uiService, SceneLoader sceneLoader)
+            PopupService popupService, SceneLoader sceneLoader)
         {
             _initializables = initializables;
             _gameplayStateMachine = gameplayStateMachine;
-            _uiService = uiService;
+            _popupService = popupService;
             _sceneLoader = sceneLoader;
         }
 
@@ -41,7 +41,7 @@ namespace _Project.Scripts.Other
             }
             catch (Exception e)
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp,string,DialogResult>(e.Message);
+                await _popupService.ShowDialogAwaitable<ErrorPopUp,string,DialogResult>(e.Message);
 
                 await _sceneLoader.LoadScene(Scenes.MainMenu);
             }

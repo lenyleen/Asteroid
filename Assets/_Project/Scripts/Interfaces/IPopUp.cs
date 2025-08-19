@@ -1,4 +1,6 @@
 ﻿using System;
+using _Project.Scripts.Data;
+using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -11,13 +13,13 @@ namespace _Project.Scripts.Interfaces
         public void Show();
     }
 
-    /*public interface IPopUp<TParam> : IPopUp
+    public interface IPopUp<TVm> : IPopUp
     {
-        public void Show(TParam param);
-    }*/
+        public void Show(TVm vm);
+    }
 
     public interface IDialogMenu<TParams, TResult> : IPopUp
     {
-        UniTask<TResult> ShowDialogAsync(TParams param);
+        public UniTask<TResult> ShowDialogAsync(TParams param);
     }
 }

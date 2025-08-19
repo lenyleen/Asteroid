@@ -12,12 +12,12 @@ namespace _Project.Scripts.UI
 {
     public class CrashHandler : MonoBehaviour, IBootstrapInitializable
     {
-        private UiService _uiService;
+        private PopupService _popupService;
 
         [Inject]
-        private void Construct(UiService uiService)
+        private void Construct(PopupService popupService)
         {
-            _uiService = uiService;
+            _popupService = popupService;
         }
 
         public UniTask InitializeAsync()
@@ -54,7 +54,7 @@ namespace _Project.Scripts.UI
         {
             try
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(logString + "\n" + stackTrace);
+                await _popupService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(logString + "\n" + stackTrace);
             }
             catch (Exception)
             {
