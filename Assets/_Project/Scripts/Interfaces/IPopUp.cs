@@ -8,16 +8,12 @@ namespace _Project.Scripts.Interfaces
     {
         public void Initialize(Transform parent);
         public IObservable<IPopUp> OnClose { get; }
-        public void Show();
+        public void Hide();
     }
 
-    /*public interface IPopUp<TParam> : IPopUp
+    public interface IDialog<TParams, TResult> : IPopUp
     {
-        public void Show(TParam param);
-    }*/
-
-    public interface IDialogMenu<TParams, TResult> : IPopUp
-    {
-        UniTask<TResult> ShowDialogAsync(TParams param);
+        public void SetParams(TParams message);
+        public UniTask<TResult> ShowDialogAsync(bool hideAfterChoice = true);
     }
 }

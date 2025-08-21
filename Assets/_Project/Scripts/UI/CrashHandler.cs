@@ -54,7 +54,10 @@ namespace _Project.Scripts.UI
         {
             try
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(logString + "\n" + stackTrace);
+                var popUp =
+                    await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(logString + "\n" + stackTrace);
+
+                await popUp.ShowDialogAsync();
             }
             catch (Exception)
             {

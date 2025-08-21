@@ -10,11 +10,12 @@ using Zenject;
 
 namespace _Project.Scripts.UI.PopUps
 {
-    public class LosePopUp : PopUpBase, IDialogMenu<int, DialogResult>
+    public class LosePopUp : PopUpBase, IDialog<int, DialogResult>
     {
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private Button _restartButton;
         [SerializeField] private Button _closeButton;
+
         [SerializeField] private string _message;
 
         [Inject]
@@ -24,30 +25,32 @@ namespace _Project.Scripts.UI.PopUps
                 _restartButton.interactable = canShowRewarded).AddTo(_disposables);
         }
 
-        public async UniTask<DialogResult> ShowDialogAsync(int score)
+        public void SetParams(int score)
         {
-            gameObject.SetActive(true);
+            gameObject.SetActive(false);
             _scoreText.text = _message + score;
+        }
 
+        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true)
+        {
             var tcs = new UniTaskCompletionSource<DialogResult>();
 
             _restartButton.OnClickAsObservable().Subscribe(_ =>
             {
                 tcs.TrySetResult(DialogResult.Yes);
-                Hide();
+                HideAfterChoice(hideAfterChoice);
             }).AddTo(_disposables);
 
             _closeButton.OnClickAsObservable().Subscribe(_ =>
             {
                 tcs.TrySetResult(DialogResult.Cancel);
-                Hide();
+                HideAfterChoice(hideAfterChoice);
             }).AddTo(_disposables);
 
             return await tcs.Task;
         }
 
-        public override void Show()
-        {
-        }
+        public override void Show() =>
+            Debug.LogWarning("Not implemented");
     }
 }

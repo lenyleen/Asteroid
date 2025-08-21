@@ -46,8 +46,10 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _analyticsService.SendEndGameAnalytics();
             _scoreModel.Enable(false);
 
-            var restartDialogResult = await _uiService
+            var restartDialog = await _uiService
                 .ShowDialogAwaitable<LosePopUp, int, DialogResult>(_scoreModel.Score.Value);
+
+            var restartDialogResult = await restartDialog.ShowDialogAsync();
 
             try
             {

@@ -21,12 +21,24 @@ namespace _Project.Scripts.UI.PopUps
 
         public abstract void Show();
 
-        protected void Hide()
+        public void Hide()
         {
             gameObject.SetActive(false);
             _closeCommand.Execute(this);
 
             Destroy(gameObject);
+        }
+
+        protected void HideAfterChoice(bool hideAfterChoice)
+        {
+            if(!hideAfterChoice)
+                return;
+
+            Hide();
+        }
+
+        private void OnDestroy()
+        {
             _disposables.Dispose();
         }
     }

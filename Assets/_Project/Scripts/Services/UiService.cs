@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
+using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
@@ -16,8 +17,8 @@ namespace _Project.Scripts.Services
             _popUpFactory = popUpFactory;
         }
 
-        public async UniTask<TResult> ShowDialogAwaitable<TPopUp, TParam, TResult>(TParam param)
-            where TPopUp : class, IDialogMenu<TParam, TResult>
+        public async UniTask<TPopUp> ShowDialogAwaitable<TPopUp, TParams, TResult>(TParams param,
+            bool hideAfterChoice = true) where TPopUp : class,IDialog<TParams,TResult>
         {
             var popUp = await _popUpFactory.CreatePopUp<TPopUp>();
 
@@ -25,7 +26,14 @@ namespace _Project.Scripts.Services
                 .Subscribe(Despawn);
             _spawnedPopUps.Add(popUp);
 
-            return await popUp.ShowDialogAsync(param);
+            popUp.SetParams(param);
+
+            return popUp;
+        }
+
+        public void HidePopUp(IPopUp popUp)
+        {
+            popUp.Hide();
         }
 
         private void Despawn(IPopUp popUp)
