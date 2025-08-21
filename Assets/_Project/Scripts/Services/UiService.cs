@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
@@ -17,8 +16,8 @@ namespace _Project.Scripts.Services
             _popUpFactory = popUpFactory;
         }
 
-        public async UniTask<TPopUp> ShowDialogAwaitable<TPopUp, TParams, TResult>(TParams param,
-            bool hideAfterChoice = true) where TPopUp : class,IDialog<TParams,TResult>
+        public async UniTask<TPopUp> ShowDialogAwaitable<TPopUp, TParams>(TParams param)
+            where TPopUp : class, IDialog<TParams> where TParams : IPopUpParams<TPopUp>
         {
             var popUp = await _popUpFactory.CreatePopUp<TPopUp>();
 

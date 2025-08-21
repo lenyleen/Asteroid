@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using _Project.Scripts.Data;
 using _Project.Scripts.GameplayStateMachine.States;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
-using _Project.Scripts.UI;
 using _Project.Scripts.UI.PopUps;
 using UnityEngine;
 using Zenject;
@@ -19,7 +19,8 @@ namespace _Project.Scripts.Other
         private List<IAsyncInitializable> _initializables;
 
         [Inject]
-        private void Construct(List<IAsyncInitializable> initializables, GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
+        private void Construct(List<IAsyncInitializable> initializables,
+            GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
             UiService uiService, SceneLoader sceneLoader)
         {
             _initializables = initializables;
@@ -41,7 +42,7 @@ namespace _Project.Scripts.Other
             }
             catch (Exception e)
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp,string,DialogResult>(e.Message);
+                await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(e.Message));
 
                 await _sceneLoader.LoadScene(Scenes.MainMenu);
             }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
 using _Project.Scripts.Factories;
@@ -11,18 +10,13 @@ using UniRx;
 
 namespace _Project.Scripts.MainMenu
 {
-    public class PromoService : IInGameInitializable
+    public class PromoService : ISceneInitializable
     {
-        private const string PromoRemoteConfigId = "PromoConfig";
-
-        private readonly UiService _uiService;
         private readonly PlayerInventoryService _playerInventoryService;
         private readonly PromoButtonFactory _promoButtonFactory;
         private readonly PromoPopUpProvider _promoPopUpProvider;
-        private readonly IRemoteConfigService _remoteConfigService;
-        private readonly IScenesAssetProvider _assetProvider;
         private readonly PurchaseService _purchaseService;
-        private readonly CompositeDisposable  _disposables = new ();
+        private readonly CompositeDisposable _disposables = new();
 
         public async UniTask InitializeAsync()
         {
@@ -36,7 +30,7 @@ namespace _Project.Scripts.MainMenu
 
                 var isRelevant = await CheckPromoToRelevance(rewards);
 
-                if(isRelevant)
+                if (isRelevant)
                     continue;
 
                 promoButton.OnSelected.Subscribe(_ =>
@@ -49,12 +43,12 @@ namespace _Project.Scripts.MainMenu
         {
             var popUp = await _promoPopUpProvider.Get(config);
 
-            var buyResult = await popUp.ShowDialogAsync(false);
+            var buyResult = await popUp.ShowDialogAsync();
 
-            if(buyResult != DialogResult.Yes)
+            if (buyResult != DialogResult.Yes)
                 return;
 
-            _purchaseService.Buy(config.Id);
+            await _purchaseService.Buy(config.Id);
         }
 
         private async UniTask<bool> CheckPromoToRelevance(List<ProductConfig> products)

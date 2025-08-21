@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.UI.PopUps;
+using UnityEngine;
 
 namespace _Project.Scripts.Data
 {
-    public class PromoPopUpData
+    public class PromoPopUpData : IPopUpParams<PromoByuPopUp>
     {
         public string ProductName { get; private set; }
         public string ProductDescription { get; private set; }

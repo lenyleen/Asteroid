@@ -8,11 +8,14 @@ namespace _Project.Scripts.Interfaces
     }
 
     public interface IBootstrapInitializable : IAsyncInitializable
-    {}
+    {
+    }
 
-    public interface IInGameInitializable : IAsyncInitializable
-    {}
+    public interface ISceneInitializable : IAsyncInitializable
+    {
+    }
 
     public interface IProjectImportanceInitializable : IAsyncInitializable
-    { }
+    {
+    }
 }

@@ -1,4 +1,4 @@
-﻿using _Project.Scripts.Configs;
+﻿using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
@@ -10,7 +10,7 @@ using Zenject;
 
 namespace _Project.Scripts.UI.PopUps
 {
-    public class LosePopUp : PopUpBase, IDialog<int, DialogResult>
+    public class LosePopUp : PopUpBase, IDialog<LosePopUpData>
     {
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private Button _restartButton;
@@ -25,10 +25,10 @@ namespace _Project.Scripts.UI.PopUps
                 _restartButton.interactable = canShowRewarded).AddTo(_disposables);
         }
 
-        public void SetParams(int score)
+        public void SetParams(LosePopUpData data)
         {
             gameObject.SetActive(false);
-            _scoreText.text = _message + score;
+            _scoreText.text = _message + data.Score;
         }
 
         public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true)
@@ -50,7 +50,9 @@ namespace _Project.Scripts.UI.PopUps
             return await tcs.Task;
         }
 
-        public override void Show() =>
+        public override void Show()
+        {
             Debug.LogWarning("Not implemented");
+        }
     }
 }

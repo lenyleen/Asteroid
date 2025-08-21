@@ -7,7 +7,6 @@ using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
 using Newtonsoft.Json;
-using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Economy;
 using Unity.Services.Economy.Model;
@@ -37,6 +36,8 @@ namespace _Project.Scripts.Services
             await EconomyService.Instance.Configuration.SyncConfigurationAsync();
 
             var products = EconomyService.Instance.Configuration.GetRealMoneyPurchases();
+
+            _purchases = DeserializePurchases(products);
 
             var productsDefinitions = new List<ProductDefinition>();
 
@@ -77,11 +78,14 @@ namespace _Project.Scripts.Services
                 var config = JsonConvert.DeserializeObject<ProductConfig>(configJson);
                 items.Add(config);
             }
+
             return items;
         }
 
-        public IEnumerable<PurchaseConfig> GetPurchasesByType(PurchasingType purchasingType) =>
-            _purchases.Where(item => item.PurchasingType == purchasingType);
+        public IEnumerable<PurchaseConfig> GetPurchasesByType(PurchasingType purchasingType)
+        {
+            return _purchases.Where(item => item.PurchasingType == purchasingType);
+        }
 
         private List<PurchaseConfig> DeserializePurchases(List<RealMoneyPurchaseDefinition> realMoneyPurchases)
         {
@@ -94,6 +98,7 @@ namespace _Project.Scripts.Services
 
                 purchases.Add(config);
             }
+
             return purchases;
         }
 

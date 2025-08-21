@@ -10,18 +10,18 @@ namespace _Project.Scripts.Factories
 {
     public class PromoButtonFactory
     {
-        private readonly IScenesAssetProvider  _assetProvider;
-        private readonly IInstantiator  _instantiator;
+        private readonly IScenesAssetProvider _assetProvider;
+        private readonly IInstantiator _instantiator;
         private readonly Transform _buttonsParent;
-        private readonly IRemoteConfigService _remoteConfigService;
-        private AssetReference _prefabReference;
+        private readonly AssetReference _prefabReference;
 
         public PromoButtonFactory(IScenesAssetProvider assetProvider, IInstantiator instantiator,
-            Transform buttonsParent, IRemoteConfigService remoteConfigService)
+            Transform buttonsParent, AssetReference prefabReference)
         {
             _assetProvider = assetProvider;
-            _instantiator =  instantiator;
+            _instantiator = instantiator;
             _buttonsParent = buttonsParent;
+            _prefabReference = prefabReference;
         }
 
         public async UniTask<PromoButton> Create(PurchaseConfig promoConfig)
@@ -32,7 +32,7 @@ namespace _Project.Scripts.Factories
 
             var button = _instantiator.InstantiatePrefabForComponent<PromoButton>(prefab, _buttonsParent);
 
-            button.Initialize(sprite,promoConfig.PromoDescription);
+            button.Initialize(sprite, promoConfig.PromoDescription);
 
             return button;
         }

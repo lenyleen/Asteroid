@@ -1,8 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using _Project.Scripts.Weapon;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -11,7 +9,7 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class WeaponFactory : IInGameInitializable
+    public class WeaponFactory : ISceneInitializable
     {
         private const string ActiveRemoteWeaponsConfigKey = "ActiveWeaponKeys";
 
@@ -21,7 +19,7 @@ namespace _Project.Scripts.Factories
         private readonly IRemoteConfigService _remoteConfigService;
 
         private WeaponView _prefab;
-        private Dictionary<WeaponType, WeaponConfig> _configs = new ();
+        private readonly Dictionary<WeaponType, WeaponConfig> _configs = new();
 
         public WeaponFactory(DiContainer instantiator, AssetReference weaponViewPrefabReference,
             IScenesAssetProvider assetProvider, IRemoteConfigService remoteConfigService)

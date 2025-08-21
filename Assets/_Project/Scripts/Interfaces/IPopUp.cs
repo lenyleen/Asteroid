@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -11,9 +12,9 @@ namespace _Project.Scripts.Interfaces
         public void Hide();
     }
 
-    public interface IDialog<TParams, TResult> : IPopUp
+    public interface IDialog<TParams> : IPopUp
     {
         public void SetParams(TParams message);
-        public UniTask<TResult> ShowDialogAsync(bool hideAfterChoice = true);
+        public UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true);
     }
 }

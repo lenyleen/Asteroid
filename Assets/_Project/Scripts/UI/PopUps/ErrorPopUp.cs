@@ -1,4 +1,5 @@
-﻿using _Project.Scripts.Interfaces;
+﻿using _Project.Scripts.Data;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
 using TMPro;
@@ -8,16 +9,16 @@ using UnityEngine.UI;
 
 namespace _Project.Scripts.UI.PopUps
 {
-    public class ErrorPopUp : PopUpBase, IDialog<string, DialogResult>
+    public class ErrorPopUp : PopUpBase, IDialog<ErrorPopUpData>
     {
         [SerializeField] private Button _closeButton;
         [SerializeField] private Button _okButton;
         [SerializeField] private TextMeshProUGUI _message;
 
-        public void SetParams(string message)
+        public void SetParams(ErrorPopUpData param)
         {
             gameObject.SetActive(false);
-            _message.text = message;
+            _message.text = param.Message;
         }
 
         public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true)
@@ -41,7 +42,9 @@ namespace _Project.Scripts.UI.PopUps
             return await tcs.Task;
         }
 
-        public override void Show() =>
+        public override void Show()
+        {
             Debug.LogWarning("Not implemented");
+        }
     }
 }

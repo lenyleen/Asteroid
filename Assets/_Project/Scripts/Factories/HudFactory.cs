@@ -1,6 +1,4 @@
-﻿using System;
-using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
+﻿using _Project.Scripts.Interfaces;
 using _Project.Scripts.UI;
 using _Project.Scripts.UI.ScoreBox;
 using _Project.Scripts.UI.ShipInfoInfo;
@@ -13,7 +11,7 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class HudFactory : IInGameInitializable
+    public class HudFactory : ISceneInitializable
     {
         private readonly IScenesAssetProvider _assetProvider;
         private readonly AssetReference _hudPrefabReference;

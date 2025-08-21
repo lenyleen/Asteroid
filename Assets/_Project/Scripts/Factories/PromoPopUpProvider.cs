@@ -1,21 +1,18 @@
-﻿using System.Collections.Generic;
-using _Project.Scripts.Configs;
+﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
 using _Project.Scripts.Extensions;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Other;
 using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace _Project.Scripts.Factories
 {
     public class PromoPopUpProvider
     {
-        private readonly IScenesAssetProvider  _assetProvider;
-        private readonly UiService  _uiService;
+        private readonly IScenesAssetProvider _assetProvider;
+        private readonly UiService _uiService;
 
         public PromoPopUpProvider(IScenesAssetProvider assetProvider, UiService uiService)
         {
@@ -31,7 +28,7 @@ namespace _Project.Scripts.Factories
                 purchaseConfig.PromoPrice.ToNextPrice(), purchaseConfig.Price.ToPreviousPrice(), sprite);
 
             var popUp =
-                await _uiService.ShowDialogAwaitable<PromoByuPopUp, PromoPopUpData, DialogResult>(popUpData);
+                await _uiService.ShowDialogAwaitable<PromoByuPopUp, PromoPopUpData>(popUpData);
 
             return popUp;
         }

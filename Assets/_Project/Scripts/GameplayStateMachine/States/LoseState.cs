@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using _Project.Scripts.Services;
@@ -28,8 +29,9 @@ namespace _Project.Scripts.GameplayStateMachine.States
         private CompositeDisposable _disposables = new();
 
         public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
-            IScenesAssetProvider assetProvider,  IAnalyticsService analyticsService, LoadCurtain loadCurtain, SceneLoader sceneLoader,
-            IAdvertisementService  advertisementService)
+            IScenesAssetProvider assetProvider, IAnalyticsService analyticsService, LoadCurtain loadCurtain,
+            SceneLoader sceneLoader,
+            IAdvertisementService advertisementService)
         {
             _uiService = uiService;
             _scoreModel = scoreModel;
@@ -47,7 +49,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _scoreModel.Enable(false);
 
             var restartDialog = await _uiService
-                .ShowDialogAwaitable<LosePopUp, int, DialogResult>(_scoreModel.Score.Value);
+                .ShowDialogAwaitable<LosePopUp, LosePopUpData>(new LosePopUpData(_scoreModel.Score.Value));
 
             var restartDialogResult = await restartDialog.ShowDialogAsync();
 
@@ -112,7 +114,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
 
         private async UniTask ThrowError(string message)
         {
-            await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(message);
+            await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(message));
             await ToMainMenu();
         }
     }

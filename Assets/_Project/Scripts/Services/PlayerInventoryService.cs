@@ -16,14 +16,11 @@ namespace _Project.Scripts.Services
 
         public async UniTask<bool> HasItem(string id)
         {
-            var options = new GetInventoryOptions(){ InventoryItemIds = new List<string>{id}};
+            var options = new GetInventoryOptions { InventoryItemIds = new List<string> { id } };
 
-            var getResult =  await EconomyService.Instance.PlayerInventory.GetInventoryAsync(options);
+            var getResult = await EconomyService.Instance.PlayerInventory.GetInventoryAsync(options);
 
             return getResult.PlayersInventoryItems.Any();
         }
-
-        public async UniTask Additem(string id) =>
-            await EconomyService.Instance.PlayerInventory.AddInventoryItemAsync(id);
     }
 }

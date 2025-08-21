@@ -1,5 +1,4 @@
-﻿using System;
-using _Project.Scripts.Data;
+﻿using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
@@ -10,7 +9,7 @@ using UnityEngine.UI;
 
 namespace _Project.Scripts.UI.PopUps
 {
-    public class PromoByuPopUp : PopUpBase, IDialog<PromoPopUpData, DialogResult>
+    public class PromoByuPopUp : PopUpBase, IDialog<PromoPopUpData>
     {
         [SerializeField] private TextMeshProUGUI _title;
         [SerializeField] private Image _productImage;
@@ -33,7 +32,6 @@ namespace _Project.Scripts.UI.PopUps
 
         public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = false)
         {
-
             var tcs = new UniTaskCompletionSource<DialogResult>();
 
             _buyButton.OnClickAsObservable().Subscribe(_ =>
@@ -51,7 +49,9 @@ namespace _Project.Scripts.UI.PopUps
             return await tcs.Task;
         }
 
-        public override void Show() =>
+        public override void Show()
+        {
             Debug.LogWarning("Not implemented");
+        }
     }
 }

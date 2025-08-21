@@ -1,7 +1,4 @@
-﻿using _Project.Scripts.AssetLoaders;
-using _Project.Scripts.Factories;
-using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
+﻿using _Project.Scripts.Services;
 using _Project.Scripts.Services.AssetProvider;
 using Zenject;
 
@@ -27,6 +24,12 @@ namespace _Project.Scripts.Installers
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<UnityAdsService>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PurchaseService>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<PlayerInventoryService>()
                 .AsSingle();
         }
     }

@@ -1,5 +1,4 @@
 ﻿using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using _Project.Scripts.UI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -8,7 +7,7 @@ using Zenject;
 
 namespace _Project.Scripts.Factories
 {
-    public class WeaponUiDataDisplayerFactory : IInGameInitializable
+    public class WeaponUiDataDisplayerFactory : ISceneInitializable
     {
         private readonly IInstantiator _instantiator;
         private readonly AssetReference _prefabReference;

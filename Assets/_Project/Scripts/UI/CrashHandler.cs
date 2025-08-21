@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Other;
 using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 using Zenject;
 
@@ -44,7 +45,7 @@ namespace _Project.Scripts.UI
 
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
-            if(type != LogType.Error)
+            if (type != LogType.Error)
                 return;
 
             _ = ShowErrorDialog(logString, stackTrace);
@@ -54,8 +55,9 @@ namespace _Project.Scripts.UI
         {
             try
             {
+                var errorData = new ErrorPopUpData(logString + "\n" + stackTrace);
                 var popUp =
-                    await _uiService.ShowDialogAwaitable<ErrorPopUp, string, DialogResult>(logString + "\n" + stackTrace);
+                    await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(errorData);
 
                 await popUp.ShowDialogAsync();
             }
@@ -71,7 +73,7 @@ namespace _Project.Scripts.UI
         {
             Application.Quit();
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #endif
         }
 

@@ -4,15 +4,15 @@ using _Project.Scripts.Extensions;
 using _Project.Scripts.Input;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Player;
-using _Project.Scripts.Services;
 using _Project.Scripts.Weapon;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;
+using Vector3 = System.Numerics.Vector3;
 
 namespace _Project.Scripts.Factories
 {
-    public class PlayerShipFactory : IInGameInitializable
+    public class PlayerShipFactory : ISceneInitializable
     {
         private const string ShipViewRemoteConfig = "CommonShipConfig"; //плейсхолдер до задания по скинам для корабля
         private const string PlayerSihipConfigRemoteKey = "PlayerShipConfig";
@@ -31,7 +31,8 @@ namespace _Project.Scripts.Factories
         private Sprite _shipSprite;
         private ShipViewModel _shipViewModel;
 
-        public PlayerShipFactory(WeaponFactory weaponFactory, PlayerInputController playerInputController, IInstantiator instantiator,
+        public PlayerShipFactory(WeaponFactory weaponFactory, PlayerInputController playerInputController,
+            IInstantiator instantiator,
             IPlayerStateProviderService playerDataProviderService, IScenesAssetProvider assetProvider,
             IPlayerWeaponInfoProviderService playerWeaponInfoProviderService, IRemoteConfigService remoteConfigService)
         {
@@ -94,8 +95,8 @@ namespace _Project.Scripts.Factories
             playerWeapons.Initialize(weaponsViewModel);
         }
 
-        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponType type, List<System.Numerics.Vector3> positions,
-            PlayerWeapons playerWeapons, bool addToUi =false)
+        private async UniTask<List<WeaponViewModel>> CreateWeapons(WeaponType type, List<Vector3> positions,
+            PlayerWeapons playerWeapons, bool addToUi = false)
         {
             var weapons = new List<WeaponViewModel>();
             var weaponIndex = 1;
@@ -108,7 +109,7 @@ namespace _Project.Scripts.Factories
 
                 weapons.Add(newWeapon);
 
-                if(addToUi)
+                if (addToUi)
                     _playerWeaponInfoProviderService.ApplyWeaponInfoProvider(newWeapon);
 
                 weaponIndex++;
