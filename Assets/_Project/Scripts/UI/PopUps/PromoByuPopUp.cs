@@ -17,21 +17,21 @@ namespace _Project.Scripts.UI.PopUps
         [SerializeField] private TextMeshProUGUI _prevPrice;
         [SerializeField] private TextMeshProUGUI _newPrice;
         [SerializeField] private Button _buyButton;
-        [SerializeField] private Button _closeButton;
 
-        public void SetParams(PromoPopUpData message)
+        public void SetParams(PromoPopUpData data)
         {
             gameObject.SetActive(false);
 
-            _title.text = message.ProductName;
-            _productImage.sprite = message.ProductImage;
-            _productDescription.text = message.ProductDescription;
-            _prevPrice.text = message.ProductPrevPrice;
-            _newPrice.text = message.ProductPrice;
+            _title.text = data.ProductName;
+            _productImage.sprite = data.ProductImage;
+            _productDescription.text = data.ProductDescription;
+            _prevPrice.text = data.ProductPrevPrice;
+            _newPrice.text = data.ProductPrice;
         }
 
-        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = false)
+        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice)
         {
+            gameObject.SetActive(true);
             var tcs = new UniTaskCompletionSource<DialogResult>();
 
             _buyButton.OnClickAsObservable().Subscribe(_ =>

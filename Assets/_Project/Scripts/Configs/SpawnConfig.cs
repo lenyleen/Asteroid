@@ -1,11 +1,10 @@
 ﻿using System;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {
     [Serializable]
-    public class SpawnConfig : ScriptableObject
+    public class SpawnConfig
     {
         public int MaxEnemies { get; private set; }
 

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
 using _Project.Scripts.Enemies;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Static;
-using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using Zenject;

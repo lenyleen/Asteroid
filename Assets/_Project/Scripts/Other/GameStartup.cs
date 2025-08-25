@@ -16,10 +16,10 @@ namespace _Project.Scripts.Other
         private UiService _uiService;
         private GameplayStateMachine.GameplayStateMachine _gameplayStateMachine;
         private SceneLoader _sceneLoader;
-        private List<IAsyncInitializable> _initializables;
+        private List<ISceneInitializable> _initializables;
 
         [Inject]
-        private void Construct(List<IAsyncInitializable> initializables,
+        private void Construct(List<ISceneInitializable> initializables,
             GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
             UiService uiService, SceneLoader sceneLoader)
         {
@@ -43,6 +43,8 @@ namespace _Project.Scripts.Other
             catch (Exception e)
             {
                 await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(e.Message));
+
+                Debug.Log(e);
 
                 await _sceneLoader.LoadScene(Scenes.MainMenu);
             }

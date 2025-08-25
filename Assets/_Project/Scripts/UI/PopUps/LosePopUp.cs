@@ -14,7 +14,6 @@ namespace _Project.Scripts.UI.PopUps
     {
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private Button _restartButton;
-        [SerializeField] private Button _closeButton;
 
         [SerializeField] private string _message;
 
@@ -31,8 +30,10 @@ namespace _Project.Scripts.UI.PopUps
             _scoreText.text = _message + data.Score;
         }
 
-        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true)
+        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice)
         {
+            gameObject.SetActive(true);
+
             var tcs = new UniTaskCompletionSource<DialogResult>();
 
             _restartButton.OnClickAsObservable().Subscribe(_ =>

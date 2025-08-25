@@ -14,7 +14,7 @@ namespace _Project.Scripts.Interfaces
 
     public interface IDialog<TParams> : IPopUp
     {
-        public void SetParams(TParams message);
-        public UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true);
+        public void SetParams(TParams data);
+        public UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice);
     }
 }

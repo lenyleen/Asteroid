@@ -13,9 +13,6 @@ namespace _Project.Scripts.Installers
             Container.Bind<Camera>().FromInstance(Camera.main)
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<SaveLoadService>()
-                .AsSingle();
-
             Container.BindInterfacesAndSelfTo<PlayerProgressProvider>()
                 .AsSingle();
 

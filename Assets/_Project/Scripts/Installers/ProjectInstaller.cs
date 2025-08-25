@@ -14,7 +14,16 @@ namespace _Project.Scripts.Installers
             Container.BindInterfacesAndSelfTo<ScenesAssetProvider>()
                 .AsSingle();
 
+            Container.BindInterfacesAndSelfTo<UnityServicesInstaller>()
+                .AsSingle();
+
             Container.BindInterfacesAndSelfTo<FirebaseInstaller>()
+                .AsSingle();
+
+            Container.Bind<LocalSaveLoadService>()
+                .AsSingle();
+
+            Container.Bind<RemoteSaveLoadService>()
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<FirebaseRemoteConfigService>()
@@ -29,7 +38,7 @@ namespace _Project.Scripts.Installers
             Container.BindInterfacesAndSelfTo<PurchaseService>()
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerInventoryService>()
+            Container.Bind<PlayerInventoryService>()
                 .AsSingle();
         }
     }

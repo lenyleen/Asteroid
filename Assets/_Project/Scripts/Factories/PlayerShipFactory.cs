@@ -70,10 +70,9 @@ namespace _Project.Scripts.Factories
                 Quaternion.identity,
                 null
             );
+            shipView.Initialize(_shipViewModel, _shipSprite);
 
             await SpawnPlayerWeapons(shipView.PlayerWeapons);
-
-            shipView.Initialize(_shipViewModel, _shipSprite);
         }
 
         private async UniTask SpawnPlayerWeapons(PlayerWeapons playerWeapons)

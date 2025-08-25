@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Enemies;
 using _Project.Scripts.Enemies.EnemyBehaviour;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Zenject;

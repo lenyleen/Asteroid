@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using _Project.Scripts.Configs;
+using _Project.Scripts.Installers;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
 using _Project.Scripts.UI;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
 using Zenject;
 
 namespace _Project.Scripts.AssetLoaders
@@ -21,14 +21,17 @@ namespace _Project.Scripts.AssetLoaders
         private List<IBootstrapInitializable> _bootstrapInitializables;
         private List<IProjectImportanceInitializable> _projectImportanceInitializables;
         private IProjectAssetProvider  _assetProvider;
+        private SaveCheckHandler  _saveCheckHandler;
 
         [Inject]
-        public void Construct(List<IBootstrapInitializable> bootstrapInitializables,
-            List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider)
+        public void Construct(List<IBootstrapInitializable> bootstrapInitializables,UiService uiService,
+            List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider,
+            SaveCheckHandler saveCheckHandler)
         {
             _projectImportanceInitializables = projectImportanceInitializables;
             _bootstrapInitializables = bootstrapInitializables;
             _assetProvider = assetProvider;
+            _saveCheckHandler = saveCheckHandler;
         }
 
         public async void Start()
@@ -60,7 +63,20 @@ namespace _Project.Scripts.AssetLoaders
             await InitializeInitializables(_projectImportanceInitializables);
             await InitializeInitializables(_bootstrapInitializables);
 
+            await CheckLoadServices(projectContextContainer);
+
             await _sceneLoader.LoadScene(Scenes.MainMenu);
+        }
+
+        private async UniTask CheckLoadServices(DiContainer projectContainer)
+        {
+            var selectedSaveService = await _saveCheckHandler.SelectSaveService();
+
+            projectContainer.Bind<ISaveService>()
+                .FromInstance(selectedSaveService)
+                .AsSingle();
+
+            Debug.Log($"Selected {selectedSaveService.GetType()}");
         }
 
         private async UniTask InitializeInitializables<T>(List<T> initializables) where T : IAsyncInitializable

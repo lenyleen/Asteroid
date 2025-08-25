@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using _Project.Scripts.Interfaces;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;

@@ -12,17 +12,17 @@ namespace _Project.Scripts.Weapon
         private readonly CompositeDisposable _disposables = new();
         private readonly List<WeaponViewModel> _heavyWeapons;
         private readonly PlayerInputController _inputService;
-        private readonly List<WeaponViewModel> _mainWeapons;
+        private readonly List<WeaponViewModel> _mainMainWeapons;
         private readonly IPositionProvider _positionProvider;
 
         public ReactiveCommand OnDeath { get; } = new();
 
-        public PlayerWeaponsViewModel(List<WeaponViewModel> weapons, List<WeaponViewModel> heavyWeapons,
+        public PlayerWeaponsViewModel(List<WeaponViewModel> mainWeapons, List<WeaponViewModel> heavyWeapons,
             PlayerInputController inputService, IPositionProvider positionProvider)
         {
             _inputService = inputService;
             _positionProvider = positionProvider;
-            _mainWeapons = weapons;
+            _mainMainWeapons = mainWeapons;
             _heavyWeapons = heavyWeapons;
         }
 
@@ -40,14 +40,14 @@ namespace _Project.Scripts.Weapon
         private void OnLose()
         {
             DisposeWeapons(_heavyWeapons);
-            DisposeWeapons(_mainWeapons);
+            DisposeWeapons(_mainMainWeapons);
         }
 
         private void HandleFireInput()
         {
             var attackInput = _inputService.GetAttackInputData();
             Fire(attackInput.IsMainFirePressed, _heavyWeapons);
-            Fire(attackInput.IsHeavyFirePressed, _mainWeapons);
+            Fire(attackInput.IsHeavyFirePressed, _mainMainWeapons);
         }
 
         private async void Fire(bool isPressed, List<WeaponViewModel> weapons)

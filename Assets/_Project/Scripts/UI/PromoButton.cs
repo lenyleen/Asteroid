@@ -1,10 +1,8 @@
 ﻿using System;
-using _Project.Scripts.Interfaces;
 using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace _Project.Scripts.UI
 {
@@ -21,6 +19,11 @@ namespace _Project.Scripts.UI
             _image.sprite = sprite;
             _promoName.text = productName;
             OnSelected = _button.OnClickAsObservable();
+        }
+
+        public void Hide()
+        {
+            Destroy(this.gameObject);
         }
     }
 }

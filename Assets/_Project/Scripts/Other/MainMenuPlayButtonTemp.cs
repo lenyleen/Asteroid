@@ -1,7 +1,6 @@
 ﻿using System;
 using _Project.Scripts.Services;
 using _Project.Scripts.Static;
-using _Project.Scripts.UI;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;

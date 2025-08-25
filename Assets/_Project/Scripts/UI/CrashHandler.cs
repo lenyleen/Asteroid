@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
@@ -11,7 +10,7 @@ using Zenject;
 
 namespace _Project.Scripts.UI
 {
-    public class CrashHandler : MonoBehaviour, IBootstrapInitializable
+   public class CrashHandler : MonoBehaviour, IBootstrapInitializable
     {
         private UiService _uiService;
 
@@ -24,62 +23,65 @@ namespace _Project.Scripts.UI
         public UniTask InitializeAsync()
         {
             Application.logMessageReceived += HandleLog;
+            Application.logMessageReceivedThreaded += HandleLog;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
-
-            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+            UniTaskScheduler.UnobservedTaskException += OnUniTaskUnobserved;
 
             return UniTask.CompletedTask;
-        }
-
-        private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-        {
-            ShowErrorDialog(e.Exception.Message, e.Exception.StackTrace).Forget();
-            e.SetObserved();
-        }
-
-        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            if (e.ExceptionObject is Exception ex)
-                ShowErrorDialog(ex.Message, ex.StackTrace).Forget();
-        }
-
-        private void HandleLog(string logString, string stackTrace, LogType type)
-        {
-            if (type != LogType.Error)
-                return;
-
-            _ = ShowErrorDialog(logString, stackTrace);
-        }
-
-        private async UniTaskVoid ShowErrorDialog(string logString, string stackTrace)
-        {
-            try
-            {
-                var errorData = new ErrorPopUpData(logString + "\n" + stackTrace);
-                var popUp =
-                    await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(errorData);
-
-                await popUp.ShowDialogAsync();
-            }
-            catch (Exception)
-            {
-                //ignored
-            }
-
-            CloseApp();
-        }
-
-        private void CloseApp()
-        {
-            Application.Quit();
-#if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
-#endif
         }
 
         private void OnDestroy()
         {
             Application.logMessageReceived -= HandleLog;
+            Application.logMessageReceivedThreaded -= HandleLog;
+
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainOnUnhandledException;
+
+            UniTaskScheduler.UnobservedTaskException -= OnUniTaskUnobserved;
+        }
+
+        private void OnUniTaskUnobserved(Exception ex)
+        {
+            _ = ShowErrorDialog(ex.Message);
+        }
+
+        private void CurrentDomainOnUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            if (e.ExceptionObject is Exception ex)
+                _ = ShowErrorDialog(ex.Message);
+            else
+                _ = ShowErrorDialog("Unhandled non-Exception error");
+        }
+
+        private void HandleLog(string logString, string stackTrace, LogType type)
+        {
+            if (type != LogType.Error && type != LogType.Exception)
+                return;
+
+            _ = ShowErrorDialog(logString);
+        }
+
+        private async UniTask ShowErrorDialog(string message)
+        {
+            try
+            {
+                var errorData = new ErrorPopUpData($"{message}");
+                var popUp = await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(errorData);
+
+                await popUp.ShowDialogAsync(true);
+
+                await UniTask.NextFrame();
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+            }
+
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }

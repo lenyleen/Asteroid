@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using _Project.Scripts.Interfaces;
 using UnityEngine.AddressableAssets;
 

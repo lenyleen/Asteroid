@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Purchasing;
 
@@ -22,17 +21,12 @@ namespace _Project.Scripts.Other
             _storeController.OnPurchaseFailed += StoreControllerOnOnPurchaseFailed;
         }
 
-        public UniTask<Order> BuyProduct(Product product, CancellationToken cts)
+        public UniTask<Order> BuyProduct(Product product)
         {
             _storeController.PurchaseProduct(product);
-            return _buyOrderTcs.Task.AttachExternalCancellation(cts);
+            return _buyOrderTcs.Task;
         }
 
-        /*public UniTask<Order> BuyProduct(string productId, CancellationToken cts)
-        {
-            _storeController.PurchaseProduct(productId);
-            return _buyOrderTcs.Task.AttachExternalCancellation(cts);
-        }*/
 
         private void StoreControllerOnOnPurchaseFailed(FailedOrder failedOrder)
         {
@@ -51,5 +45,13 @@ namespace _Project.Scripts.Other
             _storeController.OnPurchasePending -= StoreControllerOnOnPurchasePending;
             _storeController.OnPurchaseFailed -= StoreControllerOnOnPurchaseFailed;
         }
+
     }
 }
+
+
+/*public UniTask<Order> BuyProduct(string productId, CancellationToken cts)
+        {
+            _storeController.PurchaseProduct(productId);
+            return _buyOrderTcs.Task.AttachExternalCancellation(cts);
+        }*/

@@ -51,7 +51,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             var restartDialog = await _uiService
                 .ShowDialogAwaitable<LosePopUp, LosePopUpData>(new LosePopUpData(_scoreModel.Score.Value));
 
-            var restartDialogResult = await restartDialog.ShowDialogAsync();
+            var restartDialogResult = await restartDialog.ShowDialogAsync(true);
 
             try
             {

@@ -2,11 +2,13 @@
 using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Project.Scripts.UI.PopUps
 {
     public abstract class PopUpBase : MonoBehaviour, IPopUp
     {
+        [SerializeField] protected Button _closeButton;
         public IObservable<IPopUp> OnClose => _closeCommand;
 
         private readonly ReactiveCommand<IPopUp> _closeCommand = new();

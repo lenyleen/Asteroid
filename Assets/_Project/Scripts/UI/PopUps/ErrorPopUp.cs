@@ -11,17 +11,16 @@ namespace _Project.Scripts.UI.PopUps
 {
     public class ErrorPopUp : PopUpBase, IDialog<ErrorPopUpData>
     {
-        [SerializeField] private Button _closeButton;
         [SerializeField] private Button _okButton;
         [SerializeField] private TextMeshProUGUI _message;
 
-        public void SetParams(ErrorPopUpData param)
+        public void SetParams(ErrorPopUpData data)
         {
             gameObject.SetActive(false);
-            _message.text = param.Message;
+            _message.text = data.Message;
         }
 
-        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice = true)
+        public async UniTask<DialogResult> ShowDialogAsync(bool hideAfterChoice)
         {
             gameObject.SetActive(true);
 
@@ -42,9 +41,7 @@ namespace _Project.Scripts.UI.PopUps
             return await tcs.Task;
         }
 
-        public override void Show()
-        {
+        public override void Show() =>
             Debug.LogWarning("Not implemented");
-        }
     }
 }

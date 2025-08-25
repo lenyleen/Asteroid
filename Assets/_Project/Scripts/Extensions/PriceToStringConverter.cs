@@ -7,7 +7,7 @@ namespace _Project.Scripts.Extensions
         public static string ToPreviousPrice(this decimal price)
         {
             var priceAsString = price.ToString("C", CultureInfo.GetCultureInfo("en-US"));
-            return $"<color #B0B0B0>{priceAsString}</color>";
+            return $"<s>{priceAsString}</s>";
             //#B0B0B0
         }
 

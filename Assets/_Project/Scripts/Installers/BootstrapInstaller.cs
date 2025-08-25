@@ -24,6 +24,9 @@ namespace _Project.Scripts.Installers
                 .FromInstance(projectAsyncInitializer)
                 .AsSingle();
 
+            Container.Bind<SaveCheckHandler>()
+                .AsSingle();
+
             projectContainer.BindInterfacesAndSelfTo<PopUpFactory>()
                 .AsSingle()
                 .WithArguments(_popUpsConfig, _crashHandler.transform);
@@ -31,7 +34,7 @@ namespace _Project.Scripts.Installers
             projectContainer.Bind<UiService>()
                 .AsSingle();
 
-            projectContainer.Bind<CrashHandler>()
+            projectContainer.BindInterfacesAndSelfTo<CrashHandler>()
                 .FromInstance(_crashHandler)
                 .AsSingle();
         }

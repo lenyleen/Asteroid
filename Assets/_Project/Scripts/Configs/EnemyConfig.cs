@@ -1,7 +1,6 @@
 ﻿using System;
 using _Project.Scripts.Enemies;
 using Newtonsoft.Json;
-using UnityEngine;
 
 namespace _Project.Scripts.Configs
 {

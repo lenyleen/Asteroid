@@ -2,12 +2,11 @@
 using _Project.Scripts.DTO;
 using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using ModestTree;
 using UniRx;
 
 namespace _Project.Scripts.Services
 {
-    public class PlayerProgressProvider : IDisposable, IBootstrapInitializable
+    public class PlayerProgressProvider : IDisposable, ISceneInitializable
     {
         public PlayerProgress PlayerProgress { get; }
 
@@ -33,9 +32,9 @@ namespace _Project.Scripts.Services
                     PlayerProgress.AddScore(enemyData.ScoreReward))
                 .AddTo(_disposable);
 
-            var result = await _saveLoadService.TryLoadData(out _loadedPlayerProgress);
+            var result = await _saveLoadService.TryLoadData();
 
-            if (!result)
+            if (!result.Success)
                 _loadedPlayerProgress = PlayerProgress;
         }
 
@@ -44,7 +43,7 @@ namespace _Project.Scripts.Services
             var progressToSave = _loadedPlayerProgress.Score > PlayerProgress.Score ?
                 _loadedPlayerProgress : PlayerProgress;
 
-            await _saveLoadService.SaveData(progressToSave);
+            await _saveLoadService.SaveData(progressToSave, DateTime.Now);
         }
 
         public void ToDefault() =>

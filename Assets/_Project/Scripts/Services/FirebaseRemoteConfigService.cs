@@ -4,6 +4,7 @@ using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
 using Firebase.RemoteConfig;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace _Project.Scripts.Services
 {
@@ -25,7 +26,15 @@ namespace _Project.Scripts.Services
 
             _remoteConfig = FirebaseRemoteConfig.DefaultInstance;
 
-            await _remoteConfig.FetchAndActivateAsync().AsUniTask();
+            var rc = FirebaseRemoteConfig.DefaultInstance;
+            Debug.Log($"LastFetchStatus: {rc.Info.LastFetchStatus}");
+            Debug.Log($"FailureReason: {rc.Info.LastFetchFailureReason}");
+            Debug.Log($"LastFetchTime: {rc.Info.FetchTime}");
+
+
+            await rc.FetchAsync(TimeSpan.Zero).AsUniTask();
+
+            await rc.ActivateAsync();
         }
 
         public T GetConfig<T>(string key)

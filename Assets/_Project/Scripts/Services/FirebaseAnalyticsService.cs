@@ -4,7 +4,6 @@ using _Project.Scripts.Enemies;
 using _Project.Scripts.Installers;
 using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
-using Firebase;
 using Firebase.Analytics;
 using UnityEngine;
 
