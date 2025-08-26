@@ -28,7 +28,7 @@ namespace _Project.Scripts.Other
         {
             try
             {
-                await _sceneLoader.LoadSceneWithCurtain(Scenes.GameplayInitial);
+                /*await _sceneLoader.LoadSceneWithCurtain(Scenes.GameplayInitial);*/
             }
             catch (Exception e)
             {

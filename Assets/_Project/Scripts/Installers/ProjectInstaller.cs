@@ -38,7 +38,7 @@ namespace _Project.Scripts.Installers
             Container.BindInterfacesAndSelfTo<PurchaseService>()
                 .AsSingle();
 
-            Container.Bind<PlayerInventoryService>()
+            Container.BindInterfacesAndSelfTo<PlayerInventoryService>()
                 .AsSingle();
         }
     }

@@ -4,12 +4,13 @@ using System.Linq;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
 using _Project.Scripts.Installers;
+using _Project.Scripts.Interfaces;
 using Cysharp.Threading.Tasks;
 using Unity.Services.Economy;
 
 namespace _Project.Scripts.Services
 {
-    public class PlayerInventoryService
+    public class PlayerInventoryService : IBootstrapInitializable
     {
         private readonly UnityServicesInstaller  _unityServicesInstaller;
 

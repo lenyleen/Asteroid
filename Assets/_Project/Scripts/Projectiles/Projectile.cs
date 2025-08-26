@@ -29,6 +29,9 @@ namespace _Project.Scripts.Projectiles
             _renderer.sprite = _data.Sprite;
             _collider.size = _data.Sprite.bounds.size;
             _collider.offset = _data.Sprite.bounds.center;
+
+            _renderer.enabled = false;
+
             gameObject.SetActive(true);
 
             _rb.position = _data.Position;

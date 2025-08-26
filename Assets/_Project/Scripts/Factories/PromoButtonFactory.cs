@@ -11,11 +11,11 @@ namespace _Project.Scripts.Factories
     public class PromoButtonFactory
     {
         private readonly IScenesAssetProvider _assetProvider;
-        private readonly IInstantiator _instantiator;
+        private readonly DiContainer _instantiator;
         private readonly Transform _buttonsParent;
         private readonly AssetReference _prefabReference;
 
-        public PromoButtonFactory(IScenesAssetProvider assetProvider, IInstantiator instantiator,
+        public PromoButtonFactory(IScenesAssetProvider assetProvider, DiContainer instantiator,
             Transform buttonsParent, AssetReference prefabReference)
         {
             _assetProvider = assetProvider;

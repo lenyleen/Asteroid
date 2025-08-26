@@ -17,15 +17,18 @@ namespace _Project.Scripts.Configs
 
         public float LifetimeInSeconds { get; private set; }
 
+        public bool EnableSprite { get; private set; }
+
         [JsonConstructor]
         public ProjectileConfig(ProjectileType type, string spriteAddress, ColliderConfig colliderConfig,
-            float speed, float lifetimeInSeconds)
+            float speed, float lifetimeInSeconds,  bool enableSprite)
         {
             Type = type;
             SpriteAddress = spriteAddress;
             ColliderConfig = colliderConfig;
             Speed = speed;
             LifetimeInSeconds = lifetimeInSeconds;
+            EnableSprite = enableSprite;
         }
     }
 }
