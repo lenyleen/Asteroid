@@ -21,8 +21,6 @@ namespace _Project.Scripts.UI.PopUps
             gameObject.SetActive(true);
         }
 
-        public abstract void Show();
-
         public void Hide()
         {
             gameObject.SetActive(false);

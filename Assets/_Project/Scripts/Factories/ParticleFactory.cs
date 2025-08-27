@@ -12,7 +12,7 @@ namespace _Project.Scripts.Factories
 {
     public class ParticleFactory : ISceneInitializable
     {
-        private const string ConfigsListKey = "VfxConfigs";
+        private const string ConfigsListKey = "AvailableVfxConfigs";
 
         private readonly IScenesAssetProvider _assetProvider;
         private readonly IRemoteConfigService _remoteConfigService;

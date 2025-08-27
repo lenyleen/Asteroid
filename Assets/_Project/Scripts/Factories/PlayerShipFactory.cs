@@ -70,7 +70,7 @@ namespace _Project.Scripts.Factories
                 Quaternion.identity,
                 null
             );
-            shipView.Initialize(_shipViewModel, _shipSprite);
+            shipView.Initialize(_shipViewModel, _shipSprite, _shipPreferences.VFXType);
 
             await SpawnPlayerWeapons(shipView.PlayerWeapons);
         }

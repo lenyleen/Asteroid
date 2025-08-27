@@ -21,17 +21,19 @@ namespace _Project.Scripts.AssetLoaders
         private List<IBootstrapInitializable> _bootstrapInitializables;
         private List<IProjectImportanceInitializable> _projectImportanceInitializables;
         private IProjectAssetProvider  _assetProvider;
-        private SaveCheckHandler  _saveCheckHandler;
+        private PlayerProgressSaveCheckHandler  _playerProgressSaveCheckHandler;
+        private UnityServicesInstaller _unityServicesInstaller;
 
         [Inject]
         public void Construct(List<IBootstrapInitializable> bootstrapInitializables,UiService uiService,
             List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider,
-            SaveCheckHandler saveCheckHandler)
+            PlayerProgressSaveCheckHandler playerProgressSaveCheckHandler, UnityServicesInstaller unityServicesInstaller)
         {
             _projectImportanceInitializables = projectImportanceInitializables;
             _bootstrapInitializables = bootstrapInitializables;
             _assetProvider = assetProvider;
-            _saveCheckHandler = saveCheckHandler;
+            _playerProgressSaveCheckHandler = playerProgressSaveCheckHandler;
+            _unityServicesInstaller = unityServicesInstaller;
         }
 
         public async void Start()
@@ -60,6 +62,8 @@ namespace _Project.Scripts.AssetLoaders
             projectContextContainer.Bind<SceneLoader>()
                 .AsSingle();
 
+            await _unityServicesInstaller.InitializeAsync();
+
             await InitializeInitializables(_projectImportanceInitializables);
             await InitializeInitializables(_bootstrapInitializables);
 
@@ -70,7 +74,7 @@ namespace _Project.Scripts.AssetLoaders
 
         private async UniTask CheckLoadServices(DiContainer projectContainer)
         {
-            var selectedSaveService = await _saveCheckHandler.SelectSaveService();
+            var selectedSaveService = await _playerProgressSaveCheckHandler.SelectSaveService();
 
             projectContainer.Bind<ISaveService>()
                 .FromInstance(selectedSaveService)

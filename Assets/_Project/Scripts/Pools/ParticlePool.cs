@@ -3,6 +3,7 @@ using _Project.Scripts.Data;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Other;
 using Cysharp.Threading.Tasks;
+using JetBrains.Annotations;
 using UnityEngine;
 
 namespace _Project.Scripts.Pools
@@ -14,22 +15,26 @@ namespace _Project.Scripts.Pools
         private readonly int _increasingStep;
         private readonly Dictionary<VfxType, Stack<Particle>> _pool = new();
 
-        public ParticlePool(Transform poolParent, ParticleFactory particleFactory, int poolInitialSize,
+        public ParticlePool(ParticleFactory particleFactory,
             int increasingStep = 3)
         {
-            _poolParent = poolParent;
+            _poolParent = new GameObject("ParticlePool").transform;
+
             _particleFactory = particleFactory;
+            _increasingStep = increasingStep;
         }
 
-        public async void ShowParticle(VfxType vfxType, Transform parent, float rotation, float lifetime)
+        public async void ShowParticle(VfxType vfxType, [CanBeNull] Transform parent, Vector3 position)
         {
+            parent = parent == null ? _poolParent : parent;
+
             if(!_pool.TryGetValue(vfxType, out var particles))
                 _pool.Add(vfxType, particles = new Stack<Particle>());
 
             if (!particles.TryPop(out var particle))
                 particle = await CreateParticles(vfxType, particles);
 
-            particle.Display(parent, rotation, lifetime,Return);
+            particle.Display(parent,position,Return);
         }
 
         private async UniTask<Particle> CreateParticles(VfxType vfxType, Stack<Particle> particles)
@@ -37,7 +42,10 @@ namespace _Project.Scripts.Pools
             var newParticles = await _particleFactory.Create(vfxType,_poolParent, _increasingStep);
 
             foreach (var particle in newParticles)
+            {
+                particle.Deinitialize(_poolParent);
                 particles.Push(particle);
+            }
 
             return particles.Pop();
         }

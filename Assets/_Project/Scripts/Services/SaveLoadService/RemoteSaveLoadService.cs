@@ -13,10 +13,8 @@ using UnityEngine;
 
 namespace _Project.Scripts.Services
 {
-    public class RemoteSaveLoadService : ISaveService, IBootstrapInitializable
+    public class RemoteSaveLoadService : ISaveService, IProjectImportanceInitializable
     {
-        private const string PlayerProgressKey = "PlayerData";
-
         public bool IsAvailable { get; private set; }
 
         private readonly UnityServicesInstaller _unityServicesInstaller;
@@ -32,7 +30,7 @@ namespace _Project.Scripts.Services
             return UniTask.CompletedTask;
         }
 
-        public async UniTask SaveData(PlayerProgress data, DateTime timeOfCreation)
+        public async UniTask SaveData<T>(T data, string key, DateTime timeOfCreation)  where T : class, ILoadedData
         {
             if (!IsAvailable)
             {
@@ -43,32 +41,32 @@ namespace _Project.Scripts.Services
             var dataToSave = JsonConvert.SerializeObject(data);
 
             await CloudSaveService.Instance.Data.Player.SaveAsync(
-                new Dictionary<string, object>{{PlayerProgressKey,dataToSave}})
+                new Dictionary<string, object>{{key,dataToSave}})
                 .AsUniTask();
         }
 
-        public async UniTask<PlayerProgressSaveGetResult> TryLoadData()
+        public async UniTask<DataSaveGetResult<T>> TryLoadData<T>(string key) where T : class, ILoadedData
         {
             if(!IsAvailable)
-                return new PlayerProgressSaveGetResult(false, null);
+                return new DataSaveGetResult<T>(false, null);
 
             try
             {
                 var loadedData = await CloudSaveService.Instance.Data.Player.LoadAsync(
-                        new HashSet<string> { PlayerProgressKey })
+                        new HashSet<string> { key })
                     .AsUniTask();
 
-                var progressDataJson = loadedData[PlayerProgressKey].Value.GetAsString();
-                var progressData = JsonConvert.DeserializeObject<PlayerProgress>(progressDataJson);
+                var progressDataJson = loadedData[key].Value.GetAsString();
+                var progressData = JsonConvert.DeserializeObject<T>(progressDataJson);
 
-                var savedData =  new SavedPlayerData(progressData, (DateTime)loadedData[PlayerProgressKey].Modified);
+                var savedData =  new SavedData<T>(progressData, (DateTime)loadedData[key].Modified);
 
-                return new PlayerProgressSaveGetResult(true, savedData);
+                return new DataSaveGetResult<T>(true, savedData);
             }
             catch (Exception e)
             {
                 Debug.LogWarning("Failed to load player data: " + e.Message);
-                return new PlayerProgressSaveGetResult(false, null);
+                return new DataSaveGetResult<T>(false, null);
             }
         }
     }

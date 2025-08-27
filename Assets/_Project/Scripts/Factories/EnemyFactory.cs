@@ -42,7 +42,8 @@ namespace _Project.Scripts.Factories
 
         var enemySprite = await _assetProvider.Load<Sprite>(config.SpriteAddress);
 
-        var enemy = _enemyPool.Spawn(position, enemySprite, viewModel, view => _enemyPool.Despawn(view));
+        var enemy = _enemyPool.Spawn(position, enemySprite, viewModel,config.VFXType,
+            view => _enemyPool.Despawn(view));
 
         return viewModel;
     }

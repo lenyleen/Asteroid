@@ -47,7 +47,7 @@ namespace _Project.Scripts.Factories
             }
         }
 
-        public async Task<T> CreatePopUp<T>() where T : IPopUp
+        public async UniTask<T> CreatePopUp<T>() where T : IPopUp
         {
             var type = typeof(T);
             if (!_popUpPrefabs.TryGetValue(type, out var reference))

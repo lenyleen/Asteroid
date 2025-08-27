@@ -50,7 +50,7 @@ namespace _Project.Scripts.Factories
 
             var projectileInitData = new ProjectileInitData(sprite, behaviour, spawnPosition,
                 positionProvider.Rotation.Value, positionProvider.Velocity.Value, data.ColliderConfig,
-                data.LifetimeInSeconds);
+                data.LifetimeInSeconds, data.EnableSprite);
 
             _pool.Spawn(projectileInitData, prj => _pool.Despawn(prj));
         }

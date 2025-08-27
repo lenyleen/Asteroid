@@ -1,6 +1,7 @@
 ﻿using System;
 using _Project.Scripts.DTO;
 using _Project.Scripts.Interfaces;
+using _Project.Scripts.Static;
 using Cysharp.Threading.Tasks;
 using UniRx;
 
@@ -11,15 +12,18 @@ namespace _Project.Scripts.Services
         public PlayerProgress PlayerProgress { get; }
 
         private readonly ISaveService _saveLoadService;
+        private readonly LocalSaveLoadService _localSaveLoadService;
         private readonly IEnemyDiedNotifier _enemyDiedNotifier;
         private readonly CompositeDisposable _disposable = new();
 
         private PlayerProgress _loadedPlayerProgress;
 
-        public PlayerProgressProvider(ISaveService saveLoadService, IEnemyDiedNotifier enemyDiedNotifier)
+        public PlayerProgressProvider(ISaveService saveLoadService, IEnemyDiedNotifier enemyDiedNotifier,
+            LocalSaveLoadService localSaveLoadService)
         {
             _saveLoadService = saveLoadService;
             _enemyDiedNotifier = enemyDiedNotifier;
+            _localSaveLoadService = localSaveLoadService;
 
             PlayerProgress = new PlayerProgress(0);
             PlayerProgress.InitializeReactiveValues();
@@ -32,7 +36,10 @@ namespace _Project.Scripts.Services
                     PlayerProgress.AddScore(enemyData.ScoreReward))
                 .AddTo(_disposable);
 
-            var result = await _saveLoadService.TryLoadData();
+            var result = await _saveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
+
+            if(!result.Success)
+                result = await _localSaveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
             if (!result.Success)
                 _loadedPlayerProgress = PlayerProgress;
@@ -43,7 +50,15 @@ namespace _Project.Scripts.Services
             var progressToSave = _loadedPlayerProgress.Score > PlayerProgress.Score ?
                 _loadedPlayerProgress : PlayerProgress;
 
-            await _saveLoadService.SaveData(progressToSave, DateTime.Now);
+            try
+            {
+                await _saveLoadService.SaveData(progressToSave, SaveKeys.PlayerProgressKey, DateTime.UtcNow);
+            }
+            catch (Exception)
+            {
+                await _localSaveLoadService.SaveData(progressToSave, SaveKeys.PlayerProgressKey, DateTime.UtcNow);
+                throw;
+            }
         }
 
         public void ToDefault() =>

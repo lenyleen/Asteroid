@@ -1,11 +1,12 @@
 ﻿using System;
+using _Project.Scripts.Interfaces;
 using UniRx;
 using UnityEngine;
 
 namespace _Project.Scripts.DTO
 {
     [Serializable]
-    public class PlayerProgress
+    public class PlayerProgress : ILoadedData
     {
         [field: SerializeField] public int Score { get; private set; }
 

@@ -14,9 +14,14 @@ namespace _Project.Scripts.Services
             _particlePool = particlePool;
         }
 
-        public void PlayVfx(VfxType vfxType, Transform parent, float rotation, float lifetime)
+        public void PlayVfx(VfxType vfxType, Transform parent)
         {
-            _particlePool.ShowParticle(vfxType, parent, rotation, lifetime);
+            _particlePool.ShowParticle(vfxType, parent, Vector3.zero);
+        }
+
+        public void PlayVfx(VfxType vfxType, Vector3 position)
+        {
+            _particlePool.ShowParticle(vfxType,null, position);
         }
     }
 }

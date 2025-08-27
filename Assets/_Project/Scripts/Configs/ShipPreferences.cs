@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using _Project.Scripts.Data;
 using Newtonsoft.Json;
 
 namespace _Project.Scripts.Configs
@@ -23,9 +24,11 @@ namespace _Project.Scripts.Configs
 
         public string PlayerShipPrefabAddress { get; private set; }
 
+        public VfxType VFXType { get; private set; }
+
         [JsonConstructor]
         public ShipPreferences(Vector3 startPosition, int health, float acceleration, float maxSpeed,
-            float rotationSpeed, float friction, ColliderConfig colliderConfig, string playerShipPrefabAddress)
+            float rotationSpeed, float friction, ColliderConfig colliderConfig, string playerShipPrefabAddress, VfxType vfxType)
         {
             StartPosition = startPosition;
             Health = health;
@@ -35,6 +38,7 @@ namespace _Project.Scripts.Configs
             Friction = friction;
             ColliderConfig = colliderConfig;
             PlayerShipPrefabAddress = playerShipPrefabAddress;
+            VFXType = vfxType;
         }
     }
 }

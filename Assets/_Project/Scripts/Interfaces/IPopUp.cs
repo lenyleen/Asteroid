@@ -12,6 +12,11 @@ namespace _Project.Scripts.Interfaces
         public void Hide();
     }
 
+    public interface IUnParametrizedPopUp : IPopUp
+    {
+        public void Show();
+    }
+
     public interface IDialog<TParams> : IPopUp
     {
         public void SetParams(TParams data);

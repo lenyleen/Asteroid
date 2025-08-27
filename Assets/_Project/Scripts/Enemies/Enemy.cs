@@ -1,6 +1,8 @@
 ﻿using System;
 using _Project.Scripts.Configs;
+using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -21,10 +23,20 @@ namespace _Project.Scripts.Enemies
         private CompositeDisposable _disposables = new();
         private Action<Enemy> _onDeath;
         private EnemyViewModel _viewModel;
+        private VfxService  _vfxService;
+        private VfxType _vfxType;
 
-        private void Initialize(Vector3 position, Sprite sprite, EnemyViewModel context, Action<Enemy> onDeath)
+        [Inject]
+        private void Construct(VfxService vfxService)
+        {
+            _vfxService = vfxService;
+        }
+
+        private void Initialize(Vector3 position, Sprite sprite, EnemyViewModel context, VfxType vfxType,
+            Action<Enemy> onDeath)
         {
             _viewModel = context;
+            _vfxType = vfxType;
             transform.position = position;
             _onDeath = onDeath;
             _renderer.sprite = sprite;
@@ -65,6 +77,8 @@ namespace _Project.Scripts.Enemies
 
         private void Despawn()
         {
+            _vfxService.PlayVfx(_vfxType, transform.position);
+
             _rb.linearVelocity = Vector2.zero;
             _rb.angularVelocity = 0;
             gameObject.SetActive(false);
@@ -73,12 +87,12 @@ namespace _Project.Scripts.Enemies
             _disposables = new CompositeDisposable();
         }
 
-        public class Pool : MonoMemoryPool<Vector3, Sprite, EnemyViewModel, Action<Enemy>, Enemy>
+        public class Pool : MonoMemoryPool<Vector3, Sprite, EnemyViewModel,VfxType, Action<Enemy>, Enemy>
         {
             protected override void Reinitialize(Vector3 postion, Sprite sprite, EnemyViewModel context,
-                Action<Enemy> onDestroy, Enemy item)
+                VfxType vfxType, Action<Enemy> onDestroy, Enemy item)
             {
-                item.Initialize(postion, sprite, context, onDestroy);
+                item.Initialize(postion, sprite, context,vfxType, onDestroy);
             }
 
             protected override void OnDespawned(Enemy item)

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace _Project.Scripts.Installers
 {
-    public class UnityServicesInstaller : IProjectImportanceInitializable
+    public class UnityServicesInstaller
     {
         public bool Initialized { get; private set; }
         public bool Authenticated { get; private set; }

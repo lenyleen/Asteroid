@@ -7,6 +7,13 @@ namespace _Project.Scripts.Configs
     public class VfxConfig
     {
         public VfxType  VfxType { get; private set; }
+
         public string ParticlePrefabAddress { get; private set; }
+
+        public VfxConfig(VfxType vfxType, string particlePrefabAddress)
+        {
+            VfxType = vfxType;
+            ParticlePrefabAddress = particlePrefabAddress;
+        }
     }
 }

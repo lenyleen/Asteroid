@@ -1,18 +1,21 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using _Project.Scripts.Data;
+using _Project.Scripts.DTO;
 using _Project.Scripts.Interfaces;
+using _Project.Scripts.Static;
 using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
 
 namespace _Project.Scripts.Services
 {
-    public class SaveCheckHandler
+    public class PlayerProgressSaveCheckHandler
     {
         private readonly UiService _uiService;
         private readonly RemoteSaveLoadService _remoteSaveLoadService;
         private readonly LocalSaveLoadService _localSaveLoadService;
 
-        public SaveCheckHandler(UiService uiService,  RemoteSaveLoadService remoteSaveLoadService,
+        public PlayerProgressSaveCheckHandler(UiService uiService,  RemoteSaveLoadService remoteSaveLoadService,
             LocalSaveLoadService localSaveLoadService)
         {
             _uiService = uiService;
@@ -25,9 +28,9 @@ namespace _Project.Scripts.Services
             if(!_remoteSaveLoadService.IsAvailable)
                 return _remoteSaveLoadService;
 
-            var localLoadResult = await _localSaveLoadService.TryLoadData();
+            var localLoadResult = await _localSaveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
-            var remoteLoadResult = await _remoteSaveLoadService.TryLoadData();
+            var remoteLoadResult = await _remoteSaveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
             switch (localLoadResult.Success)
             {
@@ -45,8 +48,8 @@ namespace _Project.Scripts.Services
             return _localSaveLoadService;
         }
 
-        private async UniTask ShowSelectionDialog(PlayerProgressSaveGetResult localLoadResult,
-            PlayerProgressSaveGetResult remoteLoadResult, LocalSaveLoadService localSaveLoadService,
+        private async UniTask ShowSelectionDialog(DataSaveGetResult<PlayerProgress> localLoadResult,
+            DataSaveGetResult<PlayerProgress> remoteLoadResult, LocalSaveLoadService localSaveLoadService,
             RemoteSaveLoadService remoteSaveLoadService)
         {
             if(localLoadResult.Data.Created <= remoteLoadResult.Data.Created)
@@ -67,7 +70,7 @@ namespace _Project.Scripts.Services
                 await SaveDataToSaveService(remoteLoadResult, localSaveLoadService);
         }
 
-        private async UniTask SaveDataToSaveService(PlayerProgressSaveGetResult save, ISaveService to) =>
-            await to.SaveData(save.Data.PlayerData, save.Data.Created);
+        private async UniTask SaveDataToSaveService(DataSaveGetResult<PlayerProgress> save, ISaveService to) =>
+            await to.SaveData(save.Data.LoadedData, SaveKeys.PlayerProgressKey, save.Data.Created);
     }
 }

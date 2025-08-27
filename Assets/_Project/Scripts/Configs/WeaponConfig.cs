@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Data;
 using Newtonsoft.Json;
 
 namespace _Project.Scripts.Configs
@@ -14,17 +15,20 @@ namespace _Project.Scripts.Configs
 
         public float ReloadTimeInSeconds { get; private set; }
 
+        public VfxType  VFXType { get; private set; }
+
         public int AmmoCount { get; private set; }
 
         [JsonConstructor]
         public WeaponConfig(WeaponType type, ProjectileType projectileType, string spriteAddress,
-            float reloadTimeInSeconds, int ammoCount)
+            float reloadTimeInSeconds, int ammoCount, VfxType vfxType)
         {
             Type = type;
             ProjectileType = projectileType;
             SpriteAddress = spriteAddress;
             ReloadTimeInSeconds = reloadTimeInSeconds;
             AmmoCount = ammoCount;
+            VFXType = vfxType;
         }
     }
 

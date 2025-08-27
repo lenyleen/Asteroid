@@ -52,8 +52,5 @@ namespace _Project.Scripts.UI.PopUps
 
             return await tcs.Task;
         }
-
-        public override void Show() =>
-            Debug.LogWarning("Can't show SaveSelectionPopUp without parameters");
     }
 }

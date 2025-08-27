@@ -7,8 +7,8 @@ namespace _Project.Scripts.Interfaces
 {
     public interface ISaveService
     {
-        public UniTask SaveData(PlayerProgress data, DateTime timeOfCreation);
+        public UniTask SaveData<T>(T data,string key, DateTime timeOfCreation) where T : class, ILoadedData;
 
-        public UniTask<PlayerProgressSaveGetResult> TryLoadData();
+        public UniTask<DataSaveGetResult<T>> TryLoadData<T>(string key) where T : class,ILoadedData;
     }
 }

@@ -30,7 +30,7 @@ namespace _Project.Scripts.Projectiles
             _collider.size = _data.Sprite.bounds.size;
             _collider.offset = _data.Sprite.bounds.center;
 
-            _renderer.enabled = false;
+            _renderer.enabled = data.EnableSprite;
 
             gameObject.SetActive(true);
 
@@ -122,11 +122,13 @@ namespace _Project.Scripts.Projectiles
         public float Rotation {get;}
         public Vector2 Velocity {get;}
 
+        public bool EnableSprite {get;}
+
         public ProjectileInitData(Sprite sprite, IProjectileBehaviour behaviour, Vector3 position, float rotation,
-            Vector2 velocity, ColliderConfig colliderConfig, float lifetimeInSeconds)
+            Vector2 velocity, ColliderConfig colliderConfig, float lifetimeInSeconds, bool enableSprite)
         {
             Sprite = sprite;
-
+            EnableSprite = enableSprite;
             Behaviour = behaviour;
             Position = position;
             Rotation = rotation;

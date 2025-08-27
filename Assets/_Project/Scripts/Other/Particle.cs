@@ -11,30 +11,24 @@ namespace _Project.Scripts.Other
     {
         [field: SerializeField] public VfxType VfxType { get; private set; }
 
-        [SerializeField] private List<ParticleSystem> _particleSystems;
-
         private ParticleSystem _mainParticleSystem;
         private Action<Particle> _onFinish;
+        private Quaternion _startRotation;
 
         private void Awake()
         {
             _mainParticleSystem = GetComponent<ParticleSystem>();
+            _startRotation = transform.rotation;
         }
 
-        public void Display(Transform parent, float rotation, float lifetime, Action<Particle> onFinish)
+        public void Display(Transform parent,Vector3 position,  Action<Particle> onFinish)
         {
-            foreach (var particleSystem in _particleSystems)
-            {
-                var main = particleSystem.main;
-                main.startLifetime = lifetime;
-            }
-
             gameObject.SetActive(true);
 
             _onFinish = onFinish;
-            transform.SetParent(parent);
-            transform.localPosition = Vector3.zero;
-            transform.localRotation = Quaternion.Euler(0,0,rotation);
+            transform.SetParent(parent,true);
+            transform.localPosition = position;
+            transform.localRotation = _startRotation;
 
             _mainParticleSystem.Play(true);
         }
@@ -47,6 +41,8 @@ namespace _Project.Scripts.Other
             gameObject.SetActive(false);
 
             transform.SetParent(parent);
+            transform.localPosition = Vector3.zero;
+
             _onFinish = null;
         }
     }

@@ -11,11 +11,13 @@ namespace _Project.Scripts.Weapon
     {
         public string Name => _model.Name;
         public IObservable<Unit> OnDeath => _onDeath;
+        public IObservable<Unit> OnShot => _onShot;
         public ReadOnlyReactiveProperty<float> ReloadTimePercent { get; }
         public ReadOnlyReactiveProperty<int> AmmoCount { get; private set; }
 
         private readonly WeaponModel _model;
         private readonly ReactiveCommand _onDeath = new();
+        private readonly ReactiveCommand _onShot = new();
         private readonly ReactiveProperty<float> _reloadTimePercent = new();
         private readonly ProjectileFactory _projectileFactory;
         private readonly IAnalyticsService _analyticsDataObserver;
@@ -47,16 +49,15 @@ namespace _Project.Scripts.Weapon
             var rotatedOffset = Quaternion.Euler(0, 0, playerRotation) * _model.OffsetFromHolder;
             var projectileSpawnPos = positionProvider.Position.Value + rotatedOffset;
 
-            await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+            /*await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider); ????*/
 
             _analyticsDataObserver.WeaponFire(_model.Type, _model.Name);
             await _projectileFactory.Create(_model.ProjectileType, projectileSpawnPos, positionProvider);
+            _onShot.Execute();
         }
 
-        public void Update()
-        {
+        public void Update() =>
             _model.UpdateReloadTime(Time.fixedDeltaTime);
-        }
 
         public void Dispose()
         {

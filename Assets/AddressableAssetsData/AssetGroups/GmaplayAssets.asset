@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 103f59c32ebcdcc43a8817be075afdd0
+    m_Address: AsteroidDestroy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1e3a425cbb16e404d91b5dabb792a474
     m_Address: WeaponUiDataDisplayer
     m_ReadOnly: 0
@@ -40,13 +45,28 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 830c3551fa1819c468f99164dd78b554
+    m_Address: BulletVfx
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 88b03c7e585c91f40ba1811473658e69
     m_Address: Hud
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c716f078d7efde4a9c80228b0fa0375
+    m_Address: PlayerDestroy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: a1048d7f498d739439d4eef604249f5e
     m_Address: BulletGunSprite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a45e21529aed6354f8fb40fd0c5da154
+    m_Address: LaserVfx
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -67,6 +87,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d7818bef7aedd5c43b60905cdacc2a46
     m_Address: LilAsteroidSprite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d836ccda3a120eb42915d6f4891845f0
+    m_Address: UfoDestroy
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

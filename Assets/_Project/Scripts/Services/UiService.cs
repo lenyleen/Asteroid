@@ -16,23 +16,33 @@ namespace _Project.Scripts.Services
             _popUpFactory = popUpFactory;
         }
 
+        public async void ShowPopUp<TPopUp>() where TPopUp : IUnParametrizedPopUp
+        {
+            var popUp = await SpawnPopUp<TPopUp>();
+
+            popUp.Show();
+        }
+
         public async UniTask<TPopUp> ShowDialogAwaitable<TPopUp, TParams>(TParams param)
             where TPopUp : class, IDialog<TParams> where TParams : IPopUpParams<TPopUp>
         {
-            var popUp = await _popUpFactory.CreatePopUp<TPopUp>();
-
-            popUp.OnClose.Take(1)
-                .Subscribe(Despawn);
-            _spawnedPopUps.Add(popUp);
+            var popUp = await SpawnPopUp<TPopUp>();
 
             popUp.SetParams(param);
 
             return popUp;
         }
 
-        public void HidePopUp(IPopUp popUp)
+        private async UniTask<TPopUp> SpawnPopUp<TPopUp>() where TPopUp : IPopUp
         {
-            popUp.Hide();
+            var popUp = await _popUpFactory.CreatePopUp<TPopUp>();
+
+            popUp.OnClose.Take(1)
+                .Subscribe(Despawn);
+
+            _spawnedPopUps.Add(popUp);
+
+            return popUp;
         }
 
         private void Despawn(IPopUp popUp)

@@ -1,4 +1,5 @@
 ﻿using System;
+using _Project.Scripts.Data;
 using _Project.Scripts.Enemies;
 using Newtonsoft.Json;
 
@@ -21,9 +22,11 @@ namespace _Project.Scripts.Configs
 
         public ColliderConfig CollisionConfig { get; private set; }
 
+        public VfxType VFXType { get; private set; }
+
         [JsonConstructor]
         public EnemyConfig(string spriteAddress, int health, EnemyType type, int score,
-            EnemyBehaviourConfig behaviourConfig, float spawnTimeInSeconds, ColliderConfig collisionConfig)
+            EnemyBehaviourConfig behaviourConfig, float spawnTimeInSeconds, ColliderConfig collisionConfig, VfxType vfxType)
         {
             SpriteAddress = spriteAddress;
             Health = health;
@@ -32,6 +35,7 @@ namespace _Project.Scripts.Configs
             BehaviourConfig = behaviourConfig;
             SpawnTimeInSeconds = spawnTimeInSeconds;
             CollisionConfig = collisionConfig;
+            VFXType = vfxType;
         }
     }
 }
