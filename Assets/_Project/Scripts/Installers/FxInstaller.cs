@@ -8,7 +8,6 @@ namespace _Project.Scripts.Installers
 {
     public class FxInstaller : MonoInstaller<FxInstaller>
     {
-        [SerializeField]
         public override void InstallBindings()
         {
             Container.BindInterfacesAndSelfTo<ParticleFactory>()
@@ -17,7 +16,7 @@ namespace _Project.Scripts.Installers
             Container.Bind<ParticlePool>()
                 .AsSingle();
 
-            Container.Bind<VfxService>()
+            Container.BindInterfacesAndSelfTo<VfxService>()
                 .AsSingle();
         }
     }

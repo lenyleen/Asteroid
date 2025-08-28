@@ -25,7 +25,7 @@ namespace _Project.Scripts.AssetLoaders
         private UnityServicesInstaller _unityServicesInstaller;
 
         [Inject]
-        public void Construct(List<IBootstrapInitializable> bootstrapInitializables,UiService uiService,
+        public void Construct(List<IBootstrapInitializable> bootstrapInitializables,IPopUpService popUpService,
             List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider,
             PlayerProgressSaveCheckHandler playerProgressSaveCheckHandler, UnityServicesInstaller unityServicesInstaller)
         {
@@ -43,7 +43,7 @@ namespace _Project.Scripts.AssetLoaders
             var loadCurtainPrefab = (await _assetProvider.Load<GameObject>(LoadCurtainPrefabAddress))
                 .GetComponent<LoadCurtain>();
 
-            var loadCurtain = Instantiate<LoadCurtain>(loadCurtainPrefab);
+            var loadCurtain = Instantiate(loadCurtainPrefab);
             DontDestroyOnLoad(loadCurtain);
 
             loadCurtain.gameObject.SetActive(false);

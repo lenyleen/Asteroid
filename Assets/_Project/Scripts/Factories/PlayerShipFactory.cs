@@ -70,7 +70,9 @@ namespace _Project.Scripts.Factories
                 Quaternion.identity,
                 null
             );
-            shipView.Initialize(_shipViewModel, _shipSprite, _shipPreferences.VFXType);
+
+            var audio = await _assetProvider.Load<AudioClip>(_shipPreferences.AudioAddress);
+            shipView.Initialize(_shipViewModel, _shipSprite, _shipPreferences.VFXType,audio);
 
             await SpawnPlayerWeapons(shipView.PlayerWeapons);
         }

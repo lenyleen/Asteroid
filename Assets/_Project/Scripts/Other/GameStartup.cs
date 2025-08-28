@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Project.Scripts.Data;
+using _Project.Scripts.Factories;
 using _Project.Scripts.GameplayStateMachine.States;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Services;
@@ -13,20 +14,22 @@ namespace _Project.Scripts.Other
 {
     public class GameStartup : MonoBehaviour
     {
-        private UiService _uiService;
+        private IPopUpService _popUpService;
         private GameplayStateMachine.GameplayStateMachine _gameplayStateMachine;
         private SceneLoader _sceneLoader;
         private List<ISceneInitializable> _initializables;
+        private BgmHandlerFactory _bgmHandlerFactory;
 
         [Inject]
-        private void Construct(List<ISceneInitializable> initializables,
+        private void Construct(List<ISceneInitializable> initializables,BgmHandlerFactory bgmHandlerFactory,
             GameplayStateMachine.GameplayStateMachine gameplayStateMachine,
-            UiService uiService, SceneLoader sceneLoader)
+            IPopUpService popUpService, SceneLoader sceneLoader)
         {
             _initializables = initializables;
             _gameplayStateMachine = gameplayStateMachine;
-            _uiService = uiService;
+            _popUpService = popUpService;
             _sceneLoader = sceneLoader;
+            _bgmHandlerFactory = bgmHandlerFactory;
         }
 
         private async void Start()
@@ -36,13 +39,14 @@ namespace _Project.Scripts.Other
                 foreach (var initializable in _initializables)
                     await initializable.InitializeAsync();
 
+                await _bgmHandlerFactory.Create();
                 await _sceneLoader.FadeOut();
 
                 _gameplayStateMachine.Initialize(typeof(InputWaitState));
             }
             catch (Exception e)
             {
-                await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(e.Message));
+                await _popUpService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(e.Message));
 
                 Debug.Log(e);
 

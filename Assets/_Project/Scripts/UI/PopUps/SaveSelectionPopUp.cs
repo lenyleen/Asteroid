@@ -42,13 +42,13 @@ namespace _Project.Scripts.UI.PopUps
                 tcs.TrySetResult(DialogResult.Yes);
 
                 HideAfterChoice(hideAfterChoice);
-            }).AddTo(_disposables);
+            }).AddTo(this);
 
             _closeButton.OnClickAsObservable().Subscribe(_ =>
             {
                 tcs.TrySetResult(DialogResult.Cancel);
                 HideAfterChoice(hideAfterChoice);
-            }).AddTo(_disposables);
+            }).AddTo(this);
 
             return await tcs.Task;
         }

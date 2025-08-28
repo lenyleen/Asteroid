@@ -25,24 +25,15 @@ namespace _Project.Scripts.UI.PopUps
 
         public void Show()
         {
-            _volumeSettingsProvider.VolumeSettings.ReactiveSfxVolume.Subscribe(vol =>
-            {
-                if (vol <= 0.05)
-                    _sfxToggle.isOn = false;
-
-                _sfxVolumeSlider.value = vol;
-            }).AddTo(this);
-
-            _volumeSettingsProvider.VolumeSettings.ReactiveMusicVolume.Subscribe(vol =>
-            {
-                if (vol <= 0.05)
-                    _musicToggle.isOn = false;
-
-                _musicVolumeSlider.value = vol;
-            }).AddTo(this);
+            SetVolume(_sfxToggle,_sfxVolumeSlider, _volumeSettingsProvider.VolumeSettings.SfxVolume);
+            SetVolume(_musicToggle,_musicVolumeSlider, _volumeSettingsProvider.VolumeSettings.MusicVolume);
 
             _saveButton.OnClickAsObservable()
                 .Subscribe(_ => SaveSettings())
+                .AddTo(this);
+
+            _closeButton.OnClickAsObservable().Subscribe(_ =>
+                    Hide())
                 .AddTo(this);
         }
 
@@ -53,6 +44,14 @@ namespace _Project.Scripts.UI.PopUps
 
             await _volumeSettingsProvider.SaveVolumeSettings(sfxVolume, musicVolume);
             Hide();
+        }
+
+        private void SetVolume(Toggle toggle, Slider slider, float vol)
+        {
+            if (vol <= 0.05)
+                toggle.isOn = false;
+
+            slider.value = vol;
         }
 
         private float GetVolume(Toggle toggle, Slider slider)

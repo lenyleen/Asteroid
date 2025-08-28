@@ -1,4 +1,5 @@
-﻿using _Project.Scripts.Services;
+﻿using _Project.Scripts.Interfaces;
+using _Project.Scripts.Services;
 using _Project.Scripts.Static;
 using _Project.Scripts.UI.PopUps;
 using UniRx;
@@ -16,12 +17,12 @@ namespace _Project.Scripts.MainMenu
         [SerializeField] private Button _exitButton;
 
         private SceneLoader _sceneLoader;
-        private UiService _uiService;
+        private IPopUpService _popUpService;
 
         [Inject]
-        private void Construct(UiService uiService, SceneLoader sceneLoader)
+        private void Construct(IPopUpService popUpService, SceneLoader sceneLoader)
         {
-            _uiService = uiService;
+            _popUpService = popUpService;
             _sceneLoader = sceneLoader;
         }
 
@@ -32,7 +33,7 @@ namespace _Project.Scripts.MainMenu
                 .AddTo(this);
 
             _settingsButton.OnClickAsObservable().Subscribe(_ =>
-                    _uiService.ShowPopUp<SettingsPopUp>())
+                    _popUpService.ShowPopUp<SettingsPopUp>())
                 .AddTo(this);
 
             _exitButton.OnClickAsObservable().Subscribe(_ =>

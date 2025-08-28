@@ -1,7 +1,7 @@
 ﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
+using _Project.Scripts.Extensions;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using _Project.Scripts.Weapon;
 using UniRx;
 using UnityEngine;
@@ -9,7 +9,7 @@ using Zenject;
 
 namespace _Project.Scripts.Player
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(AudioSource))]
     public class Ship : MonoBehaviour, ICollisionReceiver
     {
         [field: SerializeField] public PlayerWeapons PlayerWeapons { get; private set; }
@@ -17,22 +17,24 @@ namespace _Project.Scripts.Player
 
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _spriteRenderer;
+        [SerializeField] private AudioSource _audioSource;
 
         private readonly CompositeDisposable _disposables = new();
 
         private ShipViewModel _shipViewModel;
-        private VfxService  _vfxService;
+        private IVfxService  _vfxService;
         private VfxType  _vfxType;
 
         [Inject]
-        private void Construct(VfxService vfxService)
+        private void Construct(IVfxService vfxService)
         {
             _vfxService = vfxService;
         }
 
-        public void Initialize(ShipViewModel shipViewModel, Sprite sprite, VfxType vfxType)
+        public void Initialize(ShipViewModel shipViewModel, Sprite sprite, VfxType vfxType, AudioClip audioClip)
         {
             _shipViewModel = shipViewModel;
+            _audioSource.clip = audioClip;
 
             _spriteRenderer.sprite = sprite;
 
@@ -56,9 +58,10 @@ namespace _Project.Scripts.Player
             _shipViewModel.TakeDamage(colliderType, damage);
         }
 
-        public void OnDestroy()
+        public async void OnDestroy()
         {
             _vfxService.PlayVfx(_vfxType,transform);
+            await _audioSource.PlayAsync();
 
             _disposables.Dispose();
         }

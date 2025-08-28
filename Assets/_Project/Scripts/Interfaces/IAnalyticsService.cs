@@ -1,6 +1,5 @@
 ﻿using _Project.Scripts.Configs;
 using _Project.Scripts.Enemies;
-using Cysharp.Threading.Tasks;
 
 namespace _Project.Scripts.Interfaces
 {

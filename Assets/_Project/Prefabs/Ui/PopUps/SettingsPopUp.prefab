@@ -438,7 +438,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &2048750582772387294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1837,7 +1837,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &8936285349610742867
 GameObject:
   m_ObjectHideFlags: 0
@@ -1912,7 +1912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3395302461709544896, guid: bbc07227bb420b941b05d1b2125b0054, type: 3}
       propertyPath: m_Name
-      value: SettingsPopUp Variant
+      value: SettingsPopUp
       objectReference: {fileID: 0}
     - target: {fileID: 4206364243729177692, guid: bbc07227bb420b941b05d1b2125b0054, type: 3}
       propertyPath: m_text

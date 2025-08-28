@@ -1,6 +1,4 @@
-﻿using _Project.Scripts.Configs;
-using _Project.Scripts.Factories;
-using _Project.Scripts.Services;
+﻿using _Project.Scripts.Factories;
 using _Project.Scripts.UI.ScoreBox;
 using _Project.Scripts.UI.ShipInfoInfo;
 using _Project.Scripts.UI.Tutorial;

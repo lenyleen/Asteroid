@@ -3,7 +3,6 @@ using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using Zenject;
 
 namespace _Project.Scripts.UI
 {
@@ -25,11 +24,6 @@ namespace _Project.Scripts.UI
         public void Hide()
         {
             Destroy(this.gameObject);
-        }
-
-        public class Pool : MonoMemoryPool<PromoButton>
-        {
-
         }
     }
 }

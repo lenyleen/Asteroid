@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using _Project.Scripts.Data;
 using _Project.Scripts.DTO;
 using _Project.Scripts.Interfaces;
@@ -11,14 +10,14 @@ namespace _Project.Scripts.Services
 {
     public class PlayerProgressSaveCheckHandler
     {
-        private readonly UiService _uiService;
+        private readonly IPopUpService _popUpService;
         private readonly RemoteSaveLoadService _remoteSaveLoadService;
         private readonly LocalSaveLoadService _localSaveLoadService;
 
-        public PlayerProgressSaveCheckHandler(UiService uiService,  RemoteSaveLoadService remoteSaveLoadService,
+        public PlayerProgressSaveCheckHandler(IPopUpService popUpService,  RemoteSaveLoadService remoteSaveLoadService,
             LocalSaveLoadService localSaveLoadService)
         {
-            _uiService = uiService;
+            _popUpService = popUpService;
             _remoteSaveLoadService = remoteSaveLoadService;
             _localSaveLoadService = localSaveLoadService;
         }
@@ -26,7 +25,7 @@ namespace _Project.Scripts.Services
         public async UniTask<ISaveService> SelectSaveService()
         {
             if(!_remoteSaveLoadService.IsAvailable)
-                return _remoteSaveLoadService;
+                return _localSaveLoadService;
 
             var localLoadResult = await _localSaveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
@@ -45,7 +44,7 @@ namespace _Project.Scripts.Services
                     break;
             }
 
-            return _localSaveLoadService;
+            return _remoteSaveLoadService;
         }
 
         private async UniTask ShowSelectionDialog(DataSaveGetResult<PlayerProgress> localLoadResult,
@@ -58,7 +57,7 @@ namespace _Project.Scripts.Services
                 return;
             }
 
-            var popUp = await _uiService.ShowDialogAwaitable<SaveSelectionPopUp, SaveSelectionPopUpData>(
+            var popUp = await _popUpService.ShowDialogAwaitable<SaveSelectionPopUp, SaveSelectionPopUpData>(
                 new SaveSelectionPopUpData(localLoadResult.Data.Created.ToString(CultureInfo.CurrentCulture),
                     remoteLoadResult.Data.Created.ToString(CultureInfo.CurrentCulture)));
 

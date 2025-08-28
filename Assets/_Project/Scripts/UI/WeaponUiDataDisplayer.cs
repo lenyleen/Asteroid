@@ -14,8 +14,6 @@ namespace _Project.Scripts.UI
 
         private readonly CompositeDisposable _disposables = new();
 
-        public string Name => _name.text;
-
         public void Initialize(IWeaponInfoProvider infoProvider)
         {
             _name.text = infoProvider.Name;
@@ -34,7 +32,7 @@ namespace _Project.Scripts.UI
 
         }
 
-        public void Hide()
+        private void Hide()
         {
             _disposables.Dispose();
             Destroy(gameObject);

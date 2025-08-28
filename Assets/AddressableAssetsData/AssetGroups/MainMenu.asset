@@ -20,6 +20,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6997da77ff8404948a1e56f512d48c0d
+    m_Address: MainMenuAudio
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 719c5e32bd38ebc439897d9f86f82651
     m_Address: PromoPopUp
     m_ReadOnly: 0

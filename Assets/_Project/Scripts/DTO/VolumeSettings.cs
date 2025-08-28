@@ -1,7 +1,6 @@
 ﻿using System;
-using _Project.Scripts.Extensions;
 using _Project.Scripts.Interfaces;
-using UniRx;
+using Newtonsoft.Json;
 
 namespace _Project.Scripts.DTO
 {
@@ -10,28 +9,20 @@ namespace _Project.Scripts.DTO
     {
         private const float DefaultVolume = 1f;
 
-        public ReadOnlyReactiveProperty<float> ReactiveSfxVolume => new (_reactiveSfxVolume);
-        public ReadOnlyReactiveProperty<float> ReactiveMusicVolume => new (_reactiveMusicVolume);
-
-        private float _sfxVolume;
-        private float _musicVolume;
-
-        [field:NonSerialized]private ReactiveProperty<float> _reactiveSfxVolume =  new ();
-        [field:NonSerialized]private ReactiveProperty<float> _reactiveMusicVolume = new ();
+        [JsonProperty]public float SfxVolume { get; private set; }
+        [JsonProperty]public float MusicVolume{get; private set;}
 
         public VolumeSettings() =>
             SetVolumeSettings(DefaultVolume, DefaultVolume);
 
-        public VolumeSettings(float sfxVolume, float musicVolume) =>
-            SetVolumeSettings(sfxVolume, musicVolume);
+        [JsonConstructor]
+        public VolumeSettings(float SfxVolume, float MusicVolume) =>
+            SetVolumeSettings(SfxVolume, MusicVolume);
 
         public void SetVolumeSettings(float sfxVolume, float musicVolume)
         {
-            _sfxVolume = sfxVolume;
-            _musicVolume = musicVolume;
-
-            _reactiveSfxVolume.Value = sfxVolume;
-            _reactiveMusicVolume.Value = musicVolume;
+            SfxVolume = sfxVolume;
+            MusicVolume = musicVolume;
         }
     }
 }

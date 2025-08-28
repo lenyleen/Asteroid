@@ -40,10 +40,13 @@ namespace _Project.Scripts.Factories
 
         viewModel.Initialize();
 
+        var audio = await _assetProvider.Load<AudioClip>(config.AudioAddress);
+
         var enemySprite = await _assetProvider.Load<Sprite>(config.SpriteAddress);
 
-        var enemy = _enemyPool.Spawn(position, enemySprite, viewModel,config.VFXType,
-            view => _enemyPool.Despawn(view));
+        var initData = new Enemy.EnemyInitData(enemySprite, viewModel, config.VFXType, audio);
+
+        var enemy = _enemyPool.Spawn(position, initData, view => _enemyPool.Despawn(view));
 
         return viewModel;
     }

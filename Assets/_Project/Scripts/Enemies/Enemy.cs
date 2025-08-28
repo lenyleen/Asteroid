@@ -1,8 +1,9 @@
 ﻿using System;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Data;
+using _Project.Scripts.Extensions;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
+using _Project.Scripts.Other;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -10,6 +11,7 @@ using Zenject;
 namespace _Project.Scripts.Enemies
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
+    [RequireComponent(typeof(AudioSource))]
     public class Enemy : MonoBehaviour, ICollisionReceiver
     {
         [field: SerializeField] public ColliderType ColliderType { get; private set; }
@@ -18,31 +20,34 @@ namespace _Project.Scripts.Enemies
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _maxSpeed;
         [SerializeField] private BoxCollider2D _collider;
+        [SerializeField] private AudioSource _audioSource;
 
         private Vector2 _direction;
         private CompositeDisposable _disposables = new();
         private Action<Enemy> _onDeath;
         private EnemyViewModel _viewModel;
-        private VfxService  _vfxService;
+        private IVfxService  _vfxService;
         private VfxType _vfxType;
 
         [Inject]
-        private void Construct(VfxService vfxService)
+        private void Construct(IVfxService vfxService)
         {
             _vfxService = vfxService;
         }
 
-        private void Initialize(Vector3 position, Sprite sprite, EnemyViewModel context, VfxType vfxType,
+        private void Initialize(Vector3 position,EnemyInitData initData,
             Action<Enemy> onDeath)
         {
-            _viewModel = context;
-            _vfxType = vfxType;
+            _viewModel = initData.ViewModel;
+            _vfxType = initData.VfxType;
             transform.position = position;
+            _audioSource.clip = initData.AudioClip;
+
             _onDeath = onDeath;
-            _renderer.sprite = sprite;
+            _renderer.sprite = initData.Sprite;
             _collider.enabled = true;
 
-            _collider.size = sprite.bounds.size;
+            _collider.size = initData.Sprite.bounds.size;
 
             _viewModel.Position.Subscribe(pos => _rb.position = pos)
                 .AddTo(_disposables);
@@ -75,9 +80,10 @@ namespace _Project.Scripts.Enemies
             Debug.Log("Collided");
         }
 
-        private void Despawn()
+        private async void Despawn()
         {
             _vfxService.PlayVfx(_vfxType, transform.position);
+            await _audioSource.PlayAsync();
 
             _rb.linearVelocity = Vector2.zero;
             _rb.angularVelocity = 0;
@@ -87,17 +93,32 @@ namespace _Project.Scripts.Enemies
             _disposables = new CompositeDisposable();
         }
 
-        public class Pool : MonoMemoryPool<Vector3, Sprite, EnemyViewModel,VfxType, Action<Enemy>, Enemy>
+        public class Pool : MonoMemoryPool<Vector3, EnemyInitData, Action<Enemy>, Enemy>
         {
-            protected override void Reinitialize(Vector3 postion, Sprite sprite, EnemyViewModel context,
-                VfxType vfxType, Action<Enemy> onDestroy, Enemy item)
+            protected override void Reinitialize(Vector3 postion, EnemyInitData initData, Action<Enemy> onDestroy, Enemy item)
             {
-                item.Initialize(postion, sprite, context,vfxType, onDestroy);
+                item.Initialize(postion, initData, onDestroy);
             }
 
             protected override void OnDespawned(Enemy item)
             {
                 item.Despawn();
+            }
+        }
+
+        public class EnemyInitData
+        {
+            public Sprite Sprite { get; }
+            public EnemyViewModel ViewModel { get; }
+            public VfxType VfxType { get; }
+            public AudioClip AudioClip { get; }
+
+            public EnemyInitData(Sprite sprite, EnemyViewModel viewModel, VfxType vfxType, AudioClip audioClip)
+            {
+                Sprite = sprite;
+                ViewModel = viewModel;
+                VfxType = vfxType;
+                AudioClip = audioClip;
             }
         }
     }

@@ -16,7 +16,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
     {
         public IObservable<Type> OnStateChanged => _changeStateCommand;
 
-        private readonly UiService _uiService;
+        private readonly IPopUpService _popUpService;
         private readonly ScoreBoxModel _scoreModel;
         private readonly PlayerProgressProvider _playerProgressProvider;
         private readonly ReactiveCommand<Type> _changeStateCommand = new();
@@ -28,12 +28,12 @@ namespace _Project.Scripts.GameplayStateMachine.States
 
         private CompositeDisposable _disposables = new();
 
-        public LoseState(UiService uiService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
+        public LoseState(IPopUpService popUpService, ScoreBoxModel scoreModel, PlayerProgressProvider playerProgressProvider,
             IScenesAssetProvider assetProvider, IAnalyticsService analyticsService, LoadCurtain loadCurtain,
             SceneLoader sceneLoader,
             IAdvertisementService advertisementService)
         {
-            _uiService = uiService;
+            _popUpService = popUpService;
             _scoreModel = scoreModel;
             _playerProgressProvider = playerProgressProvider;
             _assetProvider = assetProvider;
@@ -48,7 +48,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             _analyticsService.SendEndGameAnalytics();
             _scoreModel.Enable(false);
 
-            var restartDialog = await _uiService
+            var restartDialog = await _popUpService
                 .ShowDialogAwaitable<LosePopUp, LosePopUpData>(new LosePopUpData(_scoreModel.Score.Value));
 
             var restartDialogResult = await restartDialog.ShowDialogAsync(true);
@@ -114,7 +114,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
 
         private async UniTask ThrowError(string message)
         {
-            await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(message));
+            await _popUpService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData(message));
             await ToMainMenu();
         }
     }

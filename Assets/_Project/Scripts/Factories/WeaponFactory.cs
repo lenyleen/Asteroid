@@ -17,9 +17,9 @@ namespace _Project.Scripts.Factories
         private readonly AssetReference _weaponViewPrefabReference;
         private readonly IScenesAssetProvider _assetProvider;
         private readonly IRemoteConfigService _remoteConfigService;
+        private readonly Dictionary<WeaponType, WeaponConfig> _configs = new();
 
         private WeaponView _prefab;
-        private readonly Dictionary<WeaponType, WeaponConfig> _configs = new();
 
         public WeaponFactory(DiContainer instantiator, AssetReference weaponViewPrefabReference,
             IScenesAssetProvider assetProvider, IRemoteConfigService remoteConfigService)
@@ -54,8 +54,9 @@ namespace _Project.Scripts.Factories
             viewModel.Initialize();
 
             var sprite = await _assetProvider.Load<Sprite>(config.SpriteAddress);
+            var audio = await _assetProvider.Load<AudioClip>(config.WeaponSoundAddress);
 
-            var view = _instantiator.InstantiatePrefabForComponent<WeaponView>(_prefab, new object[]{config.VFXType});
+            var view = _instantiator.InstantiatePrefabForComponent<WeaponView>(_prefab, new object[]{config.VFXType, audio});
             weaponsHolder.ApplyWeapon(config.Type, view, position);
 
             view.Initialize(viewModel, sprite);

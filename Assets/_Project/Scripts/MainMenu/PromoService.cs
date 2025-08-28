@@ -4,7 +4,6 @@ using _Project.Scripts.Data;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
-using _Project.Scripts.Services;
 using _Project.Scripts.UI;
 using Cysharp.Threading.Tasks;
 using UniRx;
@@ -13,16 +12,16 @@ namespace _Project.Scripts.MainMenu
 {
     public class PromoService : ISceneInitializable
     {
-        private readonly PlayerInventoryService _playerInventoryService;
+        private readonly IPlayerInventoryService _playerInventoryService;
         private readonly PromoButtonFactory _promoButtonFactory;
         private readonly PromoPopUpProvider _promoPopUpProvider;
-        private readonly PurchaseService _purchaseService;
+        private readonly IPurchaseService _purchaseService;
         private readonly CompositeDisposable _disposables = new();
 
         private bool _promoOpened;
 
-        public PromoService(PlayerInventoryService playerInventoryService, PromoButtonFactory promoButtonFactory,
-            PromoPopUpProvider promoPopUpProvider, PurchaseService purchaseService)
+        public PromoService(IPlayerInventoryService playerInventoryService, PromoButtonFactory promoButtonFactory,
+            PromoPopUpProvider promoPopUpProvider, IPurchaseService purchaseService)
         {
             _playerInventoryService = playerInventoryService;
             _promoButtonFactory = promoButtonFactory;

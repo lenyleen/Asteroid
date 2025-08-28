@@ -38,7 +38,7 @@ namespace _Project.Scripts.Services
 
             VolumeSettings = result.Success ?  result.Data.LoadedData : new VolumeSettings();
 
-            SetMixerVolume(VolumeSettings.ReactiveSfxVolume.Value,VolumeSettings.ReactiveMusicVolume.Value);
+            SetMixerVolume(VolumeSettings.SfxVolume,VolumeSettings.MusicVolume);
         }
 
         public async UniTask SaveVolumeSettings(float sfxVolume, float musicVolume)

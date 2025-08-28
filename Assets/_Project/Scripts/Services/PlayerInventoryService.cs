@@ -10,15 +10,17 @@ using Unity.Services.Economy;
 
 namespace _Project.Scripts.Services
 {
-    public class PlayerInventoryService : IBootstrapInitializable
+    public class PlayerInventoryService : IPlayerInventoryService
     {
         private readonly UnityServicesInstaller  _unityServicesInstaller;
+        private readonly IEconomyService _economyService;
 
         private bool _isAvailable;
 
-        public PlayerInventoryService(UnityServicesInstaller unityServicesInstaller)
+        public PlayerInventoryService(UnityServicesInstaller unityServicesInstaller, IEconomyService economyService)
         {
             _unityServicesInstaller = unityServicesInstaller;
+            _economyService = economyService;
         }
 
         public UniTask InitializeAsync()
@@ -35,7 +37,7 @@ namespace _Project.Scripts.Services
 
             var options = new GetInventoryOptions { InventoryItemIds = new List<string> { id } };
 
-            var getResult = await EconomyService.Instance.PlayerInventory
+            var getResult = await _economyService.PlayerInventory
                 .GetInventoryAsync(options)
                 .AsUniTask();
 

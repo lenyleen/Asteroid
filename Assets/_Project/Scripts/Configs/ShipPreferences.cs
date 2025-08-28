@@ -26,9 +26,11 @@ namespace _Project.Scripts.Configs
 
         public VfxType VFXType { get; private set; }
 
+        public string AudioAddress { get; private set; }
+
         [JsonConstructor]
         public ShipPreferences(Vector3 startPosition, int health, float acceleration, float maxSpeed,
-            float rotationSpeed, float friction, ColliderConfig colliderConfig, string playerShipPrefabAddress, VfxType vfxType)
+            float rotationSpeed, float friction, ColliderConfig colliderConfig, string playerShipPrefabAddress, VfxType vfxType, string audioAddress)
         {
             StartPosition = startPosition;
             Health = health;
@@ -39,6 +41,7 @@ namespace _Project.Scripts.Configs
             ColliderConfig = colliderConfig;
             PlayerShipPrefabAddress = playerShipPrefabAddress;
             VFXType = vfxType;
+            AudioAddress = audioAddress;
         }
     }
 }

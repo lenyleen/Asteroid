@@ -75,6 +75,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7a210df23bd255428bdf4def67109f2
+    m_Address: Audio
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b9c701e7e6727e94692e59a435c427ee
+    m_Address: GameplayAudio
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bd780d5682f2ff2419e2cc6ea20223a5
     m_Address: LaserProjectileSprite
     m_ReadOnly: 0

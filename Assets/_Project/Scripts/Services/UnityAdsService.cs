@@ -20,13 +20,13 @@ namespace _Project.Scripts.Services
         private readonly IRemoteConfigService _remoteConfigService;
         private readonly UnityAdsShowListener _showListener;
         private readonly ReactiveProperty<bool> _canShowRewardedAds = new (false);
-        private readonly PlayerInventoryService _inventoryService;
+        private readonly IPlayerInventoryService _inventoryService;
         private readonly UnityServicesInstaller _unityServicesInstaller;
 
         private UnityAdvertisementsConfig _config;
         private bool _canShowInterstitialAds = false;
 
-        public UnityAdsService(IRemoteConfigService remoteConfigService, PlayerInventoryService inventoryService,
+        public UnityAdsService(IRemoteConfigService remoteConfigService, IPlayerInventoryService inventoryService,
             UnityServicesInstaller unityServicesInstaller)
         {
             _remoteConfigService = remoteConfigService;

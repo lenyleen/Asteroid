@@ -6,71 +6,59 @@ using _Project.Scripts.Data;
 using _Project.Scripts.Installers;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Other;
+using _Project.Scripts.Static;
 using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
-using Newtonsoft.Json;
 using Unity.Services.Economy;
-using Unity.Services.Economy.Model;
-using UnityEngine;
 using UnityEngine.Purchasing;
+using IPurchaseService = _Project.Scripts.Interfaces.IPurchaseService;
 
 namespace _Project.Scripts.Services
 {
-    public class PurchaseService : IBootstrapInitializable
+    public class PurchaseService : IPurchaseService
     {
-        public bool IsAvailable { get; private set; }
-
-        private readonly UiService _uiService;
-        private readonly PlayerInventoryService _playerInventoryService;
+        private readonly IPopUpService _popUpService;
+        private readonly IPlayerInventoryService _playerInventoryService;
         private readonly UnityServicesInstaller _unityServicesInstaller;
+        private readonly StoreControllerInstaller _storeControllerInstaller;
+        private readonly IEconomyService _economyService;
 
         private IEnumerable<PurchaseConfig> _purchases;
+        private bool _isAvailable;
         private StoreController _storeController;
 
-        public PurchaseService(UiService uiService, PlayerInventoryService playerInventoryService,
-            UnityServicesInstaller  unityServicesInstaller)
+        public PurchaseService(IPopUpService popUpService, IPlayerInventoryService playerInventoryService,
+            UnityServicesInstaller  unityServicesInstaller, StoreControllerInstaller storeControllerInstaller,
+            IEconomyService economyService)
         {
-            _uiService = uiService;
+            _popUpService = popUpService;
             _playerInventoryService = playerInventoryService;
             _unityServicesInstaller = unityServicesInstaller;
+            _storeControllerInstaller = storeControllerInstaller;
+            _economyService = economyService;
         }
 
         public async UniTask InitializeAsync()
         {
-            IsAvailable = _unityServicesInstaller.Initialized && _unityServicesInstaller.Authenticated;
+            _isAvailable = _unityServicesInstaller.Initialized && _unityServicesInstaller.Authenticated;
 
-            if (!IsAvailable)
+            if (!_isAvailable)
                 return;
 
-            await EconomyService.Instance.Configuration
+            await _economyService.Configuration
                 .SyncConfigurationAsync()
                 .AsUniTask();
 
-            var products = EconomyService.Instance.Configuration.GetRealMoneyPurchases();
+            var products = _economyService.Configuration.GetRealMoneyPurchases();
 
-            _purchases = DeserializePurchases(products);
+            _purchases = PurchaseHelper.DeserializePurchases(products);
 
-            var productsDefinitions = new List<ProductDefinition>();
-
-            foreach (var product in products)
-                productsDefinitions.Add(new ProductDefinition(product.Id, ProductType.Consumable));
-
-            _storeController = UnityIAPServices.StoreController();
-
-            await _storeController
-                .Connect()
-                .AsUniTask();
-
-            _storeController.OnProductsFetched += StoreControllerOnOnProductsFetched;
-            _storeController.OnProductsFetchFailed += StoreControllerOnOnProductsFetchFailed;
-            _storeController.OnStoreDisconnected += StoreControllerOnOnStoreDisconnected;
-
-            _storeController.FetchProducts(productsDefinitions);
+            _storeController = await _storeControllerInstaller.InitializeStoreController(products);
         }
 
         public async UniTask<PurchaseResult> Buy(string productId)
         {
-            if (!IsAvailable)
+            if (!_isAvailable)
                 return PurchaseResult.Failed;
 
             var listener = InitializeListener();
@@ -88,7 +76,7 @@ namespace _Project.Scripts.Services
             catch (Exception)
             {
                 var errorPopUp =
-                    await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData("Pusrchase is canceled"));
+                    await _popUpService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(new ErrorPopUpData("Pusrchase is canceled"));
 
                 await errorPopUp.ShowDialogAsync(true);
                 return PurchaseResult.Failed;
@@ -97,18 +85,18 @@ namespace _Project.Scripts.Services
 
         public IEnumerable<ProductConfig> GetPurchaseItems(string purchasingId)
         {
-            if (!IsAvailable)
+            if (!_isAvailable)
                 return new List<ProductConfig>();
 
-            var purchase = EconomyService.Instance.Configuration.GetRealMoneyPurchase(purchasingId);
+            var purchase = _economyService.Configuration.GetRealMoneyPurchase(purchasingId);
 
             return purchase.Rewards
-                .Select(DeserializeProduct);
+                .Select(PurchaseHelper.DeserializeProduct);
         }
 
         public IEnumerable<PurchaseConfig> GetPurchasesByType(PurchasingType purchasingType)
         {
-            if (!IsAvailable)
+            if (!_isAvailable)
                 return new List<PurchaseConfig>();
 
             return _purchases.Where(item => item.PurchasingType == purchasingType);
@@ -116,33 +104,15 @@ namespace _Project.Scripts.Services
 
         private async UniTask ConfirmPurchase(PendingOrder order, string productId)
         {
-            var purchase = EconomyService.Instance.Configuration.GetRealMoneyPurchase(productId);
+            var purchase = _economyService.Configuration.GetRealMoneyPurchase(productId);
 
             foreach (var purchaseReward in purchase.Rewards)
             {
-                var config = DeserializeProduct(purchaseReward);
+                var config = PurchaseHelper.DeserializeProduct(purchaseReward);
                 await _playerInventoryService.AddPurchaseReward(config, purchaseReward.Amount);
             }
 
             _storeController.ConfirmPurchase(order);
-        }
-
-        private IEnumerable<PurchaseConfig> DeserializePurchases(List<RealMoneyPurchaseDefinition> realMoneyPurchases) =>
-            realMoneyPurchases.Select(DeserializePurchase);
-
-        private PurchaseConfig DeserializePurchase(RealMoneyPurchaseDefinition realMoneyPurchase)
-        {
-            var configJson = realMoneyPurchase.CustomDataDeserializable.GetAsString();
-            var config = JsonConvert.DeserializeObject<PurchaseConfig>(configJson);
-            return config;
-        }
-
-        private ProductConfig DeserializeProduct(PurchaseItemQuantity item)
-        {
-            var configJson = item.Item.GetReferencedConfigurationItem().CustomDataDeserializable
-                .GetAsString();
-
-            return JsonConvert.DeserializeObject<ProductConfig>(configJson);
         }
 
         private PurchasingServiceShopListener InitializeListener()
@@ -151,25 +121,5 @@ namespace _Project.Scripts.Services
             listener.Initialize();
             return listener;
         }
-
-        #region Callbacks
-
-        private void StoreControllerOnOnProductsFetchFailed(ProductFetchFailed fetchFailed)
-        {
-            Debug.Log(fetchFailed);
-        }
-
-        private void StoreControllerOnOnProductsFetched(List<Product> products)
-        {
-            Debug.Log("StoreControllerOnOnProductsFetched");
-        }
-
-        private void StoreControllerOnOnStoreDisconnected(StoreConnectionFailureDescription failureDescription)
-        {
-            Debug.Log("PurchasingService StoreControllerOnOnStoreDisconnected");
-        }
-
-        #endregion
-
     }
 }

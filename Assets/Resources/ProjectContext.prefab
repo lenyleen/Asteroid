@@ -74,5 +74,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d327b163df7f4180a560136f391e017d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sfxGroup: {fileID: 24300002, guid: fbe4158e846abef4abf85b5a16465321, type: 2}
-  _musicGroup: {fileID: 24300002, guid: 4275dc61b294d1c419f5858d247917db, type: 2}
+  _musicMixerGroup: {fileID: 24300002, guid: 4275dc61b294d1c419f5858d247917db, type: 2}

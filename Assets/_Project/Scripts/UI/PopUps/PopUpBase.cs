@@ -13,8 +13,6 @@ namespace _Project.Scripts.UI.PopUps
 
         private readonly ReactiveCommand<IPopUp> _closeCommand = new();
 
-        protected readonly CompositeDisposable _disposables = new();
-
         public void Initialize(Transform parent)
         {
             transform.SetParent(parent,false);
@@ -35,11 +33,6 @@ namespace _Project.Scripts.UI.PopUps
                 return;
 
             Hide();
-        }
-
-        private void OnDestroy()
-        {
-            _disposables.Dispose();
         }
     }
 }

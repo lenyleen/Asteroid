@@ -1,18 +1,18 @@
 ﻿using System;
 using _Project.Scripts.Interfaces;
+using Newtonsoft.Json;
 using UniRx;
-using UnityEngine;
 
 namespace _Project.Scripts.DTO
 {
     [Serializable]
     public class PlayerProgress : ILoadedData
     {
-        [field: SerializeField] public int Score { get; private set; }
+        [JsonProperty] public int Score { get; private set; }
 
-        [field: NonSerialized] public ReadOnlyReactiveProperty<int> ReactiveScore { get; private set; }
+        [JsonIgnore]public ReadOnlyReactiveProperty<int> ReactiveScore { get; private set; }
 
-        [NonSerialized] private ReactiveProperty<int> _reactiveScore;
+        [JsonIgnore] private ReactiveProperty<int> _reactiveScore;
 
         public PlayerProgress(int score)
         {

@@ -21,7 +21,7 @@ namespace _Project.Scripts.UI.PopUps
         private void Construct(IAdvertisementService advertisementService)
         {
             advertisementService.CanShowRewardedAds.Subscribe(canShowRewarded =>
-                _restartButton.interactable = canShowRewarded).AddTo(_disposables);
+                _restartButton.interactable = canShowRewarded).AddTo(this);
         }
 
         public void SetParams(LosePopUpData data)
@@ -40,13 +40,13 @@ namespace _Project.Scripts.UI.PopUps
             {
                 tcs.TrySetResult(DialogResult.Yes);
                 HideAfterChoice(hideAfterChoice);
-            }).AddTo(_disposables);
+            }).AddTo(this);
 
             _closeButton.OnClickAsObservable().Subscribe(_ =>
             {
                 tcs.TrySetResult(DialogResult.Cancel);
                 HideAfterChoice(hideAfterChoice);
-            }).AddTo(_disposables);
+            }).AddTo(this);
 
             return await tcs.Task;
         }

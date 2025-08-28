@@ -1,7 +1,6 @@
 ﻿using System;
 using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using _Project.Scripts.UI.PopUps;
 using Cysharp.Threading.Tasks;
 using UnityEditor;
@@ -12,12 +11,12 @@ namespace _Project.Scripts.UI
 {
    public class CrashHandler : MonoBehaviour, IBootstrapInitializable
     {
-        private UiService _uiService;
+        private IPopUpService _popUpService;
 
         [Inject]
-        private void Construct(UiService uiService)
+        private void Construct(IPopUpService popUpService)
         {
-            _uiService = uiService;
+            _popUpService = popUpService;
         }
 
         public UniTask InitializeAsync()
@@ -66,7 +65,7 @@ namespace _Project.Scripts.UI
             try
             {
                 var errorData = new ErrorPopUpData($"{message}");
-                var popUp = await _uiService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(errorData);
+                var popUp = await _popUpService.ShowDialogAwaitable<ErrorPopUp, ErrorPopUpData>(errorData);
 
                 await popUp.ShowDialogAsync(true);
 

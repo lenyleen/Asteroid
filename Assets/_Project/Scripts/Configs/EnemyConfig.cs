@@ -24,9 +24,11 @@ namespace _Project.Scripts.Configs
 
         public VfxType VFXType { get; private set; }
 
+        public string AudioAddress { get; private set; }
+
         [JsonConstructor]
         public EnemyConfig(string spriteAddress, int health, EnemyType type, int score,
-            EnemyBehaviourConfig behaviourConfig, float spawnTimeInSeconds, ColliderConfig collisionConfig, VfxType vfxType)
+            EnemyBehaviourConfig behaviourConfig, float spawnTimeInSeconds, ColliderConfig collisionConfig, VfxType vfxType, string audioAddress)
         {
             SpriteAddress = spriteAddress;
             Health = health;
@@ -36,6 +38,7 @@ namespace _Project.Scripts.Configs
             SpawnTimeInSeconds = spawnTimeInSeconds;
             CollisionConfig = collisionConfig;
             VFXType = vfxType;
+            AudioAddress = audioAddress;
         }
     }
 }

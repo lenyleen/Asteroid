@@ -1,11 +1,11 @@
 ﻿using _Project.Scripts.Data;
+using _Project.Scripts.Interfaces;
 using _Project.Scripts.Pools;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace _Project.Scripts.Services
 {
-    public class VfxService
+    public class VfxService : IVfxService
     {
         private readonly ParticlePool _particlePool;
 
