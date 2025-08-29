@@ -14,9 +14,9 @@ namespace _Project.Scripts.DTO
 
         [JsonIgnore] private ReactiveProperty<int> _reactiveScore;
 
-        public PlayerProgress(int score)
+        public PlayerProgress(int Score)
         {
-            Score = score;
+            this.Score = Score;
         }
 
         public void InitializeReactiveValues()

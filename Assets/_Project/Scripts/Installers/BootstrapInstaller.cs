@@ -24,9 +24,6 @@ namespace _Project.Scripts.Installers
                 .FromInstance(projectAsyncInitializer)
                 .AsSingle();
 
-            Container.Bind<PlayerProgressSaveCheckHandler>()
-                .AsSingle();
-
             projectContainer.BindInterfacesAndSelfTo<PopUpFactory>()
                 .AsSingle()
                 .WithArguments(_popUpsConfig, _crashHandler.transform);

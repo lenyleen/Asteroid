@@ -11,7 +11,6 @@ using Zenject;
 namespace _Project.Scripts.Enemies
 {
     [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(BoxCollider2D))]
-    [RequireComponent(typeof(AudioSource))]
     public class Enemy : MonoBehaviour, ICollisionReceiver
     {
         [field: SerializeField] public ColliderType ColliderType { get; private set; }
@@ -20,19 +19,19 @@ namespace _Project.Scripts.Enemies
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _maxSpeed;
         [SerializeField] private BoxCollider2D _collider;
-        [SerializeField] private AudioSource _audioSource;
 
         private Vector2 _direction;
         private CompositeDisposable _disposables = new();
         private Action<Enemy> _onDeath;
         private EnemyViewModel _viewModel;
-        private IVfxService  _vfxService;
+        private IFxService  _fxService;
         private VfxType _vfxType;
+        private AudioClip _audioClip;
 
         [Inject]
-        private void Construct(IVfxService vfxService)
+        private void Construct(IFxService fxService)
         {
-            _vfxService = vfxService;
+            _fxService = fxService;
         }
 
         private void Initialize(Vector3 position,EnemyInitData initData,
@@ -41,7 +40,7 @@ namespace _Project.Scripts.Enemies
             _viewModel = initData.ViewModel;
             _vfxType = initData.VfxType;
             transform.position = position;
-            _audioSource.clip = initData.AudioClip;
+            _audioClip = initData.AudioClip;
 
             _onDeath = onDeath;
             _renderer.sprite = initData.Sprite;
@@ -58,7 +57,10 @@ namespace _Project.Scripts.Enemies
             _viewModel.Velocity.Subscribe(vel => _rb.linearVelocity = vel)
                 .AddTo(_disposables);
 
-            _viewModel.OnDead.Subscribe(_ => _onDeath?.Invoke(this))
+            _viewModel.OnDespawn.Subscribe(_ => _onDeath?.Invoke(this))
+                .AddTo(_disposables);
+
+            _viewModel.OnDead.Subscribe(_ => OnDeath())
                 .AddTo(_disposables);
         }
 
@@ -67,10 +69,8 @@ namespace _Project.Scripts.Enemies
             if (gameObject.activeInHierarchy) _viewModel.TakeCollision(colliderType, damage);
         }
 
-        private void Update()
-        {
+        private void Update() =>
             _viewModel.UpdatePosition();
-        }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -80,15 +80,18 @@ namespace _Project.Scripts.Enemies
             Debug.Log("Collided");
         }
 
-        private async void Despawn()
+        private void OnDeath()
         {
-            _vfxService.PlayVfx(_vfxType, transform.position);
-            await _audioSource.PlayAsync();
+            _fxService.PlayVfx(_vfxType,_audioClip, transform.position);
+            _onDeath?.Invoke(this);
+        }
 
+        private void Despawn()
+        {
+            _collider.enabled = false;
             _rb.linearVelocity = Vector2.zero;
             _rb.angularVelocity = 0;
             gameObject.SetActive(false);
-            _collider.enabled = false;
             _disposables.Dispose();
             _disposables = new CompositeDisposable();
         }

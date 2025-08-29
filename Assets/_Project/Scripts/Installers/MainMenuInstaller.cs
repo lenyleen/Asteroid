@@ -20,10 +20,6 @@ namespace _Project.Scripts.Installers
 
         public override void InstallBindings()
         {
-            ProjectContext.Instance.Container.BindInterfacesAndSelfTo<VolumeSettingsProvider>()
-                .AsSingle()
-                .WithArguments(_sfxGroup, _musicGroup);
-
             Container.Bind<MainMenuController>()
                 .FromInstance(_mainMenuController)
                 .AsSingle();

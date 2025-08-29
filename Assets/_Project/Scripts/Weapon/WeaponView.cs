@@ -1,28 +1,27 @@
 ﻿using _Project.Scripts.Data;
 using _Project.Scripts.Interfaces;
-using _Project.Scripts.Services;
 using UniRx;
 using UnityEngine;
 using Zenject;
 
 namespace _Project.Scripts.Weapon
 {
-    [RequireComponent(typeof(SpriteRenderer),  typeof(AudioSource))]
+    [RequireComponent(typeof(SpriteRenderer))]
     public class WeaponView : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private AudioSource _audioSource;
 
         private WeaponViewModel _viewModel;
-        private IVfxService _vfxService;
+        private IFxService _fxService;
         private VfxType _vfxType;
+        private AudioClip _audioClip;
 
         [Inject]
-        private void Construct(IVfxService vfxService, VfxType  vfxType, AudioClip audioClip)
+        private void Construct(IFxService fxService, VfxType  vfxType, AudioClip audioClip)
         {
-            _vfxService = vfxService;
+            _fxService = fxService;
             _vfxType = vfxType;
-            _audioSource.clip = audioClip;
+            _audioClip = audioClip;
         }
 
         public void Initialize(WeaponViewModel viewModel, Sprite sprite)
@@ -41,8 +40,10 @@ namespace _Project.Scripts.Weapon
 
         private void OnShot()
         {
-            _vfxService.PlayVfx(_vfxType, transform);
-            _audioSource.Play();
+            if(!isActiveAndEnabled)
+                return;
+
+            _fxService.PlayVfx(_vfxType,_audioClip, transform);
         }
     }
 }

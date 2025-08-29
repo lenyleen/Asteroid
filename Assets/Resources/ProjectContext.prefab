@@ -75,3 +75,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _musicMixerGroup: {fileID: 24300002, guid: 4275dc61b294d1c419f5858d247917db, type: 2}
+  _sfxMixerGroup: {fileID: 24300002, guid: fbe4158e846abef4abf85b5a16465321, type: 2}

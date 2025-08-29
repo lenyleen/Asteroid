@@ -8,22 +8,22 @@ using UnityEngine.Audio;
 
 namespace _Project.Scripts.Services
 {
-    public class VolumeSettingsProvider : ISceneInitializable
+    public class VolumeSettingsProvider : IBootstrapInitializable
     {
         private const string MusicVolumeKey = "MusicVolume";
         private const string SfxVolumeKey = "SfxVolume";
 
         public VolumeSettings VolumeSettings { get; private set; }
 
-        private readonly ISaveService _saveService;
+        private readonly SaveServiceProvider _saveServiceProvider;
         private readonly LocalSaveLoadService  _localSaveLoadService;
         private readonly AudioMixerGroup  _sfxMixer;
         private readonly AudioMixerGroup  _musicMixer;
 
-        public VolumeSettingsProvider(ISaveService saveService, LocalSaveLoadService localSaveLoadService,
+        public VolumeSettingsProvider(SaveServiceProvider saveServiceProvider,LocalSaveLoadService localSaveLoadService,
             AudioMixerGroup  sfxMixer, AudioMixerGroup  musicMixer)
         {
-            _saveService = saveService;
+            _saveServiceProvider = saveServiceProvider;
             _localSaveLoadService = localSaveLoadService;
             _sfxMixer = sfxMixer;
             _musicMixer = musicMixer;
@@ -31,7 +31,7 @@ namespace _Project.Scripts.Services
 
         public async UniTask InitializeAsync()
         {
-            var result = await _saveService.TryLoadData<VolumeSettings>(SaveKeys.VolumeSettingsKey);
+            var result = await _saveServiceProvider.SaveService.TryLoadData<VolumeSettings>(SaveKeys.VolumeSettingsKey);
 
             if(!result.Success)
                 result = await _localSaveLoadService.TryLoadData<VolumeSettings>(SaveKeys.VolumeSettingsKey);
@@ -47,7 +47,7 @@ namespace _Project.Scripts.Services
 
             try
             {
-                await _saveService.SaveData(VolumeSettings, SaveKeys.VolumeSettingsKey, DateTime.UtcNow);
+                await _saveServiceProvider.SaveService.SaveData(VolumeSettings, SaveKeys.VolumeSettingsKey, DateTime.UtcNow);
             }
             catch (Exception)
             {

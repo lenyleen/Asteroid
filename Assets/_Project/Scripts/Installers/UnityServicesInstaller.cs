@@ -1,6 +1,8 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
+using Unity.Services.Economy;
 using UnityEngine;
 
 namespace _Project.Scripts.Installers
@@ -37,6 +39,14 @@ namespace _Project.Scripts.Installers
                 Debug.LogWarning($"Not authenticated, ErrorCode {e.ErrorCode}, Message {e.Message}");
                 throw;
             }
+        }
+
+        public IEconomyService GetEconomyService()
+        {
+            if(Initialized && Authenticated)
+                return EconomyService.Instance;
+
+            throw null;
         }
     }
 }

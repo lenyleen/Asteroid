@@ -12,6 +12,7 @@ namespace _Project.Scripts.Installers
     public class ProjectInstaller : MonoInstaller<ProjectInstaller>
     {
         [SerializeField] private AudioMixerGroup _musicMixerGroup;
+        [SerializeField] private AudioMixerGroup _sfxMixerGroup;
 
         public override void InstallBindings()
         {
@@ -44,11 +45,17 @@ namespace _Project.Scripts.Installers
             Container.BindInterfacesAndSelfTo<FirebaseRemoteConfigService>()
                 .AsSingle();
 
-            Container.BindInterfacesAndSelfTo<FirebaseAnalyticsService>()
+            Container.Bind<PlayerProgressSaveCheckHandler>()
                 .AsSingle();
 
-            Container.Bind<IEconomyService>()
-                .FromInstance(EconomyService.Instance)
+            Container.BindInterfacesAndSelfTo<SaveServiceProvider>()
+                .AsSingle();
+
+            Container.BindInterfacesAndSelfTo<VolumeSettingsProvider>()
+                .AsSingle()
+                .WithArguments(_sfxMixerGroup, _musicMixerGroup);
+
+            Container.BindInterfacesAndSelfTo<FirebaseAnalyticsService>()
                 .AsSingle();
 
             Container.BindInterfacesAndSelfTo<UnityAdsService>()

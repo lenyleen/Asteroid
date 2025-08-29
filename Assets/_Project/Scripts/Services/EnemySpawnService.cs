@@ -6,6 +6,7 @@ using _Project.Scripts.Enemies;
 using _Project.Scripts.Factories;
 using _Project.Scripts.Interfaces;
 using _Project.Scripts.Static;
+using Cysharp.Threading.Tasks;
 using UniRx;
 using UnityEngine;
 using Zenject;
@@ -115,9 +116,14 @@ namespace _Project.Scripts.Services
 
             _analyticsService.EnemyKilled(enemy.Type);
 
-            if (enemy.Type != EnemyType.Asteroid)
-                return;
+            if(enemy.Type == EnemyType.Asteroid)
+                SpawnLilAsteroid(enemy);
 
+            enemy.Despawn();
+        }
+
+        private void SpawnLilAsteroid(ISpawnableEnemy enemy)
+        {
             if (!_enemiesData.TryGetValue(EnemyType.LilAsteroid, out var data))
                 return;
 

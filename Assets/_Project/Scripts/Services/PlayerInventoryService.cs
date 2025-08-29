@@ -13,19 +13,20 @@ namespace _Project.Scripts.Services
     public class PlayerInventoryService : IPlayerInventoryService
     {
         private readonly UnityServicesInstaller  _unityServicesInstaller;
-        private readonly IEconomyService _economyService;
 
+        private IEconomyService _economyService;
         private bool _isAvailable;
 
-        public PlayerInventoryService(UnityServicesInstaller unityServicesInstaller, IEconomyService economyService)
+        public PlayerInventoryService(UnityServicesInstaller unityServicesInstaller)
         {
             _unityServicesInstaller = unityServicesInstaller;
-            _economyService = economyService;
         }
 
         public UniTask InitializeAsync()
         {
             _isAvailable = _unityServicesInstaller.Initialized && _unityServicesInstaller.Authenticated;
+
+            _economyService =  _unityServicesInstaller.GetEconomyService();
 
             return UniTask.CompletedTask;
         }

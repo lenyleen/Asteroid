@@ -11,19 +11,20 @@ namespace _Project.Scripts.Services
     {
         public PlayerProgress PlayerProgress { get; }
 
-        private readonly ISaveService _saveLoadService;
+        private readonly SaveServiceProvider _saveServiceProvider;
         private readonly LocalSaveLoadService _localSaveLoadService;
         private readonly IEnemyDiedNotifier _enemyDiedNotifier;
         private readonly CompositeDisposable _disposable = new();
 
         private PlayerProgress _loadedPlayerProgress;
 
-        public PlayerProgressProvider(ISaveService saveLoadService, IEnemyDiedNotifier enemyDiedNotifier,
-            LocalSaveLoadService localSaveLoadService)
+        public PlayerProgressProvider(IEnemyDiedNotifier enemyDiedNotifier,
+            LocalSaveLoadService localSaveLoadService, SaveServiceProvider saveServiceProvider)
         {
-            _saveLoadService = saveLoadService;
+            _saveServiceProvider = saveServiceProvider;
             _enemyDiedNotifier = enemyDiedNotifier;
             _localSaveLoadService = localSaveLoadService;
+            _saveServiceProvider = saveServiceProvider;
 
             PlayerProgress = new PlayerProgress(0);
             PlayerProgress.InitializeReactiveValues();
@@ -36,13 +37,12 @@ namespace _Project.Scripts.Services
                     PlayerProgress.AddScore(enemyData.ScoreReward))
                 .AddTo(_disposable);
 
-            var result = await _saveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
+            var result = await _saveServiceProvider.SaveService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
             if(!result.Success)
                 result = await _localSaveLoadService.TryLoadData<PlayerProgress>(SaveKeys.PlayerProgressKey);
 
-            if (!result.Success)
-                _loadedPlayerProgress = PlayerProgress;
+            _loadedPlayerProgress = !result.Success ? PlayerProgress : result.Data.LoadedData;
         }
 
         public async UniTask SetDataAsync()
@@ -52,7 +52,7 @@ namespace _Project.Scripts.Services
 
             try
             {
-                await _saveLoadService.SaveData(progressToSave, SaveKeys.PlayerProgressKey, DateTime.UtcNow);
+                await _saveServiceProvider.SaveService.SaveData(progressToSave, SaveKeys.PlayerProgressKey, DateTime.UtcNow);
             }
             catch (Exception)
             {

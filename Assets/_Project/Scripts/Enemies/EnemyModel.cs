@@ -10,6 +10,7 @@ namespace _Project.Scripts.Enemies
     public class EnemyModel
     {
         public ReactiveCommand OnDeath { get; }
+        public ReactiveCommand OnDespawn { get; }
         public EnemyType Type => _config.Type;
         public ColliderType ColliderType => _collisionConfig.ColliderType;
         public int Damage => _collisionConfig.Damage;
@@ -29,8 +30,9 @@ namespace _Project.Scripts.Enemies
         public EnemyModel(EnemyConfig config, IEnemyBehaviour behaviour, Vector3 position,
             IPositionProvider followingPositionProvider)
         {
-            _health = config.Health;
             OnDeath = new ReactiveCommand();
+            OnDespawn = new ReactiveCommand();
+            _health = config.Health;
             Position = new ReactiveProperty<Vector3>(position);
             Score = config.Score;
             _followingPositionProvider = followingPositionProvider;
@@ -73,6 +75,12 @@ namespace _Project.Scripts.Enemies
             Rotation.Value = curRotation;
         }
 
+        public void Despawn()
+        {
+            Dispose();
+            OnDespawn.Execute();
+        }
+
         public void Dispose()
         {
             Score = 0;
@@ -80,7 +88,6 @@ namespace _Project.Scripts.Enemies
             Velocity.Value = Vector3.zero;
             Position.Value = Vector3.zero;
             Rotation.Value = 0;
-            OnDeath.Execute();
         }
     }
 }

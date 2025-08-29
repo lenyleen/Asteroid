@@ -12,6 +12,7 @@ namespace _Project.Scripts.Enemies
         public ReadOnlyReactiveProperty<float> Rotation { get; }
         public ReadOnlyReactiveProperty<Vector2> Velocity { get; }
         public IObservable<Unit> OnDead => _model.OnDeath;
+        public IObservable<Unit> OnDespawn => _model.OnDespawn;
         public EnemyType Type => _model.Type;
         public int Score => _model.Score;
         public ReadOnlyReactiveProperty<Vector3> Position { get; }
@@ -49,7 +50,7 @@ namespace _Project.Scripts.Enemies
             _model.UpdateMovement();
 
         public void Despawn() =>
-            _model.Dispose();
+            _model.Despawn();
 
         private void OnDeath() =>
             _disposables.Dispose();

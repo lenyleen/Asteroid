@@ -21,21 +21,19 @@ namespace _Project.Scripts.Services
         private readonly IPlayerInventoryService _playerInventoryService;
         private readonly UnityServicesInstaller _unityServicesInstaller;
         private readonly StoreControllerInstaller _storeControllerInstaller;
-        private readonly IEconomyService _economyService;
 
+        private IEconomyService _economyService;
         private IEnumerable<PurchaseConfig> _purchases;
         private bool _isAvailable;
         private StoreController _storeController;
 
         public PurchaseService(IPopUpService popUpService, IPlayerInventoryService playerInventoryService,
-            UnityServicesInstaller  unityServicesInstaller, StoreControllerInstaller storeControllerInstaller,
-            IEconomyService economyService)
+            UnityServicesInstaller  unityServicesInstaller, StoreControllerInstaller storeControllerInstaller)
         {
             _popUpService = popUpService;
             _playerInventoryService = playerInventoryService;
             _unityServicesInstaller = unityServicesInstaller;
             _storeControllerInstaller = storeControllerInstaller;
-            _economyService = economyService;
         }
 
         public async UniTask InitializeAsync()
@@ -44,6 +42,8 @@ namespace _Project.Scripts.Services
 
             if (!_isAvailable)
                 return;
+
+            _economyService = _unityServicesInstaller.GetEconomyService();
 
             await _economyService.Configuration
                 .SyncConfigurationAsync()

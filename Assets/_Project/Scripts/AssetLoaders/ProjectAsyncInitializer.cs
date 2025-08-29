@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using _Project.Scripts.Configs;
 using _Project.Scripts.Installers;
 using _Project.Scripts.Interfaces;
@@ -21,22 +22,41 @@ namespace _Project.Scripts.AssetLoaders
         private List<IBootstrapInitializable> _bootstrapInitializables;
         private List<IProjectImportanceInitializable> _projectImportanceInitializables;
         private IProjectAssetProvider  _assetProvider;
-        private PlayerProgressSaveCheckHandler  _playerProgressSaveCheckHandler;
         private UnityServicesInstaller _unityServicesInstaller;
 
         [Inject]
         public void Construct(List<IBootstrapInitializable> bootstrapInitializables,IPopUpService popUpService,
             List<IProjectImportanceInitializable>  projectImportanceInitializables, IProjectAssetProvider assetProvider,
-            PlayerProgressSaveCheckHandler playerProgressSaveCheckHandler, UnityServicesInstaller unityServicesInstaller)
+           UnityServicesInstaller unityServicesInstaller)
         {
             _projectImportanceInitializables = projectImportanceInitializables;
             _bootstrapInitializables = bootstrapInitializables;
             _assetProvider = assetProvider;
-            _playerProgressSaveCheckHandler = playerProgressSaveCheckHandler;
             _unityServicesInstaller = unityServicesInstaller;
         }
 
         public async void Start()
+        {
+            var projectContainer = ProjectContext.Instance.Container;
+
+            await InitializeImportantBindings(projectContainer);
+
+            await _unityServicesInstaller.InitializeAsync();
+
+            await InitializeInitializables(_projectImportanceInitializables);
+
+            await InitializeInitializables(_bootstrapInitializables);
+
+            await _sceneLoader.LoadScene(Scenes.MainMenu);
+        }
+
+        private async UniTask InitializeInitializables<T>(List<T> initializables) where T : IAsyncInitializable
+        {
+            foreach (var asyncInitializable in initializables)
+                await asyncInitializable.InitializeAsync();
+        }
+
+        private async UniTask InitializeImportantBindings(DiContainer container)
         {
             var projectContextContainer = ProjectContext.Instance.Container;
 
@@ -61,32 +81,6 @@ namespace _Project.Scripts.AssetLoaders
             _sceneLoader = new SceneLoader(loadCurtain);
             projectContextContainer.Bind<SceneLoader>()
                 .AsSingle();
-
-            await _unityServicesInstaller.InitializeAsync();
-
-            await InitializeInitializables(_projectImportanceInitializables);
-            await InitializeInitializables(_bootstrapInitializables);
-
-            await CheckLoadServices(projectContextContainer);
-
-            await _sceneLoader.LoadScene(Scenes.MainMenu);
-        }
-
-        private async UniTask CheckLoadServices(DiContainer projectContainer)
-        {
-            var selectedSaveService = await _playerProgressSaveCheckHandler.SelectSaveService();
-
-            projectContainer.Bind<ISaveService>()
-                .FromInstance(selectedSaveService)
-                .AsSingle();
-
-            Debug.Log($"Selected {selectedSaveService.GetType()}");
-        }
-
-        private async UniTask InitializeInitializables<T>(List<T> initializables) where T : IAsyncInitializable
-        {
-            foreach (var asyncInitializable in initializables)
-                await asyncInitializable.InitializeAsync();
         }
     }
 }

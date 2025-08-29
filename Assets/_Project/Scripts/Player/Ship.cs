@@ -9,7 +9,7 @@ using Zenject;
 
 namespace _Project.Scripts.Player
 {
-    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer), typeof(AudioSource))]
+    [RequireComponent(typeof(Rigidbody2D), typeof(SpriteRenderer))]
     public class Ship : MonoBehaviour, ICollisionReceiver
     {
         [field: SerializeField] public PlayerWeapons PlayerWeapons { get; private set; }
@@ -17,40 +17,38 @@ namespace _Project.Scripts.Player
 
         [SerializeField] private Rigidbody2D _rb;
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private AudioSource _audioSource;
-
-        private readonly CompositeDisposable _disposables = new();
 
         private ShipViewModel _shipViewModel;
-        private IVfxService  _vfxService;
+        private IFxService  _fxService;
         private VfxType  _vfxType;
+        private AudioClip _audio;
 
         [Inject]
-        private void Construct(IVfxService vfxService)
+        private void Construct(IFxService fxService)
         {
-            _vfxService = vfxService;
+            _fxService = fxService;
         }
 
         public void Initialize(ShipViewModel shipViewModel, Sprite sprite, VfxType vfxType, AudioClip audioClip)
         {
             _shipViewModel = shipViewModel;
-            _audioSource.clip = audioClip;
+            _audio = audioClip;
 
             _spriteRenderer.sprite = sprite;
 
             _vfxType = vfxType;
 
             _shipViewModel.Position.Subscribe(pos => _rb.position = pos)
-                .AddTo(_disposables);
+                .AddTo(this);
 
             _shipViewModel.Rotation.Subscribe(rot => _rb.rotation = rot)
-                .AddTo(_disposables);
+                .AddTo(this);
 
             _shipViewModel.Velocity.Subscribe(vel => _rb.linearVelocity = vel)
-                .AddTo(_disposables);
+                .AddTo(this);
 
-            _shipViewModel.OnDeath.Subscribe(_ => Destroy(gameObject))
-                .AddTo(_disposables);
+            _shipViewModel.OnDeath.Subscribe(_ => OnDeath())
+                .AddTo(this);
         }
 
         public void Collide(ColliderType colliderType, int damage)
@@ -58,12 +56,14 @@ namespace _Project.Scripts.Player
             _shipViewModel.TakeDamage(colliderType, damage);
         }
 
-        public async void OnDestroy()
+        private void OnDeath()
         {
-            _vfxService.PlayVfx(_vfxType,transform);
-            await _audioSource.PlayAsync();
+            Destroy(gameObject);
+        }
 
-            _disposables.Dispose();
+        public void OnDestroy()
+        {
+            _fxService.PlayVfx(_vfxType,_audio,transform.position);
         }
 
         private void Update()

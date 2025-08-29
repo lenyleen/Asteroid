@@ -9,6 +9,7 @@ using _Project.Scripts.UI.PopUps;
 using _Project.Scripts.UI.ScoreBox;
 using Cysharp.Threading.Tasks;
 using UniRx;
+using UnityEngine;
 
 namespace _Project.Scripts.GameplayStateMachine.States
 {
@@ -59,6 +60,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             }
             catch (Exception e)
             {
+                Debug.LogWarning(e.Message + e.StackTrace);
                 await ThrowError(e.Message);
                 return;
             }
@@ -94,6 +96,7 @@ namespace _Project.Scripts.GameplayStateMachine.States
             }
             catch (Exception e)
             {
+                Debug.LogWarning(e.Message + e.StackTrace);
                 await ThrowError(e.Message);
                 await ToMainMenu();
             }
